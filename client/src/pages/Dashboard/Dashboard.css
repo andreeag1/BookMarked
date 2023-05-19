@@ -1,0 +1,40 @@
+.dashboard {
+  background-color: #f3f3f3;
+}
+
+.overview {
+  padding-top: 100px;
+  padding-bottom: 20px;
+  padding-left: 70px;
+  display: flex;
+  flex-direction: row;
+  align-items: left;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.second-widget {
+  padding-right: 30px;
+}
+
+.feed-container {
+  width: 80%;
+}
+
+.content-section {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding-bottom: 20px;
+}
+
+.bookshelf-container {
+  padding-left: 4ch;
+  margin-right: 200px;
+}
+
+.updates-container {
+  font-family: Raleway;
+  margin-top: 1rem;
+}

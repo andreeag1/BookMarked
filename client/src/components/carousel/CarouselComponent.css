@@ -1,0 +1,46 @@
+.carousel {
+  scroll-behavior: none;
+  font-family: Raleway;
+}
+
+.first-carousel {
+  background-color: #f0ebe6;
+  padding-top: 10ch;
+  padding-left: 10ch;
+  padding-bottom: 1ch;
+}
+
+.second-carousel {
+  background-color: #e1d5ca;
+  padding-top: 2ch;
+  padding-left: 10ch;
+  padding-bottom: 1ch;
+}
+
+.third-carousel {
+  background-color: #cab9a9;
+  padding-top: 2ch;
+  padding-left: 10ch;
+  padding-bottom: 1ch;
+}
+
+.fourth-carousel {
+  background-color: #f0ebe6;
+  padding-top: 2ch;
+  padding-left: 10ch;
+  padding-bottom: 1ch;
+}
+
+.fifth-carousel {
+  background-color: #e1d5ca;
+  padding-top: 2ch;
+  padding-left: 10ch;
+  padding-bottom: 1ch;
+}
+
+.sixth-carousel {
+  background-color: #cab9a9;
+  padding-top: 2ch;
+  padding-left: 10ch;
+  padding-bottom: 1ch;
+}

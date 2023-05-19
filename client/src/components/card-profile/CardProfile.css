@@ -1,0 +1,18 @@
+.card-profile {
+  font-family: Raleway;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  background-position: center;
+}
+
+.favourite-books {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: first baseline;
+}
+
+.list {
+  margin-right: 6rem;
+}

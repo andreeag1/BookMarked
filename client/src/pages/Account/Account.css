@@ -1,0 +1,40 @@
+.account {
+  font-family: Raleway;
+  align-content: center;
+  align-items: center;
+  background-position: center;
+  background-color: #f0ebe5;
+}
+
+.profile-wrapper {
+  padding-top: 5rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.other {
+  padding-top: 2rem;
+  padding-left: 2rem;
+}
+
+.friends-list {
+  display: none;
+}
+
+.friend {
+  display: flex;
+  flex-direction: row;
+  padding-top: 1rem;
+}
+
+@media (max-width: 850px) {
+  .friends-list {
+    display: block;
+  }
+
+  .other {
+    display: none;
+  }
+}

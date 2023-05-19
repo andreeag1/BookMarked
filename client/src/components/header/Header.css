@@ -1,0 +1,74 @@
+.App-logo {
+  padding-top: 0.1em;
+}
+
+.title {
+  padding-top: 0.25em;
+  padding-left: 0.35em;
+  font-family: "Raleway", sans-serif;
+  font-size: 2rem;
+}
+
+.CircleNotificationsIcon {
+  transform: scale(1.5);
+}
+
+.AccountCircleIcon {
+  transform: scale(1.5);
+}
+
+.Header {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 3;
+}
+
+.titles {
+  justify-content: space-between;
+}
+
+.titles h7 {
+  justify-content: space-between;
+  padding-left: 0.7rem;
+}
+
+.search-bar {
+  width: 300px;
+  min-width: 170px;
+}
+
+.hamburger {
+  display: none;
+}
+
+.navbar-links {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+}
+
+.links {
+  padding-right: 70px;
+}
+
+@media (max-width: 1140px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .navbar-links {
+    display: none;
+    flex-direction: column;
+  }
+
+  .icon-buttons {
+    display: none;
+  }
+
+  .box-container {
+    flex-grow: 10;
+  }
+}

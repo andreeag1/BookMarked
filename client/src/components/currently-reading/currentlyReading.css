@@ -1,0 +1,127 @@
+.current-read {
+  background-color: #f0ebe6;
+  width: 20em;
+  height: 15em;
+  position: relative;
+  border-radius: 1em;
+  box-shadow: 0 0.01em 0.5em rgb(156, 156, 156);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  font-family: Raleway;
+}
+
+.book-info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-bottom: 1em;
+}
+
+.book-image {
+  background-color: #e1d5ca;
+  width: 7em;
+  height: 10em;
+  position: relative;
+  align-items: center;
+  padding-top: 3rem;
+  border-radius: 0.5em;
+}
+
+.add-icon {
+  color: #403c3a;
+}
+
+.book-info h7 {
+  padding-left: 2em;
+  width: 9em;
+}
+
+.current-read-info {
+  background-color: #f0ebe6;
+  width: 20em;
+  height: 15em;
+  position: relative;
+  border-radius: 1em;
+  box-shadow: 0 0.01em 0.5em rgb(156, 156, 156);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  font-family: Raleway;
+  padding-top: 0rem;
+}
+
+.current-read-info h5 {
+  padding-top: 4rem;
+  margin-bottom: -0.3rem;
+}
+
+.book-information {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 4rem;
+}
+
+.book-img {
+  padding-top: 1rem;
+  padding-left: 2rem;
+}
+
+.image-link {
+  width: 120px;
+  border-radius: 3%;
+}
+
+.book-info-container {
+  width: 200px;
+  padding-top: 20px;
+  padding-left: 0px;
+  display: flex;
+  flex-direction: column;
+  font-weight: 200;
+}
+
+.book-name {
+  font-weight: 200;
+}
+
+.progress-wrapper {
+  padding-left: 20px;
+  padding-right: 10px;
+  width: 95%;
+  margin-top: 10px;
+}
+
+.progress-btn {
+  margin-top: 2rem;
+}
+
+.map {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding-right: 8em;
+}
+
+.bookcard {
+  padding-bottom: 2em;
+  padding-left: 8em;
+  cursor: pointer;
+}
+
+.update {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.update h6 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}

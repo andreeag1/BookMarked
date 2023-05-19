@@ -1,0 +1,27 @@
+.collections-container {
+  background-color: #cab9a9;
+  width: 25em;
+  height: 15em;
+  position: relative;
+  border-radius: 1em;
+  box-shadow: 0 0.01em 0.5em rgb(156, 156, 156);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  font-family: Raleway;
+}
+
+.list {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  list-style-position: inside;
+}
+
+.list-item {
+  padding-left: 1.2em;
+  color: black;
+}

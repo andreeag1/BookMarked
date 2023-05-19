@@ -1,0 +1,87 @@
+.books-section {
+  padding-top: 2.5ch;
+  width: 370px;
+  height: 950px;
+}
+
+.discover {
+  text-align: center;
+  padding-left: 3rem;
+  padding-bottom: 3rem;
+  font-family: Raleway;
+}
+
+.bookshelf {
+  width: 120%;
+}
+
+.second-bookshelf {
+  width: 120%;
+  padding-bottom: 170px;
+}
+
+.first-book {
+  position: absolute;
+  margin-top: -2rem;
+  margin-left: 6rem;
+  border-radius: 5%;
+  width: 80px;
+  height: 100px;
+  -webkit-box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
+  box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
+}
+
+.second-book {
+  position: absolute;
+  margin-top: -2rem;
+  margin-left: 16rem;
+  border-radius: 5%;
+  width: 80px;
+  height: 100px;
+  -webkit-box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
+  box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
+}
+
+.third-book {
+  position: absolute;
+  margin-top: 6.5rem;
+  margin-left: 16rem;
+  border-radius: 5%;
+  width: 80px;
+  height: 100px;
+  -webkit-box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
+  box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
+}
+
+.fourth-book {
+  position: absolute;
+  margin-top: 6.5rem;
+  margin-left: 6rem;
+  border-radius: 5%;
+  width: 80px;
+  height: 100px;
+  -webkit-box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
+  box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
+}
+
+.fifth-book {
+  position: absolute;
+  margin-top: 15.5rem;
+  margin-left: 6rem;
+  border-radius: 5%;
+  width: 80px;
+  height: 100px;
+  -webkit-box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
+  box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
+}
+
+.sixth-book {
+  position: absolute;
+  margin-top: 15.5rem;
+  margin-left: 16rem;
+  border-radius: 5%;
+  width: 80px;
+  height: 100px;
+  -webkit-box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
+  box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
+}

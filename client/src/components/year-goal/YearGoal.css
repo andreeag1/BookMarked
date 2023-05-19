@@ -1,0 +1,51 @@
+.container-year-goal {
+  background-color: #e1d5ca;
+  width: 25em;
+  height: 15em;
+  position: relative;
+  border-radius: 1em;
+  box-shadow: 0 0.01em 0.5em rgb(156, 156, 156);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  font-family: Raleway;
+}
+
+.goal-number {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.progress-container {
+  margin-top: 70px;
+}
+
+.books-read {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding-left: 2rem;
+}
+
+.book-gif {
+  width: 140px;
+  margin-right: 30px;
+}
+
+.book-stack-gif {
+  width: 100px;
+}
+
+.goal-number h6 {
+  padding-top: 1em;
+}
+
+.start-button {
+  padding-top: 1.5em;
+  padding-left: 3.5em;
+  padding-bottom: 1.5em;
+}

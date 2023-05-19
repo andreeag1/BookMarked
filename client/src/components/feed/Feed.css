@@ -1,0 +1,115 @@
+.feed {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  scroll-behavior: auto;
+  font-family: Raleway;
+}
+
+.posts-section {
+  margin-top: -1.5rem;
+}
+
+.post {
+  background-color: white;
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
+  box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
+  margin: 30px 0;
+  min-height: 80px;
+  width: 55vw;
+  min-width: 53vh;
+}
+
+.postWrapper {
+  padding: 10px;
+}
+
+.postTop {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.postProfileImg {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.postUsername {
+  font-size: 15px;
+  font-weight: 1000;
+  margin: 0 4px;
+}
+
+.postDate {
+  margin: 0 20px;
+  font-size: 12px;
+}
+
+.postCenter {
+  margin: 20px 10px;
+  display: flex;
+  flex-direction: row;
+}
+
+.bookCard {
+  width: 500px;
+  min-height: 100%;
+}
+
+.postText {
+  margin: 10px 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.bookSummary {
+  padding-left: 20px;
+  width: 250%;
+  display: flex;
+  flex-direction: column;
+}
+
+.bookSummary h5 {
+  padding-top: 1rem;
+}
+
+.WantToReadBtn {
+  width: 200px;
+}
+
+.postBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+}
+
+.postBottomLeft {
+  display: flex;
+  align-items: center;
+}
+
+.likeIcon {
+  width: 24px;
+  height: 24px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.postLikeCounter {
+  font-size: 15px;
+}
+
+.postCommentText {
+  cursor: pointer;
+  border-bottom: 1px dashed gray;
+  font-size: 15px;
+}

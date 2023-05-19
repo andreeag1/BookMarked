@@ -1,0 +1,117 @@
+.about {
+  padding: 0rem 0rem;
+}
+
+.hero {
+  background-image: url("../../assets/pictures/Wallpaper.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-top: 270px;
+  padding-bottom: 200px;
+  background-attachment: fixed;
+  background-position: center;
+}
+
+.hero-title {
+  background-image: url("../../assets/pictures/titleBackground.png");
+  padding-top: 140px;
+  padding-bottom: 130px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-position: fixed;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  max-width: 370px;
+  padding-right: 50px;
+  text-align: center;
+  font-family: Raleway;
+}
+
+.button {
+  width: 50%;
+}
+
+.container-cards {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: auto;
+  background-color: #8c7d74;
+}
+
+.cards-section {
+  padding-left: 8.5rem;
+  padding-top: 110px;
+  width: 100%;
+  height: 550px;
+}
+
+.container-icon {
+  padding-left: 6.5rem;
+}
+
+.Icon {
+  color: white;
+}
+
+.block-titles {
+  padding-top: 2rem;
+  text-align: center;
+  font-family: Raleway;
+  font-size: 25px;
+}
+
+.block-descriptions {
+  font-family: Raleway;
+  font-size: medium;
+  text-align: center;
+}
+
+.container-about {
+  background-image: url("../../assets/pictures/writing.jpg");
+  background-size: cover;
+  background-position: center;
+  padding-top: 100px;
+  padding-bottom: 100px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.container-description {
+  padding-left: 140px;
+  padding-top: 30px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.popular-books {
+  width: auto;
+  height: 600px;
+  background-repeat: no-repeat;
+}
+
+.container-text h1 {
+  font-weight: bold;
+}
+
+.container-text {
+  padding-top: 30px;
+  padding-left: 100px;
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  font-family: Raleway;
+}
+
+.goal {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 75%;
+}
