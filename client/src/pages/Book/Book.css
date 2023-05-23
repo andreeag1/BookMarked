@@ -1,0 +1,45 @@
+.book-section-wrapper {
+  font-family: Raleway;
+  background-color: #f3f3f3;
+}
+
+.book-section {
+  padding-bottom: 50px;
+  padding-top: 100px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.book-cover {
+  width: 22%;
+  height: auto;
+  border-radius: 4%;
+  margin-left: 100px;
+}
+
+.book-information {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  margin-left: 100px;
+}
+
+.categories {
+  width: 30%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.btn-container {
+  padding-top: 1rem;
+}
+
+.want-to-read-button {
+  width: 20%;
+}
+
+.review-section {
+  margin-left: 100px;
+}

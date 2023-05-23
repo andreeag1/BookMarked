@@ -6,7 +6,7 @@ import BookCard from "../book-card/BookCard";
 import data from "../../mock.json";
 import likeIcon from "../../assets/pictures/like.png";
 import heartIcon from "../../assets/pictures/heart.png";
-import { Button, Divider } from "@mui/material";
+import { Button, Divider, Rating } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const ColorButton = styled(Button)(({ theme }) => ({
@@ -45,6 +45,9 @@ export default function Feed() {
               </div>
             </div>
             <div className="postReview">
+              <div className="post-rating">
+                <Rating readOnly value={4} />
+              </div>
               <h7 className="postText">
                 Hello Everyone! random text blah blah blah blah blah blah blah
                 blah blah blah

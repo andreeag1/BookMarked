@@ -54,6 +54,16 @@
   padding-right: 70px;
 }
 
+.options {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.button-option {
+  color: black;
+}
+
 @media (max-width: 1140px) {
   .hamburger {
     display: flex;

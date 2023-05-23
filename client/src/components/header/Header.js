@@ -105,6 +105,18 @@ const Header = () => {
                     }}
                     options={data}
                     getOptionLabel={(option) => option.title}
+                    renderOption={(props, option) => {
+                      return (
+                        <li {...props}>
+                          <Button component={Link} to={`/book/${option.id}`}>
+                            <div className="options">
+                              <h7 className="button-option">{option.title}</h7>
+                              <h7 className="button-option">{option.author}</h7>
+                            </div>
+                          </Button>
+                        </li>
+                      );
+                    }}
                     renderInput={(params) => (
                       <StyledTextfield
                         {...params}
