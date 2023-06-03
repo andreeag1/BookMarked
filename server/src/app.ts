@@ -2,7 +2,7 @@ import "dotenv/config";
 import express, { Request, Response } from "express";
 import "reflect-metadata";
 import { DataSource, Repository } from "typeorm";
-import { Book } from "./Book";
+import { Book } from "./entity/Book";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { authenticate } from "./lib/middlewares";
