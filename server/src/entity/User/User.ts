@@ -2,13 +2,16 @@ import {
   Column,
   Entity,
   Generated,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   OneToMany,
+  OneToOne,
   PrimaryColumn,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Review } from "../Review/Review";
+import { Book } from "../Book/Book";
 
 @Entity()
 export class User {
@@ -34,6 +37,13 @@ export class User {
 
   @Column()
   password!: string;
+
+  @Column({ default: 0 })
+  goal!: number;
+
+  @OneToOne(() => Book, { onUpdate: "CASCADE", onDelete: "CASCADE" })
+  @JoinColumn()
+  currentRead: Book;
 
   @ManyToMany(() => User)
   @JoinTable({

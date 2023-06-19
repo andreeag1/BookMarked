@@ -1,5 +1,5 @@
 import { DeleteResult, InsertResult } from "typeorm";
-import { User } from "../../entity";
+import { Book, User } from "../../entity";
 
 export interface AuthControllerContract {
   getAllUsers(): Promise<User[]>;
@@ -32,6 +32,10 @@ export interface AuthControllerContract {
     userToUnfollow: User,
     currentUser: User
   ): Promise<SaveUserResponse>;
+
+  addGoal(user: User, goal: number): Promise<SaveUserResponse>;
+
+  addCurrentRead(user: User, book: Book): Promise<SaveUserResponse>;
 }
 
 export interface AuthServiceContract {
@@ -62,6 +66,10 @@ export interface AuthServiceContract {
   getReviewByUserId(id: string): Promise<User | null>;
 
   unfollowUser(userToUnfollow: User, currentUser: User): Promise<User>;
+
+  addGoal(user: User, goal: number): Promise<User>;
+
+  addCurrentRead(user: User, book: Book): Promise<User>;
 }
 
 export type SaveUserResponse = {

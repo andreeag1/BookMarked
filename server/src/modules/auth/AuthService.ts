@@ -1,5 +1,5 @@
 import { DeleteResult, InsertResult } from "typeorm";
-import { User, UserRepositoryContract } from "../../entity";
+import { Book, User, UserRepositoryContract } from "../../entity";
 import { AuthServiceContract } from "./types";
 
 export class AuthService implements AuthServiceContract {
@@ -63,5 +63,13 @@ export class AuthService implements AuthServiceContract {
 
   unfollowUser(userToUnfollow: User, currentUser: User): Promise<User> {
     return this.userRepository.unfollowUser(userToUnfollow, currentUser);
+  }
+
+  addGoal(user: User, goal: number): Promise<User> {
+    return this.userRepository.addGoal(user, goal);
+  }
+
+  addCurrentRead(user: User, book: Book): Promise<User> {
+    return this.userRepository.addCurrentRead(user, book);
   }
 }

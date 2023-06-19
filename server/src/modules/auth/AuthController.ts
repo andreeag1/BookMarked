@@ -1,5 +1,5 @@
 import { DeleteResult, InsertResult } from "typeorm";
-import { User } from "../../entity";
+import { Book, User } from "../../entity";
 import {
   AuthControllerContract,
   AuthServiceContract,
@@ -76,6 +76,26 @@ export class AuthController implements AuthControllerContract {
     currentUser: User
   ): Promise<SaveUserResponse> {
     this.authService.unfollowUser(userToUnfollow, currentUser);
+    return new Promise<SaveUserResponse>((resolve, reject) => {
+      resolve({
+        statusCode: 200,
+        message: "success",
+      });
+    });
+  }
+
+  addGoal(user: User, goal: number): Promise<SaveUserResponse> {
+    this.authService.addGoal(user, goal);
+    return new Promise<SaveUserResponse>((resolve, reject) => {
+      resolve({
+        statusCode: 200,
+        message: "success",
+      });
+    });
+  }
+
+  addCurrentRead(user: User, book: Book): Promise<SaveUserResponse> {
+    this.authService.addCurrentRead(user, book);
     return new Promise<SaveUserResponse>((resolve, reject) => {
       resolve({
         statusCode: 200,

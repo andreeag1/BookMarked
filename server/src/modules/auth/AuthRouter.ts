@@ -75,6 +75,13 @@ export function createAuthRouter(controllers: {
     });
   });
 
+  //logout
+  // router.get("/logout", async (req: Request, res: Response) => {
+  //   res.cookie("accessToken", "", { maxAge: 0 });
+  //   res.cookie("refreshToken", "", { maxAge: 0 });
+  //   res.sendStatus(200);
+  // });
+
   //get a user
   router.get("/:id", async (req: Request, res: Response) => {
     try {
@@ -139,11 +146,18 @@ export function createAuthRouter(controllers: {
     }
   });
 
-  //logout
-  router.get("/logout", async (req: Request, res: Response) => {
-    res.cookie("accessToken", "", { maxAge: 0 });
-    res.cookie("refreshToken", "", { maxAge: 0 });
-    res.sendStatus(200);
+  //add a yearly goal
+  router.put("/goal", async (req: Request, res: Response) => {
+    const user = await authController.getUserById(req.body.id);
+    const goal = await authController.addGoal(user, req.body.goal);
+    res.status(goal.statusCode).json(goal);
+  });
+
+  //add a yearly goal
+  router.put("/currentread", async (req: Request, res: Response) => {
+    const user = await authController.getUserById(req.body.id);
+    const book = await authController.addCurrentRead(user, req.body.bookId);
+    res.status(book.statusCode).json(book);
   });
 
   return router;

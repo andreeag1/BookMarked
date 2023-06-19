@@ -3,6 +3,7 @@ import { User } from "./User";
 import { AppDataSource } from "../../lib/database";
 import bcryptjs from "bcryptjs";
 import { Review } from "../Review";
+import { Book } from "../Book/Book";
 
 export interface UserRepositoryContract {
   getAllUsers(): Promise<User[]>;
@@ -22,6 +23,8 @@ export interface UserRepositoryContract {
   getUsersFriendsReviews(id: string): Promise<User[]>;
   getReviewByUserId(id: string): Promise<User | null>;
   unfollowUser(userToUnfollow: User, currentUser: User): Promise<User>;
+  addGoal(user: User, goal: number): Promise<User>;
+  addCurrentRead(user: User, book: Book): Promise<User>;
 }
 
 export class UserRepository implements UserRepositoryContract {
@@ -39,6 +42,8 @@ export class UserRepository implements UserRepositoryContract {
     return this.repository.findOneOrFail({
       relations: {
         followers: true,
+        currentRead: true,
+        reviews: true,
       },
       where: {
         id: id,
@@ -122,5 +127,15 @@ export class UserRepository implements UserRepositoryContract {
         id: id,
       },
     });
+  }
+
+  addGoal(user: User, goal: number): Promise<User> {
+    user.goal = goal;
+    return this.repository.save(user);
+  }
+
+  addCurrentRead(user: User, book: Book): Promise<User> {
+    user.currentRead = book;
+    return this.repository.save(user);
   }
 }

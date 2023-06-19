@@ -149,12 +149,6 @@ app.use("/collection", createCollectionRouter(controllers));
 //   }
 // });
 
-// app.get("/api/logout", async (req: Request, res: Response) => {
-//   res.cookie("accessToken", "", { maxAge: 0 });
-//   res.cookie("refreshToken", "", { maxAge: 0 });
-//   res.sendStatus(200);
-// });
-
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
 });
