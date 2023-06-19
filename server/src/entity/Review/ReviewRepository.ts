@@ -1,4 +1,4 @@
-import { InsertResult, QueryBuilder, Repository } from "typeorm";
+import { DeleteResult, InsertResult, QueryBuilder, Repository } from "typeorm";
 import { Review } from "./Review";
 import { AppDataSource } from "../../lib/database";
 import { User } from "../User";
@@ -13,6 +13,7 @@ export interface ReviewRepositoryContract {
   updateReview(Review: Review): Promise<Review>;
   getReviewByBook(id: string): Promise<Review[]>;
   getReviewById(id: string): Promise<Review>;
+  deleteReview(id: string): Promise<DeleteResult>;
 }
 
 export class ReviewRepository implements ReviewRepositoryContract {
@@ -83,5 +84,9 @@ export class ReviewRepository implements ReviewRepositoryContract {
       .getOneOrFail();
 
     return queryBuilder;
+  }
+
+  deleteReview(id: string): Promise<DeleteResult> {
+    return this.repository.delete({ id: id });
   }
 }

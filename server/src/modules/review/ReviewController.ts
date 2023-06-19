@@ -50,4 +50,14 @@ export class ReviewController implements ReviewControllerContract {
   getReviewById(id: string): Promise<Review> {
     return this.reviewService.getReviewById(id);
   }
+
+  deleteReview(id: string): Promise<SaveReviewResponse> {
+    this.reviewService.deleteReview(id);
+    return new Promise<SaveReviewResponse>((resolve, reject) => {
+      resolve({
+        statusCode: 200,
+        message: "success",
+      });
+    });
+  }
 }

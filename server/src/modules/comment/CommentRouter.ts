@@ -23,5 +23,17 @@ export function createCommentRouter(controllers: {
     res.status(comment.statusCode).json(comment);
   });
 
+  //get count of comments
+  router.get("/count/:id", async (req: Request, res: Response) => {
+    const count = await commentController.getCount(req.params.id);
+    res.json(count);
+  });
+
+  //get a reviews comments
+  router.get("/review/:id", async (req: Request, res: Response) => {
+    const comments = await commentController.getCommentByReview(req.params.id);
+    res.json(comments);
+  });
+
   return router;
 }

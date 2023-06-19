@@ -11,6 +11,7 @@ export function createAuthRouter(controllers: {
   const router = Router();
   const { authController } = controllers;
 
+  //register
   router.post("/register", async (req: Request, res: Response) => {
     const { firstName, lastName, email, username, password } = req.body;
 
@@ -25,6 +26,7 @@ export function createAuthRouter(controllers: {
     res.status(user.statusCode).json(user);
   });
 
+  //login
   router.post("/login", async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
@@ -119,26 +121,30 @@ export function createAuthRouter(controllers: {
   });
 
   //unfollow a user
-  // router.post("/unfollow", async (req: Request, res: Response) => {
-  //   if (req.body.userId !== req.body.currentUserId) {
-  //     const userToUnfollow = await authController.getUserById(req.body.userId);
-  //     const currentUser = await authController.getUserById(
-  //       req.body.currentUserId
-  //     );
-  //     if (userToUnfollow && currentUser) {
-  //       userToUnfollow.followers.forEach(
-  //         async (currentUser) =>
-  //           await authController.deleteUser(req.body.currentUserId)
-  //       );
-  //       await authController.updateUser(userToUnfollow);
-  //       res.sendStatus(200);
-  //     }
-  //   } else {
-  //     res.status(403).json({
-  //       message: "Cannot unfollow yourself",
-  //     });
-  //   }
-  // });
+  router.put("/unfollow", async (req: Request, res: Response) => {
+    if (req.body.userId !== req.body.currentUserId) {
+      const userToUnfollow = await authController.getUserById(req.body.userId);
+      const currentUser = await authController.getUserById(
+        req.body.currentUserId
+      );
+      const unfollow = await authController.unfollowUser(
+        userToUnfollow,
+        currentUser
+      );
+      res.status(unfollow.statusCode).json(unfollow);
+    } else {
+      res.status(403).json({
+        message: "Cannot unfollow yourself",
+      });
+    }
+  });
+
+  //logout
+  router.get("/logout", async (req: Request, res: Response) => {
+    res.cookie("accessToken", "", { maxAge: 0 });
+    res.cookie("refreshToken", "", { maxAge: 0 });
+    res.sendStatus(200);
+  });
 
   return router;
 }

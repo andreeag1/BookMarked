@@ -1,4 +1,4 @@
-import { InsertResult } from "typeorm";
+import { DeleteResult, InsertResult } from "typeorm";
 import { Review, User } from "../../entity";
 
 export interface ReviewControllerContract {
@@ -19,6 +19,8 @@ export interface ReviewControllerContract {
   getReviewByBook(id: string): Promise<Review[]>;
 
   getReviewById(id: string): Promise<Review>;
+
+  deleteReview(id: string): Promise<SaveReviewResponse>;
 }
 
 export interface ReviewServiceContract {
@@ -35,6 +37,8 @@ export interface ReviewServiceContract {
   getReviewByBook(id: string): Promise<Review[]>;
 
   getReviewById(id: string): Promise<Review>;
+
+  deleteReview(id: string): Promise<DeleteResult>;
 }
 
 export type SaveReviewResponse = {

@@ -70,4 +70,17 @@ export class AuthController implements AuthControllerContract {
   getReviewByUserId(id: string): Promise<User | null> {
     return this.authService.getReviewByUserId(id);
   }
+
+  unfollowUser(
+    userToUnfollow: User,
+    currentUser: User
+  ): Promise<SaveUserResponse> {
+    this.authService.unfollowUser(userToUnfollow, currentUser);
+    return new Promise<SaveUserResponse>((resolve, reject) => {
+      resolve({
+        statusCode: 200,
+        message: "success",
+      });
+    });
+  }
 }

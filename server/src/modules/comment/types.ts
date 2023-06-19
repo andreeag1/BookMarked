@@ -9,6 +9,8 @@ export interface CommentControllerContract {
   ): Promise<SaveCommentResponse>;
 
   deleteComment(id: string): Promise<SaveCommentResponse>;
+  getCount(id: string): Promise<number>;
+  getCommentByReview(id: string): Promise<Comment[]>;
 }
 
 export interface CommentServiceContract {
@@ -19,6 +21,8 @@ export interface CommentServiceContract {
   ): Promise<Comment>;
 
   deleteComment(id: string): Promise<DeleteResult>;
+  getCount(id: string): Promise<number>;
+  getCommentByReview(id: string): Promise<Comment[]>;
 }
 
 export type SaveCommentResponse = {

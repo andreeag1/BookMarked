@@ -8,6 +8,8 @@ import { Comment } from "./Comment";
 export interface CommentRepositoryContract {
   saveComment(comment: string, user: User, review: Review): Promise<Comment>;
   deleteComment(id: string): Promise<DeleteResult>;
+  getCount(id: string): Promise<number>;
+  getCommentByReview(id: string): Promise<Comment[]>;
 }
 
 export class CommentRepository implements CommentRepositoryContract {
@@ -28,12 +30,23 @@ export class CommentRepository implements CommentRepositoryContract {
 
   deleteComment(id: string): Promise<DeleteResult> {
     return this.repository.delete({ id: id });
-    // const queryBuilder = this.repository
-    //   .createQueryBuilder("comment")
-    //   .delete()
-    //   .where("comment.id = :idOne", { idOne: id })
-    //   .execute();
+  }
 
-    // return queryBuilder;
+  getCount(id: string): Promise<number> {
+    const queryBuilder = this.repository
+      .createQueryBuilder("comment")
+      .where("comment.reviewId = :idOne", { idOne: id })
+      .getCount();
+
+    return queryBuilder;
+  }
+
+  getCommentByReview(id: string): Promise<Comment[]> {
+    const queryBuilder = this.repository
+      .createQueryBuilder("comment")
+      .where("comment.reviewId = :idOne", { idOne: id })
+      .getMany();
+
+    return queryBuilder;
   }
 }

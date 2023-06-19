@@ -27,6 +27,11 @@ export interface AuthControllerContract {
   getUsersFriendsReviews(id: string): Promise<User[]>;
 
   getReviewByUserId(id: string): Promise<User | null>;
+
+  unfollowUser(
+    userToUnfollow: User,
+    currentUser: User
+  ): Promise<SaveUserResponse>;
 }
 
 export interface AuthServiceContract {
@@ -55,6 +60,8 @@ export interface AuthServiceContract {
   getUsersFriendsReviews(id: string): Promise<User[]>;
 
   getReviewByUserId(id: string): Promise<User | null>;
+
+  unfollowUser(userToUnfollow: User, currentUser: User): Promise<User>;
 }
 
 export type SaveUserResponse = {

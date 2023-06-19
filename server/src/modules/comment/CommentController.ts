@@ -4,6 +4,7 @@ import {
   CommentControllerContract,
   SaveCommentResponse,
 } from "./types";
+import { Comment } from "../../entity/Comment";
 
 export class CommentController implements CommentControllerContract {
   private commentService: CommentServiceContract;
@@ -34,5 +35,13 @@ export class CommentController implements CommentControllerContract {
         message: "success",
       });
     });
+  }
+
+  getCount(id: string): Promise<number> {
+    return this.commentService.getCount(id);
+  }
+
+  getCommentByReview(id: string): Promise<Comment[]> {
+    return this.commentService.getCommentByReview(id);
   }
 }

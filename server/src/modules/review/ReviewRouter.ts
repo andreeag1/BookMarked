@@ -56,5 +56,11 @@ export function createReviewRouter(controllers: {
     return res.json(newReview);
   });
 
+  //delete review
+  router.put("/delete", async (req: Request, res: Response) => {
+    const review = await reviewController.deleteReview(req.body.reviewId);
+    res.status(review.statusCode).json(review);
+  });
+
   return router;
 }

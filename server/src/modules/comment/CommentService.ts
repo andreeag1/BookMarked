@@ -32,4 +32,12 @@ export class CommentService implements CommentServiceContract {
   deleteComment(id: string): Promise<DeleteResult> {
     return this.commentRepository.deleteComment(id);
   }
+
+  getCount(id: string): Promise<number> {
+    return this.commentRepository.getCount(id);
+  }
+
+  getCommentByReview(id: string): Promise<Comment[]> {
+    return this.commentRepository.getCommentByReview(id);
+  }
 }

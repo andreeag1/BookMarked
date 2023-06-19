@@ -1,4 +1,4 @@
-import { InsertResult } from "typeorm";
+import { DeleteResult, InsertResult } from "typeorm";
 import { Review, ReviewRepositoryContract } from "../../entity/Review";
 import { ReviewServiceContract } from "./types";
 import { AuthServiceContract } from "../auth";
@@ -52,5 +52,9 @@ export class ReviewService implements ReviewServiceContract {
 
   getReviewById(id: string): Promise<Review> {
     return this.reviewRepository.getReviewById(id);
+  }
+
+  deleteReview(id: string): Promise<DeleteResult> {
+    return this.reviewRepository.deleteReview(id);
   }
 }

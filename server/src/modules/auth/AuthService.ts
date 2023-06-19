@@ -60,4 +60,8 @@ export class AuthService implements AuthServiceContract {
   getReviewByUserId(id: string): Promise<User | null> {
     return this.userRepository.getReviewByUserId(id);
   }
+
+  unfollowUser(userToUnfollow: User, currentUser: User): Promise<User> {
+    return this.userRepository.unfollowUser(userToUnfollow, currentUser);
+  }
 }

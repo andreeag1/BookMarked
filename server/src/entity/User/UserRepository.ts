@@ -21,6 +21,7 @@ export interface UserRepositoryContract {
   getUserByFollower(id: string): Promise<User | null>;
   getUsersFriendsReviews(id: string): Promise<User[]>;
   getReviewByUserId(id: string): Promise<User | null>;
+  unfollowUser(userToUnfollow: User, currentUser: User): Promise<User>;
 }
 
 export class UserRepository implements UserRepositoryContract {
@@ -36,6 +37,9 @@ export class UserRepository implements UserRepositoryContract {
 
   getUserById(id: string): Promise<User> {
     return this.repository.findOneOrFail({
+      relations: {
+        followers: true,
+      },
       where: {
         id: id,
       },
@@ -102,6 +106,13 @@ export class UserRepository implements UserRepositoryContract {
 
   deleteUser(id: string): Promise<DeleteResult> {
     return this.repository.delete(id);
+  }
+
+  unfollowUser(userToUnfollow: User, currentUser: User): Promise<User> {
+    userToUnfollow.followers = userToUnfollow.followers.filter((follower) => {
+      return follower.id !== currentUser.id;
+    });
+    return this.repository.save(userToUnfollow);
   }
 
   getReviewByUserId(id: string): Promise<User | null> {

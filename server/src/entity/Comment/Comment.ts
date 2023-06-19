@@ -29,6 +29,6 @@ export class Comment {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
-  @JoinColumn({ name: "bookId" })
+  @JoinColumn({ name: "reviewId" })
   review: Review;
 }

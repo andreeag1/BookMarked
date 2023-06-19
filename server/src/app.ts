@@ -13,6 +13,7 @@ import { BookRepository } from "./entity/Book";
 import { UserRepository } from "./entity/User";
 import { ReviewRepository } from "./entity/Review";
 import { CommentRepository } from "./entity/Comment";
+import { CollectionRepository } from "./entity/Collection";
 import {
   createBookRouter,
   BookController,
@@ -41,6 +42,13 @@ import {
   CommentService,
   CommentServiceContract,
 } from "./modules/comment";
+import {
+  createCollectionRouter,
+  CollectionController,
+  CollectionControllerContract,
+  CollectionService,
+  CollectionServiceContract,
+} from "./modules/collection";
 
 const app = express();
 app.use(express.json());
@@ -62,6 +70,7 @@ const bookRepository = new BookRepository();
 const userRepository = new UserRepository();
 const reviewRepository = new ReviewRepository();
 const commentRepository = new CommentRepository();
+const collectionRepository = new CollectionRepository();
 
 const bookService = new BookService(bookRepository);
 const authService = new AuthService(userRepository);
@@ -75,6 +84,10 @@ const commentService = new CommentService(
   userRepository,
   reviewRepository
 );
+const collectionService = new CollectionService(
+  collectionRepository,
+  bookRepository
+);
 
 const bookController: BookControllerContract = new BookController(bookService);
 const authController: AuthControllerContract = new AuthController(authService);
@@ -84,18 +97,22 @@ const reviewController: ReviewControllerContract = new ReviewController(
 const commentController: CommentControllerContract = new CommentController(
   commentService
 );
+const collectionController: CollectionControllerContract =
+  new CollectionController(collectionService);
 
 const controllers = {
   bookController,
   authController,
   reviewController,
   commentController,
+  collectionController,
 };
 
 app.use("/book", createBookRouter(controllers));
 app.use("/auth", createAuthRouter(controllers));
 app.use("/review", createReviewRouter(controllers));
 app.use("/comment", createCommentRouter(controllers));
+app.use("/collection", createCollectionRouter(controllers));
 
 // app.post("/api/refresh", async (req: Request, res: Response) => {
 //   try {
