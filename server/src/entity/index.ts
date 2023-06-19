@@ -1,4 +1,15 @@
-import { Book } from "./Book";
-import { User } from "./User";
+import { Book, BookRepository, BookRepositoryContract } from "./Book";
+import { User, UserRepository, UserRepositoryContract } from "./User";
+import { Review, ReviewRepository, ReviewRepositoryContract } from "./Review";
 
-export { Book, User };
+export {
+  Book,
+  BookRepository,
+  BookRepositoryContract,
+  User,
+  UserRepository,
+  UserRepositoryContract,
+  Review,
+  ReviewRepository,
+  ReviewRepositoryContract,
+};
