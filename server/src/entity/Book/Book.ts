@@ -7,6 +7,7 @@ import {
   OneToMany,
 } from "typeorm";
 import { Review } from "../Review/Review";
+import { User } from "../User/User";
 
 @Entity()
 export class Book {
@@ -31,4 +32,11 @@ export class Book {
     onDelete: "CASCADE",
   })
   reviews: Review[];
+
+  @OneToMany(() => User, (user) => user.currentread, {
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE",
+    nullable: true,
+  })
+  users: User[];
 }

@@ -5,13 +5,15 @@ import {
   JoinColumn,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryColumn,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Review } from "../Review/Review";
 import { Book } from "../Book/Book";
+import { Comment } from "../Comment/Comment";
+import { Collection } from "../Collection/Collection";
 
 @Entity()
 export class User {
@@ -41,9 +43,8 @@ export class User {
   @Column({ default: 0 })
   goal!: number;
 
-  @OneToOne(() => Book, { onUpdate: "CASCADE", onDelete: "CASCADE" })
-  @JoinColumn()
-  currentRead: Book;
+  @Column({ default: 0 })
+  readbooks!: number;
 
   @ManyToMany(() => User)
   @JoinTable({
@@ -71,7 +72,23 @@ export class User {
   @OneToMany(() => Review, (comment) => comment.user, {
     onUpdate: "CASCADE",
     onDelete: "CASCADE",
-    nullable: true,
   })
   comments: Comment[];
+
+  @ManyToOne(() => Book, (book) => book.users, {
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE",
+    nullable: true,
+  })
+  @JoinColumn()
+  currentread: Book | null;
+
+  @Column({ default: 0 })
+  progress!: number;
+
+  @OneToMany(() => Collection, (collection) => collection.user, {
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE",
+  })
+  collections: Collection[];
 }

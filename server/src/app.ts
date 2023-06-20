@@ -86,7 +86,8 @@ const commentService = new CommentService(
 );
 const collectionService = new CollectionService(
   collectionRepository,
-  bookRepository
+  bookRepository,
+  userRepository
 );
 
 const bookController: BookControllerContract = new BookController(bookService);

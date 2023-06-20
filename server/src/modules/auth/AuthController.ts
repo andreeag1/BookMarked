@@ -103,4 +103,37 @@ export class AuthController implements AuthControllerContract {
       });
     });
   }
+
+  deleteCurrentRead(user: User): Promise<SaveUserResponse> {
+    this.authService.deleteCurrentRead(user);
+    return new Promise<SaveUserResponse>((resolve, reject) => {
+      resolve({
+        statusCode: 200,
+        message: "success",
+      });
+    });
+  }
+
+  updateReadBooksCount(
+    user: User,
+    progress: number
+  ): Promise<SaveUserResponse> {
+    this.authService.updateReadBooksCount(user, progress);
+    return new Promise<SaveUserResponse>((resolve, reject) => {
+      resolve({
+        statusCode: 200,
+        message: "success",
+      });
+    });
+  }
+
+  updateProgress(user: User, progress: number): Promise<SaveUserResponse> {
+    this.authService.updateProgress(user, progress);
+    return new Promise<SaveUserResponse>((resolve, reject) => {
+      resolve({
+        statusCode: 200,
+        message: "success",
+      });
+    });
+  }
 }

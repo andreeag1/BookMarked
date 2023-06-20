@@ -25,6 +25,9 @@ export interface UserRepositoryContract {
   unfollowUser(userToUnfollow: User, currentUser: User): Promise<User>;
   addGoal(user: User, goal: number): Promise<User>;
   addCurrentRead(user: User, book: Book): Promise<User>;
+  deleteCurrentRead(user: User): Promise<User>;
+  updateReadBooksCount(user: User, progress: number): Promise<User>;
+  updateProgress(user: User, progress: number): Promise<User>;
 }
 
 export class UserRepository implements UserRepositoryContract {
@@ -42,8 +45,6 @@ export class UserRepository implements UserRepositoryContract {
     return this.repository.findOneOrFail({
       relations: {
         followers: true,
-        currentRead: true,
-        reviews: true,
       },
       where: {
         id: id,
@@ -135,7 +136,22 @@ export class UserRepository implements UserRepositoryContract {
   }
 
   addCurrentRead(user: User, book: Book): Promise<User> {
-    user.currentRead = book;
+    user.currentread = book;
+    return this.repository.save(user);
+  }
+
+  deleteCurrentRead(user: User): Promise<User> {
+    user.currentread = null;
+    return this.repository.save(user);
+  }
+
+  updateReadBooksCount(user: User, progress: number): Promise<User> {
+    user.readbooks = progress;
+    return this.repository.save(user);
+  }
+
+  updateProgress(user: User, progress: number): Promise<User> {
+    user.progress = progress;
     return this.repository.save(user);
   }
 }

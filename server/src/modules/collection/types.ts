@@ -2,7 +2,10 @@ import { DeleteResult, InsertResult } from "typeorm";
 import { Collection } from "../../entity/Collection";
 
 export interface CollectionControllerContract {
-  saveCollection(title: string): Promise<SaveCollectionResponse>;
+  saveCollection(
+    title: string,
+    userId: string
+  ): Promise<SaveCollectionResponse>;
   saveBookToCollection(
     collectionId: string,
     bookId: string
@@ -16,7 +19,7 @@ export interface CollectionControllerContract {
 }
 
 export interface CollectionServiceContract {
-  saveCollection(title: string): Promise<Collection>;
+  saveCollection(title: string, userId: string): Promise<Collection>;
   saveBookToCollection(
     collectionId: string,
     bookId: string

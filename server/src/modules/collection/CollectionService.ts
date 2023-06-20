@@ -2,22 +2,26 @@ import { DeleteResult, InsertResult } from "typeorm";
 import { CollectionServiceContract } from "./types";
 import { CollectionRepositoryContract } from "../../entity/Collection";
 import { Collection } from "../../entity/Collection";
-import { BookRepositoryContract } from "../../entity";
+import { BookRepositoryContract, UserRepositoryContract } from "../../entity";
 
 export class CollectionService implements CollectionServiceContract {
   private collectionRepository: CollectionRepositoryContract;
   private bookRepository: BookRepositoryContract;
+  private userRepository: UserRepositoryContract;
 
   constructor(
     collectionRepository: CollectionRepositoryContract,
-    bookRepository: BookRepositoryContract
+    bookRepository: BookRepositoryContract,
+    userRepository: UserRepositoryContract
   ) {
     this.collectionRepository = collectionRepository;
     this.bookRepository = bookRepository;
+    this.userRepository = userRepository;
   }
 
-  saveCollection(title: string): Promise<Collection> {
-    return this.collectionRepository.saveCollection(title);
+  async saveCollection(title: string, userId: string): Promise<Collection> {
+    const user = await this.userRepository.getUserById(userId);
+    return this.collectionRepository.saveCollection(title, user);
   }
 
   async saveBookToCollection(

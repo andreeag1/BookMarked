@@ -6,7 +6,12 @@ import { Book } from "../Book";
 
 export interface ReviewRepositoryContract {
   getAllReviews(): Promise<Review[]>;
-  saveReview(review: string, book: Book, user: User): Promise<Review>;
+  saveReview(
+    review: string,
+    book: Book,
+    user: User,
+    rating: number
+  ): Promise<Review>;
   getReviewByReview(review: string): Promise<Review>;
   getReviewByUser(id: string): Promise<Review[]>;
   getReviewByUsersFriends(id: string): Promise<Review[]>;
@@ -64,9 +69,15 @@ export class ReviewRepository implements ReviewRepositoryContract {
     return queryBuilder;
   }
 
-  saveReview(review: string, book: Book, user: User): Promise<Review> {
+  saveReview(
+    review: string,
+    book: Book,
+    user: User,
+    rating: number
+  ): Promise<Review> {
     const post = this.repository.create({
       review: review,
+      rating: rating,
     });
     post.book = book;
     post.user = user;

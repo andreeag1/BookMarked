@@ -147,17 +147,50 @@ export function createAuthRouter(controllers: {
   });
 
   //add a yearly goal
-  router.put("/goal", async (req: Request, res: Response) => {
+  router.post("/goal", async (req: Request, res: Response) => {
     const user = await authController.getUserById(req.body.id);
     const goal = await authController.addGoal(user, req.body.goal);
     res.status(goal.statusCode).json(goal);
   });
 
-  //add a yearly goal
-  router.put("/currentread", async (req: Request, res: Response) => {
+  //add a current read
+  router.post("/currentread", async (req: Request, res: Response) => {
     const user = await authController.getUserById(req.body.id);
     const book = await authController.addCurrentRead(user, req.body.bookId);
     res.status(book.statusCode).json(book);
+  });
+
+  //remove current read
+  router.put("/removecurrent", async (req: Request, res: Response) => {
+    const user = await authController.getUserById(req.body.id);
+    const book = await authController.deleteCurrentRead(user);
+    res.status(book.statusCode).json(book);
+  });
+
+  //add progress to yearly goal
+  router.post("/readbooks", async (req: Request, res: Response) => {
+    const user = await authController.getUserById(req.body.id);
+    const progress = await authController.updateReadBooksCount(
+      user,
+      req.body.progress
+    );
+    res.status(progress.statusCode).json(progress);
+  });
+
+  //add progress on current read
+  router.post("/progress", async (req: Request, res: Response) => {
+    const user = await authController.getUserById(req.body.id);
+    if (req.body.progress <= 100) {
+      const progress = await authController.updateProgress(
+        user,
+        req.body.progress
+      );
+      res.status(progress.statusCode).json(progress);
+    } else {
+      return res.status(403).send({
+        message: "Progress percentage must be 100 or less",
+      });
+    }
   });
 
   return router;

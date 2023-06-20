@@ -6,7 +6,7 @@ import { Book } from "../Book";
 import { Collection } from "./Collection";
 
 export interface CollectionRepositoryContract {
-  saveCollection(title: string): Promise<Collection>;
+  saveCollection(title: string, user: User): Promise<Collection>;
   saveBookToCollection(collection: Collection, book: Book): Promise<Collection>;
   getCollectionById(id: string): Promise<Collection>;
   deleteBookFromCollection(
@@ -23,10 +23,11 @@ export class CollectionRepository implements CollectionRepositoryContract {
     this.repository = AppDataSource.getRepository(Collection);
   }
 
-  saveCollection(title: string): Promise<Collection> {
+  saveCollection(title: string, user: User): Promise<Collection> {
     const newCollection = this.repository.create({
       title: title,
     });
+    newCollection.user = user;
     return this.repository.save(newCollection);
   }
 

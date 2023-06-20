@@ -12,6 +12,7 @@ import {
 } from "typeorm";
 import { User } from "../User/User";
 import { Book } from "../Book/Book";
+import { Comment } from "../Comment/Comment";
 
 @Entity()
 export class Review {
@@ -22,14 +23,23 @@ export class Review {
   @Column("varchar", { length: 500 })
   review!: string;
 
-  @ManyToOne(() => User, (user: User) => user.reviews)
+  @Column({ default: 0 })
+  rating!: number;
+
+  @ManyToOne(() => User, (user: User) => user.reviews, {
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE",
+  })
   @JoinColumn({ name: "userId" })
   user: User;
 
   @Column({ default: 0 })
   likes: number;
 
-  @ManyToOne(() => Book, (book: Book) => book.reviews)
+  @ManyToOne(() => Book, (book: Book) => book.reviews, {
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE",
+  })
   @JoinColumn({ name: "bookId" })
   book: Book;
 

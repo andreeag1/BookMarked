@@ -20,12 +20,19 @@ export function createReviewRouter(controllers: {
 
   //save a review
   router.post("/add", async (req: Request, res: Response) => {
-    const review = await reviewController.saveReview(
-      req.body.review,
-      req.body.bookId,
-      req.body.userId
-    );
-    res.status(review.statusCode).json(review);
+    if (req.body.rating <= 5) {
+      const review = await reviewController.saveReview(
+        req.body.review,
+        req.body.bookId,
+        req.body.userId,
+        req.body.rating
+      );
+      res.status(review.statusCode).json(review);
+    } else {
+      return res.status(403).send({
+        message: "Rating must be 5 or less",
+      });
+    }
   });
 
   //get a user's reviews

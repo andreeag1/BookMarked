@@ -10,7 +10,8 @@ export function createCollectionRouter(controllers: {
   //Add a collection
   router.post("/add", async (req: Request, res: Response) => {
     const collection = await collectionController.saveCollection(
-      req.body.title
+      req.body.title,
+      req.body.userId
     );
     res.status(collection.statusCode).json(collection);
   });

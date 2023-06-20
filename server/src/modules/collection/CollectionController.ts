@@ -13,8 +13,11 @@ export class CollectionController implements CollectionControllerContract {
     this.collectionService = collectionService;
   }
 
-  saveCollection(title: string): Promise<SaveCollectionResponse> {
-    this.collectionService.saveCollection(title);
+  saveCollection(
+    title: string,
+    userId: string
+  ): Promise<SaveCollectionResponse> {
+    this.collectionService.saveCollection(title, userId);
     return new Promise<SaveCollectionResponse>((resolve, reject) => {
       resolve({
         statusCode: 200,

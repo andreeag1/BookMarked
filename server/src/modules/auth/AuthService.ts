@@ -72,4 +72,16 @@ export class AuthService implements AuthServiceContract {
   addCurrentRead(user: User, book: Book): Promise<User> {
     return this.userRepository.addCurrentRead(user, book);
   }
+
+  deleteCurrentRead(user: User): Promise<User> {
+    return this.userRepository.deleteCurrentRead(user);
+  }
+
+  updateReadBooksCount(user: User, progress: number): Promise<User> {
+    return this.userRepository.updateReadBooksCount(user, progress);
+  }
+
+  updateProgress(user: User, progress: number): Promise<User> {
+    return this.userRepository.updateProgress(user, progress);
+  }
 }
