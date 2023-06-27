@@ -1,0 +1,12 @@
+.my-books {
+  font-family: Raleway;
+  padding-top: 80px;
+  padding-bottom: 200px;
+  padding-left: 100px;
+}
+
+.list {
+  font-size: 20px;
+  margin-left: -25px;
+  color: black;
+}

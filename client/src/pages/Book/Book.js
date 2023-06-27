@@ -23,10 +23,10 @@ export default function Book() {
     <div className="book-section-wrapper">
       <Header />
       <div className="book-section">
-        <img src={data[0].imageLink} className="book-cover" />
+        <img src={data[bookId - 1].imageLink} className="book-cover" />
         <div className="book-information">
-          <h1>{data[0].title}</h1>
-          <h3>{data[0].author}</h3>
+          <h1>{data[bookId - 1].title}</h1>
+          <h3>{data[bookId - 1].author}</h3>
           <h7>
             Kentucky, 1850. An enslaved groom named Jarret and a bay foal forge
             a bond of understanding that will carry the horse to record-setting

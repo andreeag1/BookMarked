@@ -73,6 +73,7 @@ export default function CurrentlyReading({ setBooksRead }) {
   const [myBool, setmyBool] = React.useState(true);
   const [value, setValue] = React.useState(0);
   const [booksCompleted, setBooksCompleted] = React.useState(0);
+  const [searchedBookInfo, setSearchedBookInfo] = React.useState([]);
 
   const handleClickOpen = (scrollType) => () => {
     setOpen(true);
@@ -115,6 +116,35 @@ export default function CurrentlyReading({ setBooksRead }) {
     setBooksCompleted(booksCompleted + 1);
   };
 
+  const handleSubmit = (e) => {
+    if (e.key === "Enter") {
+      fetch(
+        "https://openlibrary.org/search.json?" +
+          new URLSearchParams({
+            q: search,
+          })
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          const books = data.docs.map((book) => {
+            if (book.author_name && book.title) {
+              const Obj = {
+                title: book.title,
+                author: book.author_name[0],
+                imageLink: `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`,
+              };
+              return Obj;
+            }
+          });
+          const filteredArray = books.filter(function (element) {
+            return element !== undefined;
+          });
+          console.log(filteredArray);
+          setSearchedBookInfo(filteredArray);
+        });
+    }
+  };
+
   const descriptionElementRef = React.useRef(null);
   React.useEffect(() => {
     if (open) {
@@ -123,7 +153,7 @@ export default function CurrentlyReading({ setBooksRead }) {
         descriptionElement.focus();
       }
     }
-  }, [open]);
+  }, [open, searchedBookInfo]);
 
   return myBool ? (
     <div className="container">
@@ -167,18 +197,15 @@ export default function CurrentlyReading({ setBooksRead }) {
             }}
             placeholder="Search books"
             onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={handleSubmit}
           />
           <DialogContent dividers={scroll === "paper"}>
             <div className="map">
-              {data
-                .filter((book) => {
-                  return search === "" ? book : book.title.includes(search);
-                })
-                .map((book) => (
-                  <div className="bookcard">
-                    <BookCard book={book} onClick={handleClick} />
-                  </div>
-                ))}
+              {searchedBookInfo?.map((book) => (
+                <div className="bookcard">
+                  <BookCard book={book} onClick={handleClick} />
+                </div>
+              ))}
             </div>
           </DialogContent>
           <DialogActions>
@@ -190,11 +217,14 @@ export default function CurrentlyReading({ setBooksRead }) {
   ) : (
     <div className="container">
       <div className="current-read-info">
-        <h5>Currently Reading</h5>
+        <div className="title-contianer">
+          <h5>Currently Reading</h5>
+        </div>
         <div className="book-information">
           <div className="book-img">
             <img src={data[0].imageLink} className="image-link" />
           </div>
+
           <div className="book-info-container">
             <span style={{ fontWeight: "bold" }} className="book-name">
               {data[0].title}

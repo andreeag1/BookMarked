@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import books from "../../assets/pictures/books.png";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const theme = createTheme({
   palette: {
@@ -44,6 +45,8 @@ const StyledCard = styled(Card)(({ theme }) => ({
 }));
 
 export default function AboutSection() {
+  const navigate = useNavigate();
+  const handleChange = () => navigate("/login");
   return (
     <div className="about">
       <div className="hero">
@@ -171,6 +174,7 @@ export default function AboutSection() {
                 variant="filled"
                 type="number"
                 sx={{ width: "100px" }}
+                onChange={handleChange}
               />
               <h2>books in {new Date().getFullYear()}</h2>
             </div>

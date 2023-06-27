@@ -33,7 +33,9 @@ export default function CarouselComponent() {
         <h3>Popular Releases</h3>
         <Carousel responsive={responsive}>
           {data.map((book) => (
-            <BookCard book={book} />
+            <div className="book-card">
+              <BookCard book={book} />
+            </div>
           ))}
         </Carousel>
       </div>
@@ -41,7 +43,9 @@ export default function CarouselComponent() {
         <h3>Fiction</h3>
         <Carousel responsive={responsive}>
           {data.map((book) => (
-            <BookCard book={book} />
+            <div className="book-card">
+              <BookCard book={book} />
+            </div>
           ))}
         </Carousel>
       </div>
@@ -49,7 +53,9 @@ export default function CarouselComponent() {
         <h3>Romance</h3>
         <Carousel responsive={responsive}>
           {data.map((book) => (
-            <BookCard book={book} />
+            <div className="book-card">
+              <BookCard book={book} />
+            </div>
           ))}
         </Carousel>
       </div>
@@ -57,7 +63,9 @@ export default function CarouselComponent() {
         <h3>Contemporary</h3>
         <Carousel responsive={responsive}>
           {data.map((book) => (
-            <BookCard book={book} />
+            <div className="book-card">
+              <BookCard book={book} />
+            </div>
           ))}
         </Carousel>
       </div>
@@ -65,7 +73,9 @@ export default function CarouselComponent() {
         <h3>Fantasy</h3>
         <Carousel responsive={responsive}>
           {data.map((book) => (
-            <BookCard book={book} />
+            <div className="book-card">
+              <BookCard book={book} />
+            </div>
           ))}
         </Carousel>
       </div>
@@ -73,7 +83,9 @@ export default function CarouselComponent() {
         <h3>Sci-Fi</h3>
         <Carousel responsive={responsive}>
           {data.map((book) => (
-            <BookCard book={book} />
+            <div className="book-card">
+              <BookCard book={book} />
+            </div>
           ))}
         </Carousel>
       </div>

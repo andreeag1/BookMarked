@@ -14,6 +14,7 @@ import Register from "./pages/Register/Register.js";
 import Dashboard from "./pages/Dashboard/Dashboard.js";
 import Account from "./pages/Account/Accout.js";
 import Book from "./pages/Book/Book.js";
+import MyBooks from "./pages/MyBooks/MyBooks";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/Dashboard" element={<Dashboard />} />
         <Route path="/account" element={<Account />} />
         <Route path="/book/:bookId" element={<Book />} />
+        <Route path="/my-books" element={<MyBooks />} />
       </Routes>
     </Router>
   );

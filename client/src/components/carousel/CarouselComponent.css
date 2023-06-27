@@ -3,6 +3,14 @@
   font-family: Raleway;
 }
 
+.book-card {
+  cursor: pointer;
+}
+
+.book-card:hover {
+  transform: scale(0.9);
+}
+
 .first-carousel {
   background-color: #f0ebe6;
   padding-top: 10ch;

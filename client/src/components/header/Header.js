@@ -69,6 +69,8 @@ const StyledTextfield = styled(TextField)(({ theme }) => ({
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [search, setSearch] = React.useState("");
+  const [searchedBookInfo, setSearchedBookInfo] = React.useState([]);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -76,6 +78,37 @@ const Header = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleSubmit = (e) => {
+    if (e.key === "Enter") {
+      fetch(
+        "https://openlibrary.org/search.json?" +
+          new URLSearchParams({
+            q: search,
+          })
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          const books = data.docs.map((book) => {
+            if (book.author_name && book.title) {
+              const Obj = {
+                id: book.id,
+                title: book.title,
+                author: book.author_name[0],
+                imageLink: `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`,
+              };
+              return Obj;
+            }
+          });
+          const filteredArray = books.filter(function (element) {
+            return element !== undefined;
+          });
+          console.log(filteredArray);
+          setSearchedBookInfo(filteredArray);
+        });
+    }
+  };
+
   return (
     <div className="Header">
       <ThemeProvider theme={theme}>
@@ -92,7 +125,6 @@ const Header = () => {
               <div className="search-bar">
                 <Search>
                   <Autocomplete
-                    disablePortal
                     freeSolo
                     id="combo-box-demo"
                     sx={{
@@ -103,8 +135,8 @@ const Header = () => {
                       maxWidth: 200,
                       maxHeight: 50,
                     }}
-                    options={data}
-                    getOptionLabel={(option) => option.title}
+                    options={searchedBookInfo}
+                    // getOptionLabel={(option) => option.title}
                     renderOption={(props, option) => {
                       return (
                         <li {...props}>
@@ -131,6 +163,8 @@ const Header = () => {
                         }}
                         sx={{ height: 50, width: 300 }}
                         placeholder="Search books"
+                        onChange={(e) => setSearch(e.target.value)}
+                        onKeyDown={handleSubmit}
                       />
                     )}
                   />
@@ -150,9 +184,19 @@ const Header = () => {
                     "aria-labelledby": "basic-button",
                   }}
                 >
-                  <MenuItem onClick={handleClose}>Home</MenuItem>
-                  <MenuItem onClick={handleClose}>My Books</MenuItem>
-                  <MenuItem onClick={handleClose}>Browse</MenuItem>
+                  <MenuItem onClick={handleClose} component={Link} to="/">
+                    Home
+                  </MenuItem>
+                  <MenuItem
+                    onClick={handleClose}
+                    component={Link}
+                    to="/my-books"
+                  >
+                    My Books
+                  </MenuItem>
+                  <MenuItem onClick={handleClose} component={Link} to="/browse">
+                    Browse
+                  </MenuItem>
                   <MenuItem onClick={handleClose}>My Account</MenuItem>
                 </Menu>
               </div>
@@ -168,7 +212,12 @@ const Header = () => {
                   </Button>
                 </div>
                 <div className="links">
-                  <Button key="MyBooks" sx={{ color: "inherit" }}>
+                  <Button
+                    key="MyBooks"
+                    sx={{ color: "inherit" }}
+                    component={Link}
+                    to="/my-books"
+                  >
                     My Books
                   </Button>
                 </div>

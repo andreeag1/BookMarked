@@ -6,6 +6,7 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
+import "./BookCard.css";
 
 const CardInfo = styled(CardContent)(({ theme }) => ({
   "&:last-child": {
@@ -25,25 +26,26 @@ const BookCard = ({ book, onClick }) => {
           alt={book.title}
         />
       </Box>
-
-      <CardInfo>
-        <Typography
-          variant="h6"
-          style={{ fontFamily: "Raleway", fontSize: 11 }}
-          gutterBottom
-          component="div"
-        >
-          {book.title}
-        </Typography>
-        <Typography
-          variant="h8"
-          style={{ fontFamily: "Raleway", fontSize: 10 }}
-          gutterBottom
-          component="div"
-        >
-          by {book.author}
-        </Typography>
-      </CardInfo>
+      <div className="book-info">
+        <CardInfo>
+          <Typography
+            variant="h6"
+            style={{ fontFamily: "Raleway", fontSize: 11 }}
+            gutterBottom
+            component="div"
+          >
+            {book.title}
+          </Typography>
+          <Typography
+            variant="h8"
+            style={{ fontFamily: "Raleway", fontSize: 10 }}
+            gutterBottom
+            component="div"
+          >
+            by {book.author}
+          </Typography>
+        </CardInfo>
+      </div>
     </Card>
   );
 };
