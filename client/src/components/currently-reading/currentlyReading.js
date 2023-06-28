@@ -74,6 +74,11 @@ export default function CurrentlyReading({ setBooksRead }) {
   const [value, setValue] = React.useState(0);
   const [booksCompleted, setBooksCompleted] = React.useState(0);
   const [searchedBookInfo, setSearchedBookInfo] = React.useState([]);
+  const [title, setTitle] = React.useState("");
+  const [author, setAuthor] = React.useState("");
+  const [description, setDescription] = React.useState("");
+  const [imageLink, setImageLink] = React.useState("");
+  const [bookId, setBookId] = React.useState("");
 
   const handleClickOpen = (scrollType) => () => {
     setOpen(true);
@@ -85,6 +90,11 @@ export default function CurrentlyReading({ setBooksRead }) {
   };
 
   const handleClick = (e) => {
+    // setTitle(e.target.book.title);
+    // setAuthor(e.target.book.author);
+    // setDescription(e.target.book.description);
+    // setImageLink(e.target.book.imageLink);
+    // console.log(title);
     setCurrentRead(e.target.book);
     setOpen(false);
     setmyBool(!myBool);
@@ -127,12 +137,25 @@ export default function CurrentlyReading({ setBooksRead }) {
         .then((response) => response.json())
         .then((data) => {
           const books = data.docs.map((book) => {
-            if (book.author_name && book.title) {
+            if (book.author_name && book.title && book.key && book.cover_i) {
+              const Description = fetch(
+                `https://openlibrary.org${book.key}.json`
+              )
+                .then((response) => response.json())
+                .then((data) => {
+                  if (data.description.value) {
+                    const Description = data.description.value;
+                    return Description;
+                  }
+                });
               const Obj = {
+                description: Description,
                 title: book.title,
                 author: book.author_name[0],
                 imageLink: `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`,
               };
+
+              console.log(Obj);
               return Obj;
             }
           });

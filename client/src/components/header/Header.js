@@ -71,6 +71,12 @@ const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [search, setSearch] = React.useState("");
   const [searchedBookInfo, setSearchedBookInfo] = React.useState([]);
+  const [title, setTitle] = React.useState("");
+  const [author, setAuthor] = React.useState("");
+  const [description, setDescription] = React.useState("");
+  const [imageLink, setImageLink] = React.useState("");
+  const [bookId, setBookId] = React.useState("");
+
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -90,13 +96,24 @@ const Header = () => {
         .then((response) => response.json())
         .then((data) => {
           const books = data.docs.map((book) => {
-            if (book.author_name && book.title) {
+            if (book.author_name && book.title && book.key && book.cover_i) {
+              const Description = fetch(
+                `https://openlibrary.org${book.key}.json`
+              )
+                .then((response) => response.json())
+                .then((data) => {
+                  if (data.description.value) {
+                    const Description = data.description.value;
+                    return Description;
+                  }
+                });
               const Obj = {
-                id: book.id,
+                description: Description,
                 title: book.title,
                 author: book.author_name[0],
                 imageLink: `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`,
               };
+              console.log(Obj);
               return Obj;
             }
           });

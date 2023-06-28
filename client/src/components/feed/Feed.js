@@ -33,7 +33,9 @@ export default function Feed() {
             <div className="postWrapper">
               <div className="postTop">
                 <div className="postTopLeft">
-                  <img className="postProfileImg" src={profilePic} alt="" />
+                  <a href="/account">
+                    <img className="postProfileImg" src={profilePic} alt="" />
+                  </a>
                   <span className="postUsername">John Doe</span>
                   <span className="postUsername">reviewed</span>
                   <span className="postUsername">Book title</span>

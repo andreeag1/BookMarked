@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Signup.css";
 import { TextField, Button, FormControl } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { registerUser } from "../../modules/user/userRepository.js";
 import { useFormik } from "formik";
 import { basicSchema } from "../../schemas";
@@ -18,18 +18,20 @@ const ColorButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const onSubmit = (values, actions) => {
-  registerUser(
-    values.firstName,
-    values.lastName,
-    values.email,
-    values.username,
-    values.password
-  );
-  actions.resetForm();
-};
-
 export default function Signup() {
+  const navigate = useNavigate();
+
+  const onSubmit = () => {
+    registerUser(
+      values.firstName,
+      values.lastName,
+      values.email,
+      values.username,
+      values.password
+    );
+    navigate("/login");
+  };
+
   const { values, errors, touched, handleChange, handleBlur, handleSubmit } =
     useFormik({
       initialValues: {
@@ -42,7 +44,6 @@ export default function Signup() {
       validationSchema: basicSchema,
       onSubmit,
     });
-  console.log(errors);
 
   return (
     <div className="signup">
@@ -142,7 +143,7 @@ export default function Signup() {
         ) : (
           <div />
         )}
-        <ColorButton component={Link} to="/Login" onClick={handleSubmit}>
+        <ColorButton onClick={handleSubmit} component={Link} to="/login">
           Sign-up
         </ColorButton>
       </div>
