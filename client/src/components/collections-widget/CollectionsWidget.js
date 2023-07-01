@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import "./CollectionsWidget.css";
 import {
   TextField,
@@ -10,6 +10,11 @@ import {
   DialogTitle,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import {
+  addCollection,
+  getCollectionTitles,
+} from "../../modules/collection/collectionRepository";
+import { getCurrentUserId } from "../../modules/user/userRepository";
 
 const ColorButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText("#E9E7E5"),
@@ -23,6 +28,19 @@ export default function CollectionsWidget() {
   const [open, setOpen] = React.useState(false);
   const [newItem, setNewItem] = React.useState("");
   const [items, setItems] = React.useState([]);
+  const [collection, setCollection] = React.useState(false);
+  const [collectionId, setCollectionId] = React.useState([]);
+
+  useEffect(() => {
+    const getCollection = async () => {
+      const userId = await getCurrentUserId();
+      const collections = await getCollectionTitles(userId);
+      setItems(collections);
+      console.log(collections);
+    };
+
+    getCollection();
+  }, [collection]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -32,21 +50,26 @@ export default function CollectionsWidget() {
     setOpen(false);
   };
 
-  function addItem() {
+  const addItem = async () => {
     if (!newItem) {
       alert("Enter a collection name");
       return;
     }
 
-    const item = {
-      id: Math.floor(Math.random() * 1000),
-      value: newItem,
-    };
+    const userId = await getCurrentUserId();
+    await addCollection(newItem, userId);
 
-    setItems((oldList) => [...oldList, item]);
+    setCollection(true);
+
+    // const item = {
+    //   id: Math.floor(Math.random() * 1000),
+    //   value: newItem,
+    // };
+
+    // setItems((oldList) => [...oldList, item]);
 
     setNewItem("");
-  }
+  };
 
   return (
     <div className="collections-container">
@@ -55,9 +78,9 @@ export default function CollectionsWidget() {
         <ul className="list">
           {items.map((item) => {
             return (
-              <a href={"/" + item.value}>
+              <a href={"/" + item.title}>
                 <li key={item.id} className="list-item">
-                  {item.value}
+                  {item.title}
                 </li>
               </a>
             );
@@ -87,7 +110,7 @@ export default function CollectionsWidget() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={() => addItem()}>Add</Button>
+          <Button onClick={addItem}>Add</Button>
         </DialogActions>
       </Dialog>
     </div>

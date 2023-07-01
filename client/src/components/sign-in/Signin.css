@@ -48,3 +48,10 @@
   font-size: 1rem;
   margin-bottom: -2;
 }
+
+.invalid-error {
+  color: red;
+  padding-right: 8rem;
+  font-size: 1rem;
+  margin-bottom: -2;
+}

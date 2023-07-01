@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useRef } from "react";
 import "./currentlyReading.css";
 import AddIcon from "@mui/icons-material/Add";
 import {
@@ -9,6 +9,7 @@ import {
   Box,
   Typography,
   Rating,
+  Autocomplete,
 } from "@mui/material";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -22,6 +23,15 @@ import PropTypes from "prop-types";
 import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
+import {
+  getCurrentUserId,
+  addCurrentRead,
+  getCurrentRead,
+  removeCurrentRead,
+  addProgressToCurrentRead,
+  addProgressToYearlyGoal,
+} from "../../modules/user/userRepository";
+import { createBook } from "../../modules/books/bookRepository";
 
 const ColorButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText("#cab9a9"),
@@ -62,6 +72,17 @@ LinearProgressWithLabel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
+const useDidMountEffect = (saveBook, bookInfo) => {
+  const didMount = useRef(false);
+  React.useEffect(() => {
+    if (didMount.current) {
+      saveBook();
+    } else {
+      didMount.current = true;
+    }
+  }, [bookInfo]);
+};
+
 export default function CurrentlyReading({ setBooksRead }) {
   const [currentRead, setCurrentRead] = React.useState(<BookCard />);
   const [open, setOpen] = React.useState(false);
@@ -70,15 +91,23 @@ export default function CurrentlyReading({ setBooksRead }) {
   const [search, setSearch] = React.useState("");
   const [progress, setProgress] = React.useState(0);
   const [update, setUpdate] = React.useState(0);
-  const [myBool, setmyBool] = React.useState(true);
+  const [myBool, setMyBool] = React.useState(true);
   const [value, setValue] = React.useState(0);
   const [booksCompleted, setBooksCompleted] = React.useState(0);
-  const [searchedBookInfo, setSearchedBookInfo] = React.useState([]);
-  const [title, setTitle] = React.useState("");
-  const [author, setAuthor] = React.useState("");
-  const [description, setDescription] = React.useState("");
-  const [imageLink, setImageLink] = React.useState("");
   const [bookId, setBookId] = React.useState("");
+  const [searchedBookInfo, setSearchedBookInfo] = React.useState([]);
+  const [bookInfo, setBookInfo] = React.useState([]);
+  const [confirmedBookInfo, setConfirmedBookInfo] = React.useState([]);
+  const [noCurrentRead, setNoCurrentRead] = React.useState(true);
+  const [bookRemoved, setBookRemoved] = React.useState(false);
+
+  const top100Films = [
+    { label: "The Shawshank Redemption", year: 1994 },
+    { label: "The Godfather", year: 1972 },
+    { label: "The Godfather: Part II", year: 1974 },
+    { label: "The Dark Knight", year: 2008 },
+    { label: "12 Angry Men", year: 1957 },
+  ];
 
   const handleClickOpen = (scrollType) => () => {
     setOpen(true);
@@ -89,24 +118,69 @@ export default function CurrentlyReading({ setBooksRead }) {
     setOpen(false);
   };
 
-  const handleClick = (e) => {
-    // setTitle(e.target.book.title);
-    // setAuthor(e.target.book.author);
-    // setDescription(e.target.book.description);
-    // setImageLink(e.target.book.imageLink);
-    // console.log(title);
-    setCurrentRead(e.target.book);
+  React.useEffect(() => {
+    const saveBook = async () => {
+      const userId = await getCurrentUserId();
+      if (bookRemoved == true) {
+        const currentRead = await addCurrentRead(
+          userId,
+          bookInfo.title,
+          bookInfo.author,
+          bookInfo.imageLink
+        );
+        console.log(currentRead);
+        setConfirmedBookInfo({
+          title: bookInfo.title,
+          author: bookInfo.author,
+          imageLink: bookInfo.imageLink,
+        });
+        setMyBool(false);
+      }
+    };
+    saveBook();
+  }, [bookInfo]);
+
+  React.useEffect(() => {
+    const currentRead = async () => {
+      const userId = await getCurrentUserId();
+      const existingCurrentRead = await getCurrentRead(userId);
+      console.log(existingCurrentRead);
+      if ((await getCurrentRead(userId)) == null) {
+        setMyBool(true);
+      } else {
+        setMyBool(false);
+        console.log(existingCurrentRead);
+        setConfirmedBookInfo({
+          title: existingCurrentRead.title,
+          author: existingCurrentRead.author,
+          imageLink: existingCurrentRead.imageLink,
+        });
+        setProgress(existingCurrentRead.progress);
+      }
+    };
+    currentRead();
+  }, [noCurrentRead]);
+
+  useDidMountEffect(() => {
+    console.log("second render");
+  });
+
+  const handleClick = async () => {
+    setBookRemoved(true);
     setOpen(false);
-    setmyBool(!myBool);
   };
 
-  function toggleBool() {
-    setmyBool(!myBool);
-  }
+  useEffect(() => {
+    const saveProgress = async () => {
+      const userId = await getCurrentUserId();
+      addProgressToCurrentRead(userId, progress);
+    };
+    saveProgress();
+  }, [progress]);
 
-  const handleUpdate = () => {
-    setOpen(false);
+  const handleUpdate = async () => {
     setProgress(update);
+    setOpen(false);
   };
 
   const handleFinished = () => {
@@ -118,13 +192,25 @@ export default function CurrentlyReading({ setBooksRead }) {
     setSecondOpen(false);
   };
 
-  const handleDone = () => {
+  const handleDone = async () => {
+    const userId = await getCurrentUserId();
+    removeCurrentRead(userId);
     setSecondOpen(false);
-    setmyBool(!myBool);
+    setNoCurrentRead(true);
+    setMyBool(true);
     setProgress(0);
     setBooksRead(booksCompleted + 1);
     setBooksCompleted(booksCompleted + 1);
+    await addProgressToYearlyGoal(userId, booksCompleted + 1);
   };
+
+  // await fetch(`https://openlibrary.org${bookInfo.id}.json`)
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       const Description = data.description.value;
+  //       console.log(Description);
+  //       setBookInfo({ description: Description });
+  //     });
 
   const handleSubmit = (e) => {
     if (e.key === "Enter") {
@@ -138,23 +224,11 @@ export default function CurrentlyReading({ setBooksRead }) {
         .then((data) => {
           const books = data.docs.map((book) => {
             if (book.author_name && book.title && book.key && book.cover_i) {
-              const Description = fetch(
-                `https://openlibrary.org${book.key}.json`
-              )
-                .then((response) => response.json())
-                .then((data) => {
-                  if (data.description.value) {
-                    const Description = data.description.value;
-                    return Description;
-                  }
-                });
               const Obj = {
-                description: Description,
                 title: book.title,
                 author: book.author_name[0],
                 imageLink: `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`,
               };
-
               console.log(Obj);
               return Obj;
             }
@@ -183,7 +257,7 @@ export default function CurrentlyReading({ setBooksRead }) {
       <div className="current-read">
         <h5>Currently Reading</h5>
         <div className="book-info">
-          <div className="book-image">
+          <div className="book-imagee">
             <IconButton onClick={handleClickOpen("paper")}>
               <AddIcon className="add-icon" sx={{ fontSize: "45px" }} />
             </IconButton>
@@ -225,8 +299,17 @@ export default function CurrentlyReading({ setBooksRead }) {
           <DialogContent dividers={scroll === "paper"}>
             <div className="map">
               {searchedBookInfo?.map((book) => (
-                <div className="bookcard">
-                  <BookCard book={book} onClick={handleClick} />
+                <div className="bookcard" onClick={handleClick}>
+                  <BookCard
+                    book={book}
+                    onClick={() => {
+                      setBookInfo({
+                        title: book.title,
+                        author: book.author,
+                        imageLink: book.imageLink,
+                      });
+                    }}
+                  />
                 </div>
               ))}
             </div>
@@ -245,15 +328,15 @@ export default function CurrentlyReading({ setBooksRead }) {
         </div>
         <div className="book-information">
           <div className="book-img">
-            <img src={data[0].imageLink} className="image-link" />
+            <img src={confirmedBookInfo.imageLink} className="image-link" />
           </div>
 
           <div className="book-info-container">
             <span style={{ fontWeight: "bold" }} className="book-name">
-              {data[0].title}
+              {confirmedBookInfo.title}
             </span>
             <span style={{ fontWeight: "bold" }} className="book-name">
-              {data[0].author}
+              {confirmedBookInfo.author}
             </span>
             <div className="progress-wrapper">
               <LinearProgressWithLabel variant="determinate" value={progress} />
@@ -316,15 +399,29 @@ export default function CurrentlyReading({ setBooksRead }) {
           <DialogTitle>Congrats!</DialogTitle>
           <DialogContent>
             <div className="update">
-              <h6>Give {data[0].title} a rating!</h6>
-              <div>
-                <Rating
-                  name="simple-controlled"
-                  value={value}
-                  onChange={(event, newValue) => {
-                    setValue(newValue);
-                  }}
-                />
+              <h6>Give {confirmedBookInfo.title} a rating!</h6>
+              <div className="rate">
+                <div className="rating">
+                  <Rating
+                    name="simple-controlled"
+                    value={value}
+                    onChange={(event, newValue) => {
+                      setValue(newValue);
+                    }}
+                  />
+                </div>
+
+                <div className="collections">
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={top100Films}
+                    sx={{ width: 250 }}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Add to a collection" />
+                    )}
+                  />
+                </div>
               </div>
 
               <TextField
@@ -333,7 +430,7 @@ export default function CurrentlyReading({ setBooksRead }) {
                 id="fullWidth"
                 inputProps={{
                   style: {
-                    height: "300px",
+                    height: "270px",
                   },
                 }}
                 multiline

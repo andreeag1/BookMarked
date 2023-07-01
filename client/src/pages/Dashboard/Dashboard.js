@@ -10,9 +10,15 @@ import Grid from "@mui/material/Grid";
 import BookCard from "../../components/book-card/BookCard";
 import Bookshelf from "../../components/bookshelf/Bookshelf";
 import { Divider } from "@mui/material";
+import { getCurrentUserId } from "../../modules/user/userRepository";
 
 export default function Dashboard() {
   const [booksRead, setBooksRead] = React.useState(0);
+
+  const getUser = async () => {
+    const token = await getCurrentUserId();
+    console.log(token);
+  };
 
   return (
     <div className="dashboard">

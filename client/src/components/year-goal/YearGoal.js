@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import "./YearGoal.css";
 import { TextField, Button, Typography, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -8,6 +8,11 @@ import bookStack from "../../assets/animations/bookStack.webp";
 import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
+import {
+  getCurrentUserId,
+  addYearlyGoal,
+  getUserById,
+} from "../../modules/user/userRepository";
 
 const ColorButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText("#E9E7E5"),
@@ -49,13 +54,44 @@ LinearProgressWithLabel.propTypes = {
 };
 
 export default function YearGoal({ booksRead }) {
-  const [myBool, setmyBool] = React.useState(true);
+  const [myBool, setMyBool] = React.useState(true);
   const [goal, setGoal] = React.useState(0);
   const [progress, setProgress] = React.useState(0);
+  const [noCurrentGoal, setNoCurrentGoal] = React.useState(true);
+  const [newGoal, setNewGoal] = React.useState(false);
 
-  function toggleBool() {
-    setmyBool(!myBool);
-  }
+  useEffect(() => {
+    const setNewProgress = async () => {
+      const userId = await getCurrentUserId();
+      const user = await getUserById(userId);
+      const newProgress = user.readbooks;
+      setProgress(newProgress);
+    };
+    setNewProgress();
+  }, [booksRead]);
+
+  useEffect(() => {
+    const getGoal = async () => {
+      const userId = await getCurrentUserId();
+      const user = await getUserById(userId);
+      const goal = user.goal;
+      if (goal !== 0) {
+        setGoal(goal);
+        setMyBool(false);
+      } else {
+        setMyBool(true);
+      }
+    };
+    getGoal();
+  }, [noCurrentGoal]);
+
+  const toggleBool = async () => {
+    const userId = await getCurrentUserId();
+    await addYearlyGoal(userId, goal);
+    setNoCurrentGoal(false);
+    setNewGoal(true);
+    setMyBool(false);
+  };
 
   return myBool ? (
     <div className="container-year-goal">
@@ -85,12 +121,12 @@ export default function YearGoal({ booksRead }) {
           <h5>Your {new Date().getFullYear()} Reading Challenge!</h5>
           <div className="books-read">
             <h6>
-              You have read {booksRead} books out of {goal}
+              You have read {progress} books out of {goal}
             </h6>
           </div>
           <LinearProgressWithLabel
             variant="determinate"
-            value={(booksRead / goal) * 100}
+            value={(progress / goal) * 100}
           />
         </div>
         <img src={book} alt="" className="book-gif" />

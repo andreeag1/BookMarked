@@ -1,6 +1,6 @@
-export const createBook = async (title, author, description, imageLink) => {
+export const createBook = async (title, author, imageLink) => {
   try {
-    const res = await fetch(`http://localhost:5000/book/add`, {
+    const res = await fetch("http://localhost:5000/book/add", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -8,7 +8,6 @@ export const createBook = async (title, author, description, imageLink) => {
       body: JSON.stringify({
         title: title,
         author: author,
-        description: description,
         imageLink: imageLink,
       }),
     });
@@ -17,7 +16,7 @@ export const createBook = async (title, author, description, imageLink) => {
       console.log(data.description);
       return;
     }
-    console.log(data);
+    return data;
   } catch (error) {
     console.log(error);
   }

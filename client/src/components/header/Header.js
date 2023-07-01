@@ -24,6 +24,7 @@ import { Link } from "react-router-dom";
 import data from "../../mock.json";
 import MenuIcon from "@mui/icons-material/Menu";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { getCurrentUserId } from "../../modules/user/userRepository";
 
 const theme = createTheme({
   palette: {
@@ -71,11 +72,6 @@ const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [search, setSearch] = React.useState("");
   const [searchedBookInfo, setSearchedBookInfo] = React.useState([]);
-  const [title, setTitle] = React.useState("");
-  const [author, setAuthor] = React.useState("");
-  const [description, setDescription] = React.useState("");
-  const [imageLink, setImageLink] = React.useState("");
-  const [bookId, setBookId] = React.useState("");
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -124,6 +120,11 @@ const Header = () => {
           setSearchedBookInfo(filteredArray);
         });
     }
+  };
+
+  const getUser = async () => {
+    const token = await getCurrentUserId();
+    console.log(token);
   };
 
   return (
@@ -255,7 +256,10 @@ const Header = () => {
                   <CircleNotificationsIcon className="CircleNotificationsIcon" />
                 </IconButton>
                 <IconButton component={Link} to="/account">
-                  <AccountCircle className="AccountCircleIcon" />
+                  <AccountCircle
+                    className="AccountCircleIcon"
+                    onClick={getUser}
+                  />
                 </IconButton>
               </div>
             </Toolbar>

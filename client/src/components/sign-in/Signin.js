@@ -18,11 +18,17 @@ const ColorButton = styled(Button)(({ theme }) => ({
 }));
 
 export default function Signin() {
+  const [error, setError] = React.useState(false);
   const navigate = useNavigate();
 
-  const onSubmit = () => {
-    loginUser(values.email, values.password);
-    navigate("/Dashboard");
+  const onSubmit = async () => {
+    const loggedIn = await loginUser(values.email, values.password);
+    if (loggedIn === 200) {
+      setError(false);
+      navigate("/Dashboard");
+    } else {
+      setError(true);
+    }
   };
 
   const { values, errors, touched, handleChange, handleBlur, handleSubmit } =
@@ -68,6 +74,11 @@ export default function Signin() {
         </div>
         {errors.password && touched.password ? (
           <p className="error-class">{errors.password}</p>
+        ) : (
+          <div />
+        )}
+        {error === true ? (
+          <p className="invalid-error">Please enter valid credentials</p>
         ) : (
           <div />
         )}

@@ -19,7 +19,22 @@
   padding-bottom: 1em;
 }
 
-.book-image {
+.rate {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: row;
+}
+
+.collections {
+  padding-left: 2rem;
+  padding-bottom: 1rem;
+}
+
+.rating {
+  padding-top: 1rem;
+}
+
+.book-imagee {
   background-color: #e1d5ca;
   width: 7em;
   height: 10em;
@@ -59,18 +74,19 @@
 }
 
 .book-img {
-  padding-top: 0.5rem;
+  padding-top: 0.8rem;
   margin-left: -17rem;
 }
 
 .image-link {
   width: 120px;
+  height: 150px;
   border-radius: 3%;
 }
 
 .book-info-container {
   width: 200px;
-  margin-top: -170px;
+  margin-top: -150px;
   margin-left: 20px;
   display: flex;
   flex-direction: column;
