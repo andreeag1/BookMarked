@@ -73,7 +73,7 @@ const commentRepository = new CommentRepository();
 const collectionRepository = new CollectionRepository();
 
 const bookService = new BookService(bookRepository);
-const authService = new AuthService(userRepository);
+const authService = new AuthService(userRepository, bookRepository);
 const reviewService = new ReviewService(
   reviewRepository,
   userRepository,

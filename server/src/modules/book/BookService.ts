@@ -24,10 +24,9 @@ export class BookService implements BookServiceContract {
   saveBook(
     title: string,
     author: string,
-    description: string,
     imageLink: string
-  ): Promise<Book> {
-    return this.bookRepository.saveBook(title, author, description, imageLink);
+  ): Promise<Book | null> {
+    return this.bookRepository.saveBook(title, author, imageLink);
   }
 
   getBookById(id: string): Promise<Book> {

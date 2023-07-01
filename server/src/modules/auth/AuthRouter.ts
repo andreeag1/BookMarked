@@ -4,16 +4,28 @@ import bcryptjs from "bcryptjs";
 import { sign, verify } from "jsonwebtoken";
 import { UserRepository } from "../../entity";
 import { authenticate } from "../../lib/middlewares";
+import jwt_decode from "jwt-decode";
+import { BookController, BookControllerContract } from "../book";
 
 export function createAuthRouter(controllers: {
   authController: AuthControllerContract;
+  bookController: BookControllerContract;
 }) {
   const router = Router();
-  const { authController } = controllers;
+  const { authController, bookController } = controllers;
 
-  //register
+  //register DONE
   router.post("/register", async (req: Request, res: Response) => {
     const { firstName, lastName, email, username, password } = req.body;
+
+    // const existingEmail = await authController.getUserByEmail(email);
+    // const existingUsername = await authController.getUserByUsername(username);
+
+    // if (existingEmail == null || existingUsername == null) {
+    //   return res.status(404).json({
+    //     message: "User already exists under these credentials",
+    //   });
+    // }
 
     const user = await authController.saveUser(
       firstName,
@@ -22,11 +34,10 @@ export function createAuthRouter(controllers: {
       username,
       password
     );
-
     res.status(user.statusCode).json(user);
   });
 
-  //login
+  //login DONE
   router.post("/login", async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
@@ -70,26 +81,32 @@ export function createAuthRouter(controllers: {
       maxAge: 7 * 24 * 60 * 60 * 1000, //equivalent to 7 days
     });
 
-    res.send({
+    user.isAdmin = true;
+    await authController.updateUser(user);
+
+    return res.status(200).send({
       message: "success",
     });
   });
 
-  //logout
-  // router.get("/logout", async (req: Request, res: Response) => {
-  //   res.cookie("accessToken", "", { maxAge: 0 });
-  //   res.cookie("refreshToken", "", { maxAge: 0 });
-  //   res.sendStatus(200);
-  // });
+  //get user id from jwt token DONE
+  router.get("/me", authenticate, async (req: Request, res: Response) => {
+    const accessToken = req.cookies["accessToken"];
+    const decoded = jwt_decode(accessToken);
+    res.status(200).send(decoded);
+  });
 
-  //get a user
+  //logout
+  router.get("/logout", async (req: Request, res: Response) => {
+    res.cookie("accessToken", "", { maxAge: 0 });
+    res.cookie("refreshToken", "", { maxAge: 0 });
+    res.sendStatus(200);
+  });
+
+  //get a user by id
   router.get("/:id", async (req: Request, res: Response) => {
-    try {
-      const user = await authController.getUserById(req.params.id);
-      res.json(user);
-    } catch (err) {
-      res.sendStatus(500);
-    }
+    const user = await authController.getUserById(req.params.id);
+    res.json(user);
   });
 
   //follow a user
@@ -153,18 +170,33 @@ export function createAuthRouter(controllers: {
     res.status(goal.statusCode).json(goal);
   });
 
-  //add a current read
+  //add a current read DONE
   router.post("/currentread", async (req: Request, res: Response) => {
     const user = await authController.getUserById(req.body.id);
-    const book = await authController.addCurrentRead(user, req.body.bookId);
-    res.status(book.statusCode).json(book);
+    user.title = req.body.title;
+    user.author = req.body.author;
+    user.imageLink = req.body.imageLink;
+    const newUser = await authController.updateUser(user);
+    res.json(newUser);
   });
 
-  //remove current read
+  //remove current read DONE
   router.put("/removecurrent", async (req: Request, res: Response) => {
     const user = await authController.getUserById(req.body.id);
-    const book = await authController.deleteCurrentRead(user);
-    res.status(book.statusCode).json(book);
+    user.title = "";
+    user.author = "";
+    user.imageLink = "";
+    const newUser = await authController.updateUser(user);
+    res.json(newUser);
+  });
+
+  //get current read DONE
+  router.get("/getcurrent/:id", async (req: Request, res: Response) => {
+    const user = await authController.getUserById(req.params.id);
+    if (user.title == "") {
+      return null;
+    }
+    return res.json(user);
   });
 
   //add progress to yearly goal
@@ -177,7 +209,7 @@ export function createAuthRouter(controllers: {
     res.status(progress.statusCode).json(progress);
   });
 
-  //add progress on current read
+  //add progress on current read  DONE
   router.post("/progress", async (req: Request, res: Response) => {
     const user = await authController.getUserById(req.body.id);
     if (req.body.progress <= 100) {

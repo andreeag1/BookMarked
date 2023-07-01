@@ -136,4 +136,12 @@ export class AuthController implements AuthControllerContract {
       });
     });
   }
+
+  getUserByUsername(username: string): Promise<User | null> {
+    return this.authService.getUserByUsername(username);
+  }
+
+  getCurrentRead(id: string): Promise<User | null> {
+    return this.authService.getCurrentRead(id);
+  }
 }

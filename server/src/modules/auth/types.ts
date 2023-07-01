@@ -27,6 +27,8 @@ export interface AuthControllerContract {
   deleteCurrentRead(user: User): Promise<SaveUserResponse>;
   updateReadBooksCount(user: User, progress: number): Promise<SaveUserResponse>;
   updateProgress(user: User, progress: number): Promise<SaveUserResponse>;
+  getUserByUsername(username: string): Promise<User | null>;
+  getCurrentRead(id: string): Promise<User | null>;
 }
 
 export interface AuthServiceContract {
@@ -52,6 +54,8 @@ export interface AuthServiceContract {
   deleteCurrentRead(user: User): Promise<User>;
   updateReadBooksCount(user: User, progress: number): Promise<User>;
   updateProgress(user: User, progress: number): Promise<User>;
+  getUserByUsername(username: string): Promise<User | null>;
+  getCurrentRead(id: string): Promise<User | null>;
 }
 
 export type SaveUserResponse = {

@@ -8,19 +8,14 @@ export function createBookRouter(controllers: {
   const router = Router();
   const { bookController } = controllers;
 
-  router.get("/", async (req: Request, res: Response) => {
-    const book = await bookController.getAllBooks();
-    res.json(book);
-  });
-
+  //add a book
   router.post("/add", async (req: Request, res: Response) => {
     const response = await bookController.saveBook(
       req.body.title,
       req.body.author,
-      req.body.description,
       req.body.imageLink
     );
-    res.status(response.statusCode).json(response);
+    res.json(response);
   });
 
   return router;

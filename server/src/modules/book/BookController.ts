@@ -28,16 +28,15 @@ export class BookController implements BookControllerContract {
   saveBook(
     title: string,
     author: string,
-    description: string,
     imageLink: string
-  ): Promise<SaveBookResponse> {
-    this.bookService.saveBook(title, author, description, imageLink);
-    return new Promise<SaveBookResponse>((resolve, reject) => {
-      resolve({
-        statusCode: 200,
-        message: "success",
-      });
-    });
+  ): Promise<Book | null> {
+    return this.bookService.saveBook(title, author, imageLink);
+    // return new Promise<SaveBookResponse>((resolve, reject) => {
+    //   resolve({
+    //     statusCode: 200,
+    //     message: "success",
+    //   });
+    // });
   }
 
   getBookById(id: string): Promise<Book> {

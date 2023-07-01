@@ -9,6 +9,7 @@ export interface UserRepositoryContract {
   getAllUsers(): Promise<User[]>;
   getUserById(id: string): Promise<User>;
   getUserByEmail(email: string): Promise<User | null>;
+  getUserByUsername(username: string): Promise<User | null>;
   saveUser(
     firstName: string,
     lastName: string,
@@ -28,6 +29,7 @@ export interface UserRepositoryContract {
   deleteCurrentRead(user: User): Promise<User>;
   updateReadBooksCount(user: User, progress: number): Promise<User>;
   updateProgress(user: User, progress: number): Promise<User>;
+  getCurrentRead(id: string): Promise<User | null>;
 }
 
 export class UserRepository implements UserRepositoryContract {
@@ -65,6 +67,14 @@ export class UserRepository implements UserRepositoryContract {
     return this.repository.findOne({
       where: {
         email: email,
+      },
+    });
+  }
+
+  getUserByUsername(username: string): Promise<User | null> {
+    return this.repository.findOne({
+      where: {
+        username: username,
       },
     });
   }
@@ -133,6 +143,16 @@ export class UserRepository implements UserRepositoryContract {
   addGoal(user: User, goal: number): Promise<User> {
     user.goal = goal;
     return this.repository.save(user);
+  }
+
+  getCurrentRead(id: string): Promise<User | null> {
+    const queryBuilder = this.repository
+      .createQueryBuilder("user")
+      .leftJoinAndSelect("user.currentread", "currentread")
+      .where("user.id = :idOne", { idOne: id })
+      .getOne();
+
+    return queryBuilder;
   }
 
   addCurrentRead(user: User, book: Book): Promise<User> {

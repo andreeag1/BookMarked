@@ -16,6 +16,7 @@ export interface CollectionControllerContract {
     bookId: string
   ): Promise<SaveCollectionResponse>;
   deleteCollection(id: string): Promise<SaveCollectionResponse>;
+  getCollectionByUser(id: string): Promise<Collection[]>;
 }
 
 export interface CollectionServiceContract {
@@ -30,6 +31,7 @@ export interface CollectionServiceContract {
     bookId: string
   ): Promise<Collection>;
   deleteCollection(id: string): Promise<DeleteResult>;
+  getCollectionByUser(id: string): Promise<Collection[]>;
 }
 
 export type SaveCollectionResponse = {

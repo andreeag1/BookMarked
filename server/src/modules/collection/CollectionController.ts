@@ -65,4 +65,8 @@ export class CollectionController implements CollectionControllerContract {
       });
     });
   }
+
+  getCollectionByUser(id: string): Promise<Collection[]> {
+    return this.collectionService.getCollectionByUser(id);
+  }
 }

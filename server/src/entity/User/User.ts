@@ -46,6 +46,15 @@ export class User {
   @Column({ default: 0 })
   readbooks!: number;
 
+  @Column({ default: "" })
+  title!: string;
+
+  @Column({ default: "" })
+  author!: string;
+
+  @Column({ default: "" })
+  imageLink!: string;
+
   @ManyToMany(() => User)
   @JoinTable({
     name: "followerfollowing",
@@ -77,7 +86,6 @@ export class User {
 
   @ManyToOne(() => Book, (book) => book.users, {
     onUpdate: "CASCADE",
-    onDelete: "CASCADE",
     nullable: true,
   })
   @JoinColumn()

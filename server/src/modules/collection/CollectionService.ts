@@ -53,4 +53,8 @@ export class CollectionService implements CollectionServiceContract {
   deleteCollection(id: string): Promise<DeleteResult> {
     return this.collectionRepository.deleteCollection(id);
   }
+
+  getCollectionByUser(id: string): Promise<Collection[]> {
+    return this.collectionRepository.getCollectionByUser(id);
+  }
 }

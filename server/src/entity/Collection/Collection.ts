@@ -28,6 +28,6 @@ export class Collection {
     onUpdate: "CASCADE",
     onDelete: "CASCADE",
   })
-  @JoinColumn()
+  @JoinColumn({ name: "userId" })
   user: User;
 }

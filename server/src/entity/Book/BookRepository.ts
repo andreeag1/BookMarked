@@ -9,9 +9,8 @@ export interface BookRepositoryContract {
   saveBook(
     title: string,
     author: string,
-    description: string,
     imageLink: string
-  ): Promise<Book>;
+  ): Promise<Book | null>;
   getBookById(id: string): Promise<Book>;
   getReviewByBookId(id: string): Promise<Book | null>;
 }
@@ -47,19 +46,34 @@ export class BookRepository implements BookRepositoryContract {
     return this.repository.save(Book);
   }
 
-  saveBook(
+  async saveBook(
     title: string,
     author: string,
-    description: string,
     imageLink: string
-  ): Promise<Book> {
-    const book = this.repository.create({
-      title: title,
-      author: author,
-      description: description,
-      imageLink: imageLink,
+  ): Promise<Book | null> {
+    const existingBook = await this.repository.findOne({
+      where: {
+        title: title,
+        author: author,
+        imageLink: imageLink,
+      },
     });
-    return this.repository.save(book);
+    if (existingBook == null) {
+      const book = this.repository.create({
+        title: title,
+        author: author,
+        imageLink: imageLink,
+      });
+      this.repository.save(book);
+      return this.repository.findOne({
+        where: {
+          title: title,
+          author: author,
+          imageLink: imageLink,
+        },
+      });
+    }
+    return existingBook;
   }
 
   getReviewByBookId(id: string): Promise<Book | null> {

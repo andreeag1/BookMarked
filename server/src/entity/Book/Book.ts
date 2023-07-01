@@ -21,8 +21,8 @@ export class Book {
   @Column("varchar", { length: 255 })
   author: string;
 
-  @Column("varchar", { length: 255 })
-  description: string;
+  // @Column("varchar", { length: 255, default: "No description" })
+  // description: string;
 
   @Column("varchar", { length: 255 })
   imageLink: string;
@@ -35,7 +35,6 @@ export class Book {
 
   @OneToMany(() => User, (user) => user.currentread, {
     onUpdate: "CASCADE",
-    onDelete: "CASCADE",
     nullable: true,
   })
   users: User[];

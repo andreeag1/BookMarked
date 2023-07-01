@@ -6,9 +6,8 @@ export interface BookControllerContract {
   saveBook(
     title: string,
     author: string,
-    description: string,
     imageLink: string
-  ): Promise<SaveBookResponse>;
+  ): Promise<Book | null>;
   getBookByImg(img: string): Promise<Book | null>;
   updateBook(Book: Book): Promise<Book>;
   getBookById(id: string): Promise<Book>;
@@ -20,9 +19,8 @@ export interface BookServiceContract {
   saveBook(
     title: string,
     author: string,
-    description: string,
     imageLink: string
-  ): Promise<Book>;
+  ): Promise<Book | null>;
   getBookByImg(img: string): Promise<Book | null>;
   updateBook(Book: Book): Promise<Book>;
   getBookById(id: string): Promise<Book>;

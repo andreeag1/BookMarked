@@ -7,8 +7,6 @@ export const authenticate = (
   next: NextFunction
 ) => {
   const accessToken = req.cookies["accessToken"];
-  //   const accessToken = "";
-  //   console.log(req.cookies);
 
   if (accessToken) {
     verify(

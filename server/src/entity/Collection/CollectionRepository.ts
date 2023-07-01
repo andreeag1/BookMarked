@@ -14,6 +14,7 @@ export interface CollectionRepositoryContract {
     bookToRemove: Book
   ): Promise<Collection>;
   deleteCollection(id: string): Promise<DeleteResult>;
+  getCollectionByUser(id: string): Promise<Collection[]>;
 }
 
 export class CollectionRepository implements CollectionRepositoryContract {
@@ -62,5 +63,15 @@ export class CollectionRepository implements CollectionRepositoryContract {
 
   deleteCollection(id: string): Promise<DeleteResult> {
     return this.repository.delete({ id: id });
+  }
+
+  getCollectionByUser(id: string): Promise<Collection[]> {
+    const queryBuilder = this.repository
+      .createQueryBuilder("collection")
+      .leftJoinAndSelect("collection.books", "book")
+      .where("collection.userId = :idOne", { idOne: id })
+      .getMany();
+
+    return queryBuilder;
   }
 }

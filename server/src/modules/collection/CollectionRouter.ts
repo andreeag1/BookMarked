@@ -7,7 +7,7 @@ export function createCollectionRouter(controllers: {
   const router = Router();
   const { collectionController } = controllers;
 
-  //Add a collection
+  //Add a collection DONE
   router.post("/add", async (req: Request, res: Response) => {
     const collection = await collectionController.saveCollection(
       req.body.title,
@@ -40,6 +40,14 @@ export function createCollectionRouter(controllers: {
       req.body.collectionId
     );
     res.status(collection.statusCode).json(collection);
+  });
+
+  //get a user's collections DONE
+  router.get("/:id", async (req: Request, res: Response) => {
+    const collections = await collectionController.getCollectionByUser(
+      req.params.id
+    );
+    res.json(collections);
   });
 
   return router;
