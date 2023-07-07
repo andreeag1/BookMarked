@@ -52,6 +52,8 @@ export class ReviewRepository implements ReviewRepositoryContract {
   getReviewByBook(id: string): Promise<Review[]> {
     const queryBuilder = this.repository
       .createQueryBuilder("review")
+      .leftJoinAndSelect("review.user", "user")
+      .leftJoinAndSelect("review.book", "book")
       .where("review.bookId = :idOne", { idOne: id })
       .getMany();
 

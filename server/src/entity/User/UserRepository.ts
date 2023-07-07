@@ -30,6 +30,7 @@ export interface UserRepositoryContract {
   updateReadBooksCount(user: User, progress: number): Promise<User>;
   updateProgress(user: User, progress: number): Promise<User>;
   getCurrentRead(id: string): Promise<User | null>;
+  addProfilePic(user: User, picture: string): Promise<User>;
 }
 
 export class UserRepository implements UserRepositoryContract {
@@ -142,6 +143,11 @@ export class UserRepository implements UserRepositoryContract {
 
   addGoal(user: User, goal: number): Promise<User> {
     user.goal = goal;
+    return this.repository.save(user);
+  }
+
+  addProfilePic(user: User, picture: string): Promise<User> {
+    user.picture = picture;
     return this.repository.save(user);
   }
 

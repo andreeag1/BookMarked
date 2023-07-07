@@ -5,12 +5,22 @@ import {
   SaveCollectionResponse,
 } from "./types";
 import { Collection } from "../../entity/Collection";
+import { AuthServiceContract } from "../auth";
 
 export class CollectionController implements CollectionControllerContract {
   private collectionService: CollectionServiceContract;
+  private authService: AuthServiceContract;
 
-  constructor(collectionService: CollectionServiceContract) {
+  constructor(
+    collectionService: CollectionServiceContract,
+    authService: AuthServiceContract
+  ) {
     this.collectionService = collectionService;
+    this.authService = authService;
+  }
+
+  getCollection(userId: string, title: string): Promise<Collection | null> {
+    return this.collectionService.getCollection(userId, title);
   }
 
   saveCollection(

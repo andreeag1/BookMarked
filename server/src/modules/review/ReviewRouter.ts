@@ -18,7 +18,7 @@ export function createReviewRouter(controllers: {
     res.json(review);
   });
 
-  //save a review
+  //save a review DONE
   router.post("/add", async (req: Request, res: Response) => {
     if (req.body.rating <= 5) {
       const review = await reviewController.saveReview(

@@ -1,11 +1,12 @@
 import { Router, Request, Response } from "express";
-import { AuthControllerContract } from "./types";
+import { AuthControllerContract, TokenContent } from "./types";
 import bcryptjs from "bcryptjs";
 import { sign, verify } from "jsonwebtoken";
 import { UserRepository } from "../../entity";
 import { authenticate } from "../../lib/middlewares";
 import jwt_decode from "jwt-decode";
 import { BookController, BookControllerContract } from "../book";
+import jwtDecode from "jwt-decode";
 
 export function createAuthRouter(controllers: {
   authController: AuthControllerContract;
@@ -92,7 +93,8 @@ export function createAuthRouter(controllers: {
   //get user id from jwt token DONE
   router.get("/me", authenticate, async (req: Request, res: Response) => {
     const accessToken = req.cookies["accessToken"];
-    const decoded = jwt_decode(accessToken);
+    const decoded = jwtDecode<TokenContent>(accessToken);
+    const user = decoded.id;
     res.status(200).send(decoded);
   });
 
@@ -103,21 +105,31 @@ export function createAuthRouter(controllers: {
     res.sendStatus(200);
   });
 
-  //get a user by id
-  router.get("/:id", async (req: Request, res: Response) => {
-    const user = await authController.getUserById(req.params.id);
-    res.json(user);
+  //get current user by id DONE
+  router.get("/user", async (req: Request, res: Response) => {
+    const accessToken = req.cookies["accessToken"];
+    const decoded = jwtDecode<TokenContent>(accessToken);
+    const user = decoded.id;
+    const newUser = await authController.getUserById(user);
+    res.json(newUser);
   });
 
-  //follow a user
+  //get any user by id DONE
+  router.get("/user/:id", async (req: Request, res: Response) => {
+    const newUser = await authController.getUserById(req.params.id);
+    res.json(newUser);
+  });
+
+  //follow a user DONE
   router.post("/follow", async (req: Request, res: Response) => {
-    if (req.body.userId !== req.body.currentUserId) {
+    const accessToken = req.cookies["accessToken"];
+    const decoded = jwtDecode<TokenContent>(accessToken);
+    const currentUserId = decoded.id;
+    if (req.body.userId !== currentUserId) {
       const userToFollow = await authController.getUserByFollower(
         req.body.userId
       );
-      const currentUser = await authController.getUserById(
-        req.body.currentUserId
-      );
+      const currentUser = await authController.getUserById(currentUserId);
       if (userToFollow && currentUser) {
         userToFollow.followers.push(currentUser);
         await authController.updateUser(userToFollow);
@@ -130,27 +142,40 @@ export function createAuthRouter(controllers: {
     }
   });
 
-  //get list of people the current user follows
+  //get list of people the current user follows DONE
+  router.get("/following", async (req: Request, res: Response) => {
+    const accessToken = req.cookies["accessToken"];
+    const decoded = jwtDecode<TokenContent>(accessToken);
+    const currentUserId = decoded.id;
+    const following = await authController.getUsersFollowing(currentUserId);
+    return res.json(following);
+  });
+
+  //get list of people a user follows
   router.get("/following/:id", async (req: Request, res: Response) => {
     const following = await authController.getUsersFollowing(req.params.id);
     return res.json(following);
   });
 
   //get a user's friend's reviews
-  router.get("/reviews/:id", async (req: Request, res: Response) => {
+  router.get("/reviews", async (req: Request, res: Response) => {
+    const accessToken = req.cookies["accessToken"];
+    const decoded = jwtDecode<TokenContent>(accessToken);
+    const currentUserId = decoded.id;
     const following = await authController.getUsersFriendsReviews(
-      req.params.id
+      currentUserId
     );
     res.json(following);
   });
 
-  //unfollow a user
+  //unfollow a user DONE
   router.put("/unfollow", async (req: Request, res: Response) => {
-    if (req.body.userId !== req.body.currentUserId) {
+    const accessToken = req.cookies["accessToken"];
+    const decoded = jwtDecode<TokenContent>(accessToken);
+    const currentUserId = decoded.id;
+    if (req.body.userId !== currentUserId) {
       const userToUnfollow = await authController.getUserById(req.body.userId);
-      const currentUser = await authController.getUserById(
-        req.body.currentUserId
-      );
+      const currentUser = await authController.getUserById(currentUserId);
       const unfollow = await authController.unfollowUser(
         userToUnfollow,
         currentUser
@@ -163,16 +188,31 @@ export function createAuthRouter(controllers: {
     }
   });
 
-  //add a yearly goal
+  //add a yearly goal DONE
   router.post("/goal", async (req: Request, res: Response) => {
-    const user = await authController.getUserById(req.body.id);
+    const accessToken = req.cookies["accessToken"];
+    const decoded = jwtDecode<TokenContent>(accessToken);
+    const currentUserId = decoded.id;
+    const user = await authController.getUserById(currentUserId);
     const goal = await authController.addGoal(user, req.body.goal);
     res.status(goal.statusCode).json(goal);
   });
 
+  router.post("/profilepic", async (req: Request, res: Response) => {
+    const accessToken = req.cookies["accessToken"];
+    const decoded = jwtDecode<TokenContent>(accessToken);
+    const currentUserId = decoded.id;
+    const user = await authController.getUserById(currentUserId);
+    const update = await authController.addProfilePic(user, req.body.picture);
+    res.status(update.statusCode).json(update);
+  });
+
   //add a current read DONE
   router.post("/currentread", async (req: Request, res: Response) => {
-    const user = await authController.getUserById(req.body.id);
+    const accessToken = req.cookies["accessToken"];
+    const decoded = jwtDecode<TokenContent>(accessToken);
+    const currentUserId = decoded.id;
+    const user = await authController.getUserById(currentUserId);
     user.title = req.body.title;
     user.author = req.body.author;
     user.imageLink = req.body.imageLink;
@@ -182,7 +222,10 @@ export function createAuthRouter(controllers: {
 
   //remove current read DONE
   router.put("/removecurrent", async (req: Request, res: Response) => {
-    const user = await authController.getUserById(req.body.id);
+    const accessToken = req.cookies["accessToken"];
+    const decoded = jwtDecode<TokenContent>(accessToken);
+    const currentUserId = decoded.id;
+    const user = await authController.getUserById(currentUserId);
     user.title = "";
     user.author = "";
     user.imageLink = "";
@@ -191,17 +234,23 @@ export function createAuthRouter(controllers: {
   });
 
   //get current read DONE
-  router.get("/getcurrent/:id", async (req: Request, res: Response) => {
-    const user = await authController.getUserById(req.params.id);
+  router.get("/getcurrent", async (req: Request, res: Response) => {
+    const accessToken = req.cookies["accessToken"];
+    const decoded = jwtDecode<TokenContent>(accessToken);
+    const currentUserId = decoded.id;
+    const user = await authController.getUserById(currentUserId);
     if (user.title == "") {
       return null;
     }
     return res.json(user);
   });
 
-  //add progress to yearly goal
+  //add progress to yearly goal DONE
   router.post("/readbooks", async (req: Request, res: Response) => {
-    const user = await authController.getUserById(req.body.id);
+    const accessToken = req.cookies["accessToken"];
+    const decoded = jwtDecode<TokenContent>(accessToken);
+    const currentUserId = decoded.id;
+    const user = await authController.getUserById(currentUserId);
     const progress = await authController.updateReadBooksCount(
       user,
       req.body.progress
@@ -211,7 +260,10 @@ export function createAuthRouter(controllers: {
 
   //add progress on current read  DONE
   router.post("/progress", async (req: Request, res: Response) => {
-    const user = await authController.getUserById(req.body.id);
+    const accessToken = req.cookies["accessToken"];
+    const decoded = jwtDecode<TokenContent>(accessToken);
+    const currentUserId = decoded.id;
+    const user = await authController.getUserById(currentUserId);
     if (req.body.progress <= 100) {
       const progress = await authController.updateProgress(
         user,

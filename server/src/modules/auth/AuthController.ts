@@ -144,4 +144,14 @@ export class AuthController implements AuthControllerContract {
   getCurrentRead(id: string): Promise<User | null> {
     return this.authService.getCurrentRead(id);
   }
+
+  addProfilePic(user: User, picture: string): Promise<SaveUserResponse> {
+    this.authService.addProfilePic(user, picture);
+    return new Promise<SaveUserResponse>((resolve, reject) => {
+      resolve({
+        statusCode: 200,
+        message: "success",
+      });
+    });
+  }
 }

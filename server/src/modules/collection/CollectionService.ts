@@ -57,4 +57,8 @@ export class CollectionService implements CollectionServiceContract {
   getCollectionByUser(id: string): Promise<Collection[]> {
     return this.collectionRepository.getCollectionByUser(id);
   }
+
+  getCollection(userId: string, title: string): Promise<Collection | null> {
+    return this.collectionRepository.getCollection(userId, title);
+  }
 }

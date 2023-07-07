@@ -18,5 +18,15 @@ export function createBookRouter(controllers: {
     res.json(response);
   });
 
+  router.get("/search/:imagelink", async (req: Request, res: Response) => {
+    const imageLink = req.params.imagelink.split("_").join("/");
+    const book = await bookController.getBookByImg(imageLink);
+    if (book == null) {
+      res.sendStatus(404);
+      return null;
+    }
+    res.json(book);
+  });
+
   return router;
 }

@@ -102,4 +102,8 @@ export class AuthService implements AuthServiceContract {
   getCurrentRead(id: string): Promise<User | null> {
     return this.userRepository.getCurrentRead(id);
   }
+
+  addProfilePic(user: User, picture: string): Promise<User> {
+    return this.userRepository.addProfilePic(user, picture);
+  }
 }

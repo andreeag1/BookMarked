@@ -15,6 +15,7 @@ export interface CollectionRepositoryContract {
   ): Promise<Collection>;
   deleteCollection(id: string): Promise<DeleteResult>;
   getCollectionByUser(id: string): Promise<Collection[]>;
+  getCollection(userId: string, title: string): Promise<Collection | null>;
 }
 
 export class CollectionRepository implements CollectionRepositoryContract {
@@ -22,6 +23,16 @@ export class CollectionRepository implements CollectionRepositoryContract {
 
   constructor() {
     this.repository = AppDataSource.getRepository(Collection);
+  }
+
+  getCollection(id: string, title: string): Promise<Collection | null> {
+    const queryBuilder = this.repository
+      .createQueryBuilder("collection")
+      .where("collection.userId = :idOne", { idOne: id })
+      .andWhere("collection.title = :idTwo", { idTwo: title })
+      .getOne();
+
+    return queryBuilder;
   }
 
   saveCollection(title: string, user: User): Promise<Collection> {
@@ -36,7 +47,7 @@ export class CollectionRepository implements CollectionRepositoryContract {
     collection: Collection,
     book: Book
   ): Promise<Collection> {
-    collection.books = [book];
+    collection.books.push(book);
     return this.repository.save(collection);
   }
 

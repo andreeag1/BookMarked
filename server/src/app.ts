@@ -99,7 +99,7 @@ const commentController: CommentControllerContract = new CommentController(
   commentService
 );
 const collectionController: CollectionControllerContract =
-  new CollectionController(collectionService);
+  new CollectionController(collectionService, authService);
 
 const controllers = {
   bookController,

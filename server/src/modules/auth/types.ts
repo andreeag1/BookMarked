@@ -29,6 +29,7 @@ export interface AuthControllerContract {
   updateProgress(user: User, progress: number): Promise<SaveUserResponse>;
   getUserByUsername(username: string): Promise<User | null>;
   getCurrentRead(id: string): Promise<User | null>;
+  addProfilePic(user: User, picture: string): Promise<SaveUserResponse>;
 }
 
 export interface AuthServiceContract {
@@ -56,6 +57,11 @@ export interface AuthServiceContract {
   updateProgress(user: User, progress: number): Promise<User>;
   getUserByUsername(username: string): Promise<User | null>;
   getCurrentRead(id: string): Promise<User | null>;
+  addProfilePic(user: User, picture: string): Promise<User>;
+}
+
+export interface TokenContent {
+  id: string;
 }
 
 export type SaveUserResponse = {

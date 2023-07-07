@@ -40,6 +40,9 @@ export class User {
   @Column()
   password!: string;
 
+  @Column({ default: "" })
+  picture!: string;
+
   @Column({ default: 0 })
   goal!: number;
 

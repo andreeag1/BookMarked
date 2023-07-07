@@ -9,11 +9,22 @@ export function createCollectionRouter(controllers: {
 
   //Add a collection DONE
   router.post("/add", async (req: Request, res: Response) => {
-    const collection = await collectionController.saveCollection(
-      req.body.title,
-      req.body.userId
+    const existingCollection = await collectionController.getCollection(
+      req.body.userId,
+      req.body.title
     );
-    res.status(collection.statusCode).json(collection);
+    if (existingCollection == null) {
+      const collection = await collectionController.saveCollection(
+        req.body.title,
+        req.body.userId
+      );
+      res.status(collection.statusCode).json(collection);
+    } else {
+      res.status(404).json({
+        statusCode: 404,
+        message: "This collection already exists",
+      });
+    }
   });
 
   //Add book to colleciton
@@ -48,6 +59,15 @@ export function createCollectionRouter(controllers: {
       req.params.id
     );
     res.json(collections);
+  });
+
+  //get a collection by title and user id
+  router.get("/:id/:title", async (req: Request, res: Response) => {
+    const collection = await collectionController.getCollection(
+      req.params.id,
+      req.params.title
+    );
+    res.json(collection);
   });
 
   return router;
