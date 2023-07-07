@@ -80,13 +80,13 @@
 
 .image-link {
   width: 120px;
-  height: 150px;
+  height: 170px;
   border-radius: 3%;
 }
 
 .book-info-container {
   width: 200px;
-  margin-top: -150px;
+  margin-top: -175px;
   margin-left: 20px;
   display: flex;
   flex-direction: column;

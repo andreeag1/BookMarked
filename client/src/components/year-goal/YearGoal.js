@@ -12,6 +12,7 @@ import {
   getCurrentUserId,
   addYearlyGoal,
   getUserById,
+  getCurrentUser,
 } from "../../modules/user/userRepository";
 
 const ColorButton = styled(Button)(({ theme }) => ({
@@ -62,8 +63,7 @@ export default function YearGoal({ booksRead }) {
 
   useEffect(() => {
     const setNewProgress = async () => {
-      const userId = await getCurrentUserId();
-      const user = await getUserById(userId);
+      const user = await getCurrentUser();
       const newProgress = user.readbooks;
       setProgress(newProgress);
     };
@@ -72,8 +72,7 @@ export default function YearGoal({ booksRead }) {
 
   useEffect(() => {
     const getGoal = async () => {
-      const userId = await getCurrentUserId();
-      const user = await getUserById(userId);
+      const user = await getCurrentUser();
       const goal = user.goal;
       if (goal !== 0) {
         setGoal(goal);

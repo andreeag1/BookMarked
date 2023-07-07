@@ -3,39 +3,22 @@ import "./CardProfile.css";
 import Avatar from "@mui/material/Avatar";
 import { Divider } from "@mui/material";
 import {
+  getCurrentUserId,
   getUserById,
-  followUser,
-  unfollowUser,
+  getCurrentUser,
+  addProfilePic,
 } from "../../modules/user/userRepository";
 import { getCollectionTitles } from "../../modules/collection/collectionRepository";
-import Button from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
 
-const FollowButton = styled(Button)(({ theme }) => ({
-  color: theme.palette.getContrastText("#cab9a9"),
-  backgroundColor: "#cab9a9",
-  "&:hover": {
-    backgroundColor: "#cab9a9",
-  },
-}));
-
-const UnfollowButton = styled(Button)(({ theme }) => ({
-  color: theme.palette.getContrastText("#cab9a9"),
-  backgroundColor: "#E1D5CA",
-  "&:hover": {
-    backgroundColor: "#E1D5CA",
-  },
-}));
-
-export default function CardProfile({ userId }) {
+export default function CurrentUserCardProfile() {
   const [user, setUser] = React.useState("");
   const [collections, setCollections] = React.useState([]);
-  const [followed, setFollowed] = React.useState(false);
+  const [image, setImage] = React.useState("");
 
   useEffect(() => {
-    const newUser = async () => {
-      console.log(userId);
-      const user = await getUserById(userId);
+    const currentUser = async () => {
+      const userId = await getCurrentUserId();
+      const user = await getCurrentUser();
       setUser({ firstName: user.firstName, lastName: user.lastName });
       const newCollections = await getCollectionTitles(userId);
       const titles = [];
@@ -44,38 +27,30 @@ export default function CardProfile({ userId }) {
       });
       setCollections(titles);
     };
-    newUser();
-  }, [userId]);
+    currentUser();
+  });
 
-  const handleFollow = async () => {
-    setFollowed(true);
-    const follow = await followUser(userId);
-    console.log(follow);
+  // useEffect(() => {
+  //   const ProfilePicture = async () => {
+  //     addProfilePic(image);
+  //   };
+  //   ProfilePicture();
+  // }, [image]);
+
+  const handleApi = async () => {
+    await addProfilePic(image);
   };
 
-  const handleUnfollow = async () => {
-    setFollowed(false);
-    const unfollow = await unfollowUser(userId);
-    console.log(unfollow);
+  const handleChange = (e) => {
+    setImage(e.target.files[0]);
   };
 
   return (
     <div className="card-profile">
-      <div className="profile-img-set">
+      <div className="profile-img">
         <Avatar sx={{ width: 150, height: 150 }} />
-        <div className="follow-button">
-          {followed ? (
-            <UnfollowButton onClick={handleUnfollow}>Unfollow</UnfollowButton>
-          ) : (
-            <FollowButton
-              className="follower-button"
-              sx={{ width: 100 }}
-              onClick={handleFollow}
-            >
-              Follow
-            </FollowButton>
-          )}
-        </div>
+        <input type="file" onChange={handleChange} />
+        <button onClick={handleApi}>Submit</button>
       </div>
       <div className="profile-info">
         <div className="name">

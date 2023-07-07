@@ -76,31 +76,7 @@ export const getCurrentUserId = async () => {
   }
 };
 
-// export const addCurrentRead = async (id, bookId) => {
-//   try {
-//     const res = await fetch(`http://localhost:5000/auth/currentread`, {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         id: id,
-//         bookId: bookId,
-//       }),
-//       credentials: "include",
-//     });
-//     const data = await res.json();
-//     if (!res.ok) {
-//       console.log(data.description);
-//       return;
-//     }
-//     return data;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-export const addCurrentRead = async (id, title, author, imageLink) => {
+export const addCurrentRead = async (title, author, imageLink) => {
   try {
     const res = await fetch(`http://localhost:5000/auth/currentread`, {
       method: "POST",
@@ -108,7 +84,6 @@ export const addCurrentRead = async (id, title, author, imageLink) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id: id,
         title: title,
         author: author,
         imageLink: imageLink,
@@ -126,9 +101,9 @@ export const addCurrentRead = async (id, title, author, imageLink) => {
   }
 };
 
-export const getCurrentRead = async (id) => {
+export const getCurrentRead = async () => {
   try {
-    const res = await fetch(`http://localhost:5000/auth/getcurrent/${id}`, {
+    const res = await fetch(`http://localhost:5000/auth/getcurrent`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -153,9 +128,6 @@ export const removeCurrentRead = async (id) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        id: id,
-      }),
       credentials: "include",
     });
     const data = await res.json();
@@ -169,7 +141,7 @@ export const removeCurrentRead = async (id) => {
   }
 };
 
-export const addProgressToCurrentRead = async (id, progress) => {
+export const addProgressToCurrentRead = async (progress) => {
   try {
     const res = await fetch(`http://localhost:5000/auth/progress`, {
       method: "POST",
@@ -177,7 +149,6 @@ export const addProgressToCurrentRead = async (id, progress) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id: id,
         progress: progress,
       }),
       credentials: "include",
@@ -193,7 +164,7 @@ export const addProgressToCurrentRead = async (id, progress) => {
   }
 };
 
-export const addYearlyGoal = async (id, goal) => {
+export const addYearlyGoal = async (goal) => {
   try {
     const res = await fetch(`http://localhost:5000/auth/goal`, {
       method: "POST",
@@ -201,7 +172,6 @@ export const addYearlyGoal = async (id, goal) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id: id,
         goal: goal,
       }),
       credentials: "include",
@@ -217,7 +187,7 @@ export const addYearlyGoal = async (id, goal) => {
   }
 };
 
-export const addProgressToYearlyGoal = async (id, progress) => {
+export const addProgressToYearlyGoal = async (progress) => {
   try {
     const res = await fetch(`http://localhost:5000/auth/readbooks`, {
       method: "POST",
@@ -225,8 +195,50 @@ export const addProgressToYearlyGoal = async (id, progress) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id: id,
         progress: progress,
+      }),
+      credentials: "include",
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      console.log(data.description);
+      return;
+    }
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getCurrentUser = async () => {
+  try {
+    const res = await fetch(`http://localhost:5000/auth/user`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      console.log(data.description);
+      return;
+    }
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const addProfilePic = async (picture) => {
+  try {
+    const res = await fetch(`http://localhost:5000/auth/profilepic`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        picture: picture,
       }),
       credentials: "include",
     });
@@ -243,7 +255,7 @@ export const addProgressToYearlyGoal = async (id, progress) => {
 
 export const getUserById = async (id) => {
   try {
-    const res = await fetch(`http://localhost:5000/auth/${id}`, {
+    const res = await fetch(`http://localhost:5000/auth/user/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -252,7 +264,73 @@ export const getUserById = async (id) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data.description);
+      console.log(data);
+      return;
+    }
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const followUser = async (userId) => {
+  try {
+    const res = await fetch(`http://localhost:5000/auth/follow`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: userId,
+      }),
+      credentials: "include",
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      console.log(data);
+      return;
+    }
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const unfollowUser = async (userId) => {
+  try {
+    const res = await fetch(`http://localhost:5000/auth/unfollow`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: userId,
+      }),
+      credentials: "include",
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      console.log(data);
+      return;
+    }
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getCurrentUserFollowing = async () => {
+  try {
+    const res = await fetch(`http://localhost:5000/auth/following/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      console.log(data);
       return;
     }
     return data;

@@ -1,0 +1,17 @@
+.search-class {
+  padding-left: 200px;
+  padding-top: 100px;
+  padding-bottom: 200px;
+  font-family: Raleway;
+  background-color: #f0ebe5;
+}
+
+.searched {
+  display: flex;
+  flex-direction: row;
+  padding-left: 20rem;
+}
+
+.book-imagelink {
+  max-height: 200px;
+}

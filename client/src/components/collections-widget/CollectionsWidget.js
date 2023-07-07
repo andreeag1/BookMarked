@@ -57,9 +57,12 @@ export default function CollectionsWidget() {
     }
 
     const userId = await getCurrentUserId();
-    await addCollection(newItem, userId);
-
-    setCollection(true);
+    const newCollection = await addCollection(newItem, userId);
+    if (newCollection.statusCode == 404) {
+      alert("This collection already exists");
+    } else {
+      setCollection(true);
+    }
 
     // const item = {
     //   id: Math.floor(Math.random() * 1000),

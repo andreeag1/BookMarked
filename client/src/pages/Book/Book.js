@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import "./Book.css";
@@ -7,6 +7,9 @@ import { TextField, Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Feed from "../../components/feed/Feed";
 import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { getReviewByBook } from "../../modules/review/reviewRepository";
+import { getBookByImg } from "../../modules/books/bookRepository";
 
 const ColorButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText("#E9E7E5"),
@@ -18,35 +21,95 @@ const ColorButton = styled(Button)(({ theme }) => ({
 
 export default function Book() {
   const { bookId } = useParams();
+  const location = useLocation();
+
+  const [book, setBook] = React.useState([]);
+  const [authorKey, setAuthorKey] = React.useState("");
+  const [bookAuthor, setBookAuthor] = React.useState("");
+  const [bookCover, setBookCover] = React.useState("");
+  const [mediumCover, setMediumCover] = React.useState("");
+  const [review, setReview] = React.useState([]);
+
+  useEffect(() => {
+    const handleBookList = async () => {
+      await fetch(`https://openlibrary.org/works/${bookId}.json`)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          const newDescription = "No Description";
+          if (!data.description) {
+            const Obj = {
+              title: data.title,
+              description: newDescription,
+            };
+            setBook(Obj);
+            setAuthorKey(data.authors[0].author.key);
+            const cover = `https://covers.openlibrary.org/b/id/${data.covers[0]}-L.jpg`;
+            setBookCover(cover);
+          } else {
+            if (data.description.value) {
+              const Obj = {
+                title: data.title,
+                description: data.description.value,
+              };
+              setBook(Obj);
+            } else {
+              const Obj = {
+                title: data.title,
+                description: data.description,
+              };
+              setBook(Obj);
+            }
+
+            setAuthorKey(data.authors[0].author.key);
+            const cover = `https://covers.openlibrary.org/b/id/${data.covers[0]}-L.jpg`;
+            setBookCover(cover);
+            const mediumBookCover = `https://covers.openlibrary.org/b/id/${data.covers[0]}-M.jpg`;
+            const replacedCover = mediumBookCover.replaceAll("/", "_");
+            console.log(replacedCover);
+            setMediumCover(replacedCover);
+          }
+        });
+    };
+    handleBookList();
+  }, [bookId]);
+
+  useEffect(() => {
+    const handleAuthor = async () => {
+      await fetch(`https://openlibrary.org${authorKey}.json`)
+        .then((response) => response.json())
+        .then((data) => {
+          const name = data.name;
+          setBookAuthor(name);
+        });
+    };
+    handleAuthor();
+  }, [authorKey]);
+
+  useEffect(() => {
+    const getReviews = async () => {
+      console.log(mediumCover);
+      const existingBook = await getBookByImg(mediumCover);
+      if (existingBook == null) {
+        console.log("This book does not exist");
+      }
+      console.log(existingBook);
+      const reviews = await getReviewByBook(existingBook.id);
+      console.log(reviews);
+      setReview(reviews);
+    };
+    getReviews();
+  }, [mediumCover]);
 
   return (
     <div className="book-section-wrapper">
       <Header />
       <div className="book-section">
-        <img src={data[bookId - 1].imageLink} className="book-cover" />
+        <img src={bookCover} className="book-cover" />
         <div className="book-information">
-          <h1>{data[bookId - 1].title}</h1>
-          <h3>{data[bookId - 1].author}</h3>
-          <h7>
-            Kentucky, 1850. An enslaved groom named Jarret and a bay foal forge
-            a bond of understanding that will carry the horse to record-setting
-            victories across the South. When the nation erupts in civil war, an
-            itinerant young artist who has made his name on paintings of the
-            racehorse takes up arms for the Union. On a perilous night, he
-            reunites with the stallion and his groom, very far from the glamor
-            of any racetrack. New York City, 1954. Martha Jackson, a gallery
-            owner celebrated for taking risks on edgy contemporary painters,
-            becomes obsessed with a nineteenth-century equestrian oil painting
-            of mysterious provenance. Washington, DC, 2019. Jess, a Smithsonian
-            scientist from Australia, and Theo, a Nigerian-American art
-            historian, find themselves unexpectedly connected through their
-            shared interest in the horse--one studying the stallion's bones for
-            clues to his power and endurance, the other uncovering the lost
-            history of the unsung Black horsemen who were critical to his racing
-            success. Based on the remarkable true story of the record-breaking
-            thoroughbred Lexington, Horse is a novel of art and science, love
-            and obsession, and our unfinished reckoning with racism.
-          </h7>
+          <h1>{book.title}</h1>
+          <h3>{bookAuthor}</h3>
+          <h7>{book.description}</h7>
           <div className="categories">
             <span style={{ fontWeight: "bold" }}> Genres: </span>
             <h7>Fantasy</h7>
@@ -62,7 +125,9 @@ export default function Book() {
       </div>
       <div className="review-section">
         <h2>Reviews</h2>
-        <Feed />
+        {review.map((singleReview) => (
+          <Feed review={singleReview} description={book.description} />
+        ))}
       </div>
       <Footer />
     </div>

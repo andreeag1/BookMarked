@@ -49,9 +49,7 @@ export default function Dashboard() {
             <div className="updates-container">
               <h3>Updates</h3>
             </div>
-            <div className="feed-container">
-              <Feed />
-            </div>
+            <div className="feed-container">{/* <Feed /> */}</div>
           </Grid>
         </Grid>
       </div>

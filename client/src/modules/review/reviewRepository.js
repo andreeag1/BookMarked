@@ -1,15 +1,17 @@
-export const createBook = async (title, author, imageLink) => {
+export const addReview = async (review, bookId, userId, rating) => {
   try {
-    const res = await fetch("http://localhost:5000/book/add", {
+    const res = await fetch(`http://localhost:5000/review/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        title: title,
-        author: author,
-        imageLink: imageLink,
+        review: review,
+        bookId: bookId,
+        userId: userId,
+        rating: rating,
       }),
+      credentials: "include",
     });
     const data = await res.json();
     if (!res.ok) {
@@ -22,9 +24,9 @@ export const createBook = async (title, author, imageLink) => {
   }
 };
 
-export const getBookByImg = async (imagelink) => {
+export const getReviewByBook = async (bookId) => {
   try {
-    const res = await fetch(`http://localhost:5000/book/search/${imagelink}`, {
+    const res = await fetch(`http://localhost:5000/review/book/${bookId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -32,9 +34,9 @@ export const getBookByImg = async (imagelink) => {
       credentials: "include",
     });
     const data = await res.json();
-    if (res == 404) {
+    if (!res.ok) {
       console.log(data);
-      return null;
+      return;
     }
     return data;
   } catch (error) {

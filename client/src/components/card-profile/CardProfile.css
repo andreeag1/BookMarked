@@ -16,3 +16,30 @@
 .list {
   margin-right: 6rem;
 }
+
+.list-items {
+  color: black;
+  size: 20px;
+}
+
+.name {
+  display: flex;
+  flex-direction: row;
+}
+
+.lastName {
+  padding-left: 0.7rem;
+}
+
+.profile-img-set {
+  padding-right: 100px;
+}
+
+.follow-button {
+  padding-top: 50px;
+  padding-left: 30px;
+}
+
+.follower-button {
+  color: blue;
+}

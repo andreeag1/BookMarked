@@ -20,7 +20,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { styled, alpha } from "@mui/material/styles";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import data from "../../mock.json";
 import MenuIcon from "@mui/icons-material/Menu";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -81,44 +81,11 @@ const Header = () => {
     setAnchorEl(null);
   };
 
+  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     if (e.key === "Enter") {
-      fetch(
-        "https://openlibrary.org/search.json?" +
-          new URLSearchParams({
-            q: search,
-          })
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          const books = data.docs.map((book) => {
-            if (book.author_name && book.title && book.key && book.cover_i) {
-              const Description = fetch(
-                `https://openlibrary.org${book.key}.json`
-              )
-                .then((response) => response.json())
-                .then((data) => {
-                  if (data.description.value) {
-                    const Description = data.description.value;
-                    return Description;
-                  }
-                });
-              const Obj = {
-                description: Description,
-                title: book.title,
-                author: book.author_name[0],
-                imageLink: `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`,
-              };
-              console.log(Obj);
-              return Obj;
-            }
-          });
-          const filteredArray = books.filter(function (element) {
-            return element !== undefined;
-          });
-          console.log(filteredArray);
-          setSearchedBookInfo(filteredArray);
-        });
+      navigate("/search", { state: search });
     }
   };
 
@@ -135,56 +102,35 @@ const Header = () => {
             <Toolbar disableGutters>
               <img src={logo} className="App-logo" alt="logo" />
               <Box className="title-container">
-                <span className="title" component="div">
-                  BookMarked
-                </span>
+                <Link to={"/Dashboard"}>
+                  <span className="title" component="div">
+                    BookMarked
+                  </span>
+                </Link>
               </Box>
               <Box sx={{ flexGrow: 1 }} />
               <div className="search-bar">
                 <Search>
-                  <Autocomplete
-                    freeSolo
-                    id="combo-box-demo"
+                  <StyledTextfield
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <SearchIcon />
+                        </InputAdornment>
+                      ),
+                      disableUnderline: true,
+                    }}
+                    placeholder="Search books"
+                    onChange={(e) => setSearch(e.target.value)}
+                    onKeyDown={handleSubmit}
                     sx={{
                       "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
                         {
                           border: alpha(theme.palette.common.white, 0.65),
                         },
-                      maxWidth: 200,
-                      maxHeight: 50,
+                      height: 40,
+                      width: 300,
                     }}
-                    options={searchedBookInfo}
-                    // getOptionLabel={(option) => option.title}
-                    renderOption={(props, option) => {
-                      return (
-                        <li {...props}>
-                          <Button component={Link} to={`/book/${option.id}`}>
-                            <div className="options">
-                              <h7 className="button-option">{option.title}</h7>
-                              <h7 className="button-option">{option.author}</h7>
-                            </div>
-                          </Button>
-                        </li>
-                      );
-                    }}
-                    renderInput={(params) => (
-                      <StyledTextfield
-                        {...params}
-                        InputProps={{
-                          ...params.InputProps,
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <SearchIcon />
-                            </InputAdornment>
-                          ),
-                          disableUnderline: true,
-                        }}
-                        sx={{ height: 50, width: 300 }}
-                        placeholder="Search books"
-                        onChange={(e) => setSearch(e.target.value)}
-                        onKeyDown={handleSubmit}
-                      />
-                    )}
                   />
                 </Search>
               </div>
@@ -202,7 +148,11 @@ const Header = () => {
                     "aria-labelledby": "basic-button",
                   }}
                 >
-                  <MenuItem onClick={handleClose} component={Link} to="/">
+                  <MenuItem
+                    onClick={handleClose}
+                    component={Link}
+                    to="/Dashboard"
+                  >
                     Home
                   </MenuItem>
                   <MenuItem
@@ -224,7 +174,7 @@ const Header = () => {
                     key="Home"
                     sx={{ color: "inherit" }}
                     component={Link}
-                    to="/"
+                    to="/Dashboard"
                   >
                     Home
                   </Button>

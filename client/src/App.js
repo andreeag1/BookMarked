@@ -15,6 +15,8 @@ import Dashboard from "./pages/Dashboard/Dashboard.js";
 import Account from "./pages/Account/Account.js";
 import Book from "./pages/Book/Book.js";
 import MyBooks from "./pages/MyBooks/MyBooks";
+import Search from "./pages/Search/Search.js";
+import CurrentUserAccount from "./pages/Account/CurrentUserAccount.js";
 
 function App() {
   return (
@@ -25,9 +27,11 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/sign-up" element={<Register />} />
         <Route path="/Dashboard" element={<Dashboard />} />
-        <Route path="/account" element={<Account />} />
+        <Route path="/account" element={<CurrentUserAccount />} />
+        <Route path="/profile/:userId" element={<Account />} />
         <Route path="/book/:bookId" element={<Book />} />
         <Route path="/my-books" element={<MyBooks />} />
+        <Route path="/search" element={<Search />} />
       </Routes>
     </Router>
   );
