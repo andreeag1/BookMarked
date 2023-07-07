@@ -33,13 +33,6 @@ export default function Feed({ review, description }) {
     setIsLiked(!isLiked);
   };
 
-  useEffect(() => {
-    const getInfo = async () => {
-      console.log(review);
-    };
-    getInfo();
-  }, [review]);
-
   return (
     <div className="feed">
       <div className="posts-section">
@@ -49,10 +42,10 @@ export default function Feed({ review, description }) {
               <div className="postTopLeft">
                 <Link to={`/profile/${review.user.id}`}>
                   <img className="postProfileImg" src={profilePic} alt="" />
+                  <span className="postUsername">
+                    {review.user.firstName} {review.user.lastName}
+                  </span>
                 </Link>
-                <span className="postUsername">
-                  {review.user.firstName} {review.user.lastName}
-                </span>
 
                 <span className="postUsername">reviewed</span>
                 <span className="postUsername">{review.book.title}</span>

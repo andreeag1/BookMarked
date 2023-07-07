@@ -66,7 +66,7 @@ export const getCurrentUserId = async () => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data.description);
+      console.log(data);
       return;
     }
     const userId = data.id;
@@ -288,7 +288,7 @@ export const followUser = async (userId) => {
     const data = await res.json();
     if (!res.ok) {
       console.log(data);
-      return;
+      return 404;
     }
     return data;
   } catch (error) {
@@ -322,6 +322,26 @@ export const unfollowUser = async (userId) => {
 export const getCurrentUserFollowing = async () => {
   try {
     const res = await fetch(`http://localhost:5000/auth/following/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      console.log(data);
+      return;
+    }
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getFollowing = async (id) => {
+  try {
+    const res = await fetch(`http://localhost:5000/auth/following/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

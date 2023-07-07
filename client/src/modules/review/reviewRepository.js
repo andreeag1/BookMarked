@@ -43,3 +43,23 @@ export const getReviewByBook = async (bookId) => {
     console.log(error);
   }
 };
+
+export const getReviewByUser = async (userId) => {
+  try {
+    const res = await fetch(`http://localhost:5000/review/user/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      console.log(data);
+      return;
+    }
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};

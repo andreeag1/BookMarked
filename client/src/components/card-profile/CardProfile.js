@@ -48,8 +48,10 @@ export default function CardProfile({ userId }) {
   }, [userId]);
 
   const handleFollow = async () => {
-    setFollowed(true);
     const follow = await followUser(userId);
+    if (follow !== 404) {
+      setFollowed(true);
+    }
     console.log(follow);
   };
 

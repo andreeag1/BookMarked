@@ -6,17 +6,89 @@ import CurrentUserCardProfile from "../../components/card-profile/CurrentUserCar
 import Feed from "../../components/feed/Feed";
 import { Box } from "@mui/material";
 import profilePic from "../../assets/pictures/1.jpeg";
-import { getCurrentUserFollowing } from "../../modules/user/userRepository";
+import CircularProgress from "@mui/material/CircularProgress";
+import {
+  getCurrentUser,
+  getCurrentUserFollowing,
+  getCurrentUserId,
+} from "../../modules/user/userRepository";
+import { getReviewByUser } from "../../modules/review/reviewRepository";
 
 export default function CurrentUserAccount() {
   const [following, setFollowing] = React.useState([]);
+  const [review, setReview] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
-    const getFriends = async () => {
-      const user = await getCurrentUserFollowing();
-      setFollowing(user);
+    const newUser = async () => {
+      const userId = await getCurrentUserId();
+      const friends = await getCurrentUserFollowing();
+      setFollowing(friends);
+      const newReview = await getReviewByUser(userId);
+      const newReviewLength = newReview.length;
+      const reviewLength = review.length;
+      if (newReviewLength !== reviewLength) {
+        newReview.map((reviews) => {
+          const title = reviews.book.title;
+          const cover = reviews.book.imageLink.replace(
+            "https://covers.openlibrary.org/b/id/",
+            ""
+          );
+          const newCover = cover.replace("-M.jpg", "");
+          fetch(
+            "https://openlibrary.org/search.json?" +
+              new URLSearchParams({
+                q: title,
+              })
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              data.docs.map((book) => {
+                if (book.cover_i == newCover) {
+                  const bookId = book.key;
+                  fetch(`https://openlibrary.org${bookId}.json`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                      const newDescription = "No Description";
+                      if (!data.description) {
+                        const Obj = {
+                          other: reviews,
+                          description: newDescription,
+                        };
+                        setReview((old) => [...old, Obj]);
+                        setLoading(false);
+
+                        console.log(Obj);
+                      } else {
+                        if (data.description.value) {
+                          const Obj = {
+                            other: reviews,
+                            description: data.description.value,
+                          };
+                          setReview((old) => [...old, Obj]);
+                          setLoading(false);
+
+                          console.log(Obj);
+                        } else {
+                          const Obj = {
+                            other: reviews,
+                            description: data.description,
+                          };
+                          setReview((old) => [...old, Obj]);
+                          setLoading(false);
+
+                          console.log(Obj);
+                        }
+                      }
+                    });
+                }
+              });
+            });
+        });
+      }
     };
-    getFriends();
+    newUser();
+    console.log(review);
   });
 
   return (
@@ -40,7 +112,18 @@ export default function CurrentUserAccount() {
             })}
           </div>
           <h3 className="reviews">Your Reviews</h3>
-          <div className="feed-container">{/* <Feed /> */}</div>
+          <div className="feed-container">
+            {loading ? (
+              <CircularProgress />
+            ) : (
+              review.map((singleReview) => (
+                <Feed
+                  review={singleReview.other}
+                  description={singleReview.description}
+                />
+              ))
+            )}
+          </div>
         </div>
         <div className="other">
           <h3 className="friends">Your friends</h3>
