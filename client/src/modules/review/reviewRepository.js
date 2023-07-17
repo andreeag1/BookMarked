@@ -63,3 +63,69 @@ export const getReviewByUser = async (userId) => {
     console.log(error);
   }
 };
+
+export const addLike = async (reviewId) => {
+  try {
+    const res = await fetch(`http://localhost:5000/review/like`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: reviewId,
+      }),
+      credentials: "include",
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      console.log(data);
+      return;
+    }
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteLike = async (reviewId) => {
+  try {
+    const res = await fetch(`http://localhost:5000/review/unlike`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: reviewId,
+      }),
+      credentials: "include",
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      console.log(data);
+      return;
+    }
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getReviewById = async (id) => {
+  try {
+    const res = await fetch(`http://localhost:5000/review/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      console.log(data);
+      return;
+    }
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};

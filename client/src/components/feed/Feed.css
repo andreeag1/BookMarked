@@ -118,3 +118,43 @@
   border-bottom: 1px dashed gray;
   font-size: 15px;
 }
+
+.comments {
+  padding-left: 10px;
+}
+
+.comment {
+  display: flex;
+  flex-direction: column;
+  padding-top: 0.8rem;
+}
+
+.comment-text {
+  padding-left: 45px;
+}
+
+.solid {
+  border-top: 3px solid #bbb;
+  border-left: -5rem;
+  width: 50rem;
+}
+
+.addComment {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+.comment-button {
+  width: 100px;
+  height: 20px;
+}
+
+.comment-button-section {
+  padding-top: 0.1rem;
+  padding-left: 2.5rem;
+}
+
+.add-comment-section {
+  margin-bottom: 0.8rem;
+}

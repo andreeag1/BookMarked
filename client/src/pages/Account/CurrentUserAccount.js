@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import "./Account.css";
@@ -18,78 +18,87 @@ export default function CurrentUserAccount() {
   const [following, setFollowing] = React.useState([]);
   const [review, setReview] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
+  const [array, setArray] = React.useState([]);
 
-  useEffect(() => {
-    const newUser = async () => {
-      const userId = await getCurrentUserId();
-      const friends = await getCurrentUserFollowing();
-      setFollowing(friends);
-      const newReview = await getReviewByUser(userId);
-      const newReviewLength = newReview.length;
-      const reviewLength = review.length;
-      if (newReviewLength !== reviewLength) {
-        newReview.map((reviews) => {
-          const title = reviews.book.title;
-          const cover = reviews.book.imageLink.replace(
-            "https://covers.openlibrary.org/b/id/",
-            ""
-          );
-          const newCover = cover.replace("-M.jpg", "");
-          fetch(
-            "https://openlibrary.org/search.json?" +
-              new URLSearchParams({
-                q: title,
-              })
-          )
-            .then((response) => response.json())
-            .then((data) => {
-              data.docs.map((book) => {
-                if (book.cover_i == newCover) {
-                  const bookId = book.key;
-                  fetch(`https://openlibrary.org${bookId}.json`)
-                    .then((response) => response.json())
-                    .then((data) => {
-                      const newDescription = "No Description";
-                      if (!data.description) {
-                        const Obj = {
-                          other: reviews,
-                          description: newDescription,
-                        };
-                        setReview((old) => [...old, Obj]);
-                        setLoading(false);
-
-                        console.log(Obj);
-                      } else {
-                        if (data.description.value) {
-                          const Obj = {
-                            other: reviews,
-                            description: data.description.value,
-                          };
-                          setReview((old) => [...old, Obj]);
-                          setLoading(false);
-
-                          console.log(Obj);
-                        } else {
-                          const Obj = {
-                            other: reviews,
-                            description: data.description,
-                          };
-                          setReview((old) => [...old, Obj]);
-                          setLoading(false);
-
-                          console.log(Obj);
-                        }
-                      }
-                    });
-                }
-              });
-            });
-        });
+  const useDidMountEffect = () => {
+    const didMount = useRef(false);
+    React.useEffect(() => {
+      if (didMount.current) {
+        newUser();
+      } else {
+        didMount.current = true;
       }
-    };
-    newUser();
-    console.log(review);
+    }, [array]);
+  };
+
+  useDidMountEffect(() => {
+    console.log("second render");
   });
+
+  const newUser = async () => {
+    console.log("hello");
+    const userId = await getCurrentUserId();
+    const friends = await getCurrentUserFollowing();
+    setFollowing(friends);
+    const newReview = await getReviewByUser(userId);
+    newReview.map((reviews) => {
+      const title = reviews.book.title;
+      const cover = reviews.book.imageLink.replace(
+        "https://covers.openlibrary.org/b/id/",
+        ""
+      );
+      const newCover = cover.replace("-M.jpg", "");
+      fetch(
+        "https://openlibrary.org/search.json?" +
+          new URLSearchParams({
+            q: title,
+          })
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          data.docs.map((book) => {
+            if (book.cover_i == newCover) {
+              const bookId = book.key;
+              fetch(`https://openlibrary.org${bookId}.json`)
+                .then((response) => response.json())
+                .then((data) => {
+                  const newDescription = "No Description";
+                  if (!data.description) {
+                    const Obj = {
+                      other: reviews,
+                      description: newDescription,
+                    };
+                    setReview((old) => [...old, Obj]);
+                    setLoading(false);
+
+                    console.log(Obj);
+                  } else {
+                    if (data.description.value) {
+                      const Obj = {
+                        other: reviews,
+                        description: data.description.value,
+                      };
+                      setReview((old) => [...old, Obj]);
+                      setLoading(false);
+
+                      console.log(Obj);
+                    } else {
+                      const Obj = {
+                        other: reviews,
+                        description: data.description,
+                      };
+                      setReview((old) => [...old, Obj]);
+                      setLoading(false);
+
+                      console.log(Obj);
+                    }
+                  }
+                });
+            }
+          });
+        });
+    });
+  };
 
   return (
     <div className="account">
@@ -118,6 +127,8 @@ export default function CurrentUserAccount() {
             ) : (
               review.map((singleReview) => (
                 <Feed
+                  user={singleReview.other.user}
+                  book={singleReview.other.book}
                   review={singleReview.other}
                   description={singleReview.description}
                 />

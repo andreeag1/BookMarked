@@ -126,7 +126,12 @@ export default function Book() {
       <div className="review-section">
         <h2>Reviews</h2>
         {review.map((singleReview) => (
-          <Feed review={singleReview} description={book.description} />
+          <Feed
+            review={singleReview}
+            user={singleReview.user}
+            book={singleReview.book}
+            description={book.description}
+          />
         ))}
       </div>
       <Footer />

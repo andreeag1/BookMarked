@@ -69,8 +69,7 @@ export const getCurrentUserId = async () => {
       console.log(data);
       return;
     }
-    const userId = data.id;
-    return userId;
+    return data;
   } catch (error) {
     console.log(error);
   }
@@ -342,6 +341,26 @@ export const getCurrentUserFollowing = async () => {
 export const getFollowing = async (id) => {
   try {
     const res = await fetch(`http://localhost:5000/auth/following/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      console.log(data);
+      return;
+    }
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getFriendsReviews = async () => {
+  try {
+    const res = await fetch(`http://localhost:5000/auth/reviews`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

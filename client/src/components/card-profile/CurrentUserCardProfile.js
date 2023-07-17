@@ -22,9 +22,10 @@ export default function CurrentUserCardProfile() {
       setUser({ firstName: user.firstName, lastName: user.lastName });
       const newCollections = await getCollectionTitles(userId);
       const titles = [];
-      newCollections.map((collection) => {
-        titles.push(collection.title);
-      });
+        newCollections.map((collection) => {
+          titles.push(collection.title);
+        });
+      
       setCollections(titles);
     };
     currentUser();
