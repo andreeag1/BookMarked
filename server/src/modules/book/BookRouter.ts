@@ -8,7 +8,7 @@ export function createBookRouter(controllers: {
   const router = Router();
   const { bookController } = controllers;
 
-  //add a book
+  //add a book DONE
   router.post("/add", async (req: Request, res: Response) => {
     const response = await bookController.saveBook(
       req.body.title,
@@ -18,6 +18,7 @@ export function createBookRouter(controllers: {
     res.json(response);
   });
 
+  //get book by imagelink DONE
   router.get("/search/:imagelink", async (req: Request, res: Response) => {
     const imageLink = req.params.imagelink.split("_").join("/");
     const book = await bookController.getBookByImg(imageLink);

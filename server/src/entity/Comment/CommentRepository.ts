@@ -44,6 +44,7 @@ export class CommentRepository implements CommentRepositoryContract {
   getCommentByReview(id: string): Promise<Comment[]> {
     const queryBuilder = this.repository
       .createQueryBuilder("comment")
+      .innerJoinAndSelect("comment.user", "user")
       .where("comment.reviewId = :idOne", { idOne: id })
       .getMany();
 

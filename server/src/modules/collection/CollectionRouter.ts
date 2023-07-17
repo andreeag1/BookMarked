@@ -27,7 +27,7 @@ export function createCollectionRouter(controllers: {
     }
   });
 
-  //Add book to colleciton
+  //Add book to colleciton DONE
   router.post("/book", async (req: Request, res: Response) => {
     const newBook = await collectionController.saveBookToCollection(
       req.body.collectionId,
@@ -61,7 +61,7 @@ export function createCollectionRouter(controllers: {
     res.json(collections);
   });
 
-  //get a collection by title and user id
+  //get a collection by title and user id DONE
   router.get("/:id/:title", async (req: Request, res: Response) => {
     const collection = await collectionController.getCollection(
       req.params.id,

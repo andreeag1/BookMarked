@@ -35,13 +35,13 @@ export function createReviewRouter(controllers: {
     }
   });
 
-  //get a user's reviews
+  //get a user's reviews DONE
   router.get("/user/:userId", async (req: Request, res: Response) => {
     const review = await reviewController.getReviewByUser(req.params.userId);
     return res.json(review);
   });
 
-  //get a book's reviews
+  //get a book's reviews DONE
   router.get("/book/:bookId", async (req: Request, res: Response) => {
     const review = await reviewController.getReviewByBook(req.params.bookId);
     return res.json(review);
@@ -61,6 +61,12 @@ export function createReviewRouter(controllers: {
     review.likes--;
     const newReview = await reviewController.updateReview(review);
     return res.json(newReview);
+  });
+
+  //get review by id
+  router.get("/:id", async (req: Request, res: Response) => {
+    const review = await reviewController.getReviewById(req.params.id);
+    return res.json(review);
   });
 
   //delete review

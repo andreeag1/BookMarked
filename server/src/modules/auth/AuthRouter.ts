@@ -95,7 +95,7 @@ export function createAuthRouter(controllers: {
     const accessToken = req.cookies["accessToken"];
     const decoded = jwtDecode<TokenContent>(accessToken);
     const user = decoded.id;
-    res.status(200).send(decoded);
+    res.status(200).json(user);
   });
 
   //logout
@@ -151,7 +151,7 @@ export function createAuthRouter(controllers: {
     return res.json(following);
   });
 
-  //get list of people a user follows
+  //get list of people a user follows DONE
   router.get("/following/:id", async (req: Request, res: Response) => {
     const following = await authController.getUsersFollowing(req.params.id);
     return res.json(following);

@@ -95,6 +95,7 @@ export class UserRepository implements UserRepositoryContract {
       .createQueryBuilder("user")
       .innerJoin("user.followers", "followers")
       .innerJoinAndSelect("user.reviews", "reviews")
+      .innerJoinAndSelect("reviews.book", "book")
       .where("followers.id = :idOne", { idOne: id })
       .getMany();
 
