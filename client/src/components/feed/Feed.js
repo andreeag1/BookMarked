@@ -57,14 +57,21 @@ export default function Feed({ user, book, description, review }) {
     const getlikes = async () => {
       const newReview = await getReviewById(review.id);
       setLike(newReview.likes);
+    };
+
+    getlikes();
+  }, [array]);
+
+  useEffect(() => {
+    const getComments = async () => {
       const comments = await getCommentsByReview(review.id);
       setCommentInfo(comments);
       const count = await getCommentCount(review.id);
       setCommentCount(count);
     };
 
-    getlikes();
-  }, [array]);
+    getComments();
+  });
 
   const likeHandler = async () => {
     if (isLiked == true) {

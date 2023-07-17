@@ -30,7 +30,7 @@ function App() {
         <Route path="/account" element={<CurrentUserAccount />} />
         <Route path="/profile/:userId" element={<Account />} />
         <Route path="/book/:bookId" element={<Book />} />
-        <Route path="/my-books" element={<MyBooks />} />
+        <Route path="/my-books/:collectionId" element={<MyBooks />} />
         <Route path="/search" element={<Search />} />
       </Routes>
     </Router>

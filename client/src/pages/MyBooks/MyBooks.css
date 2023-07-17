@@ -5,8 +5,24 @@
   padding-left: 100px;
 }
 
-.list {
+.my-list {
   font-size: 20px;
   margin-left: -25px;
+  margin-right: 70px;
   color: black;
+  width: 200px;
+}
+
+.title-section {
+  width: 200px;
+}
+
+.my-collection-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.collection-books-section {
+  padding-left: 60px;
 }

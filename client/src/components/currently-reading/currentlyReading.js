@@ -223,7 +223,8 @@ export default function CurrentlyReading({ setBooksRead }) {
       setBooksCompleted(booksCompleted + 1);
       await addProgressToYearlyGoal(booksCompleted + 1);
       const collectionId = await getCollection(userId, addToCollection);
-      await addBookToCollection(collectionId.id, book.id);
+      console.log(collectionId.id);
+      // await addBookToCollection(collectionId.id, book.id);
       const createNewReview = await addReview(review, book.id, userId, rating);
       console.log(createNewReview);
     }

@@ -10,6 +10,7 @@ import {
   DialogTitle,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { Link } from "react-router-dom";
 import {
   addCollection,
   getCollectionTitles,
@@ -81,11 +82,11 @@ export default function CollectionsWidget() {
         <ul className="list">
           {items.map((item) => {
             return (
-              <a href={"/" + item.title}>
+              <Link to={`/my-books/${item.id}`}>
                 <li key={item.id} className="list-item">
                   {item.title}
                 </li>
-              </a>
+              </Link>
             );
           })}
         </ul>
