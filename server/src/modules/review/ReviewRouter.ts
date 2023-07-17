@@ -47,7 +47,7 @@ export function createReviewRouter(controllers: {
     return res.json(review);
   });
 
-  //add like
+  //add like DONE
   router.put("/like", async (req: Request, res: Response) => {
     const review = await reviewController.getReviewById(req.body.id);
     review.likes++;
@@ -55,7 +55,7 @@ export function createReviewRouter(controllers: {
     return res.json(newReview);
   });
 
-  //remove like
+  //remove like DONE
   router.put("/unlike", async (req: Request, res: Response) => {
     const review = await reviewController.getReviewById(req.body.id);
     review.likes--;
@@ -63,7 +63,7 @@ export function createReviewRouter(controllers: {
     return res.json(newReview);
   });
 
-  //get review by id
+  //get review by id DONE
   router.get("/:id", async (req: Request, res: Response) => {
     const review = await reviewController.getReviewById(req.params.id);
     return res.json(review);

@@ -54,8 +54,15 @@ export function createCollectionRouter(controllers: {
   });
 
   //get a user's collections DONE
-  router.get("/:id", async (req: Request, res: Response) => {
+  router.get("/user/:id", async (req: Request, res: Response) => {
     const collections = await collectionController.getCollectionByUser(
+      req.params.id
+    );
+    res.json(collections);
+  });
+
+  router.get("/get/:id", async (req: Request, res: Response) => {
+    const collections = await collectionController.getCollectionById(
       req.params.id
     );
     res.json(collections);
