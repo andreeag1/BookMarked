@@ -29,6 +29,7 @@ export default function Book() {
   const [bookCover, setBookCover] = React.useState("");
   const [mediumCover, setMediumCover] = React.useState("");
   const [review, setReview] = React.useState([]);
+  const [zeroReviews, setZeroReviews] = React.useState(false);
 
   useEffect(() => {
     const handleBookList = async () => {
@@ -46,6 +47,10 @@ export default function Book() {
             setAuthorKey(data.authors[0].author.key);
             const cover = `https://covers.openlibrary.org/b/id/${data.covers[0]}-L.jpg`;
             setBookCover(cover);
+            const mediumBookCover = `https://covers.openlibrary.org/b/id/${data.covers[0]}-M.jpg`;
+            const replacedCover = mediumBookCover.replaceAll("/", "_");
+            console.log(replacedCover);
+            setMediumCover(replacedCover);
           } else {
             if (data.description.value) {
               const Obj = {
@@ -96,6 +101,9 @@ export default function Book() {
       console.log(existingBook);
       const reviews = await getReviewByBook(existingBook.id);
       console.log(reviews);
+      if (reviews.length == 0) {
+        setZeroReviews(true);
+      }
       setReview(reviews);
     };
     getReviews();
@@ -125,14 +133,18 @@ export default function Book() {
       </div>
       <div className="review-section">
         <h2>Reviews</h2>
-        {review.map((singleReview) => (
-          <Feed
-            review={singleReview}
-            user={singleReview.user}
-            book={singleReview.book}
-            description={book.description}
-          />
-        ))}
+        {zeroReviews ? (
+          <p>No Reviews Yet!</p>
+        ) : (
+          review.map((singleReview) => (
+            <Feed
+              review={singleReview}
+              user={singleReview.user}
+              book={singleReview.book}
+              description={book.description}
+            />
+          ))
+        )}
       </div>
       <Footer />
     </div>

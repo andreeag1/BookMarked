@@ -21,6 +21,7 @@ export default function Dashboard() {
   const [review, setReview] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [array, setArray] = React.useState([]);
+  const [zeroReviews, setZeroReviews] = React.useState(false);
 
   const useDidMountEffect = () => {
     const didMount = useRef(false);
@@ -39,6 +40,9 @@ export default function Dashboard() {
 
   const newUser = async () => {
     const newReview = await getFriendsReviews();
+    if (newReview.length == 0) {
+      setZeroReviews(true);
+    }
     newReview.map((reviews) => {
       reviews.reviews.map((singleReview) => {
         const title = singleReview.book.title;
@@ -133,7 +137,11 @@ export default function Dashboard() {
               <h3>Updates</h3>
             </div>
             <div className="feed-container">
-              {loading ? (
+              {zeroReviews ? (
+                <div className="no-reviews">
+                  <h7>Follow other users to see their updates!</h7>
+                </div>
+              ) : loading ? (
                 <CircularProgress />
               ) : (
                 review.map((singleReview) => (

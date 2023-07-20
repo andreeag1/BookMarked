@@ -15,6 +15,7 @@ import Dashboard from "./pages/Dashboard/Dashboard.js";
 import Account from "./pages/Account/Account.js";
 import Book from "./pages/Book/Book.js";
 import MyBooks from "./pages/MyBooks/MyBooks";
+import MyBooksMain from "./pages/MyBooks/MyBooksMain";
 import Search from "./pages/Search/Search.js";
 import CurrentUserAccount from "./pages/Account/CurrentUserAccount.js";
 
@@ -31,6 +32,7 @@ function App() {
         <Route path="/profile/:userId" element={<Account />} />
         <Route path="/book/:bookId" element={<Book />} />
         <Route path="/my-books/:collectionId" element={<MyBooks />} />
+        <Route path="/my-books" element={<MyBooksMain />} />
         <Route path="/search" element={<Search />} />
       </Routes>
     </Router>

@@ -184,7 +184,7 @@ const Header = () => {
                     key="MyBooks"
                     sx={{ color: "inherit" }}
                     component={Link}
-                    to={`/my-books/all`}
+                    to={`/my-books`}
                   >
                     My Books
                   </Button>

@@ -19,6 +19,7 @@ export default function CurrentUserAccount() {
   const [review, setReview] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [array, setArray] = React.useState([]);
+  const [zeroReviews, setZeroReviews] = React.useState(false);
 
   const useDidMountEffect = () => {
     const didMount = useRef(false);
@@ -41,6 +42,9 @@ export default function CurrentUserAccount() {
     const friends = await getCurrentUserFollowing();
     setFollowing(friends);
     const newReview = await getReviewByUser(userId);
+    if (newReview.length == 0) {
+      setZeroReviews(true);
+    }
     newReview.map((reviews) => {
       const title = reviews.book.title;
       const cover = reviews.book.imageLink.replace(
@@ -122,7 +126,11 @@ export default function CurrentUserAccount() {
           </div>
           <h3 className="reviews">Your Reviews</h3>
           <div className="feed-container">
-            {loading ? (
+            {zeroReviews ? (
+              <div className="no-reviews">
+                <h7>You'll see your reviews here once you write one!</h7>
+              </div>
+            ) : loading ? (
               <CircularProgress />
             ) : (
               review.map((singleReview) => (

@@ -18,6 +18,7 @@ export default function Account() {
   const [review, setReview] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [array, setArray] = React.useState([]);
+  const [zeroReviews, setZeroReviews] = React.useState(false);
 
   const useDidMountEffect = () => {
     const didMount = useRef(false);
@@ -41,6 +42,9 @@ export default function Account() {
     const friends = await getFollowing(userId);
     setFollowing(friends);
     const newReview = await getReviewByUser(userId);
+    if (newReview.length == 0) {
+      setZeroReviews(true);
+    }
     console.log(newReview);
     if (newReview.length !== review.length) {
       newReview.map(async (reviews) => {
@@ -125,7 +129,11 @@ export default function Account() {
           </div>
           <h3 className="reviews">{firstName}'s Reviews</h3>
           <div className="feed-container">
-            {loading ? (
+            {zeroReviews ? (
+              <div className="no-reviews">
+                <h7>This user doesn't have any reviews yet!</h7>
+              </div>
+            ) : loading ? (
               <CircularProgress />
             ) : (
               review.map((singleReview) => (

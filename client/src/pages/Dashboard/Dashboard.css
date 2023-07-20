@@ -38,3 +38,8 @@
   font-family: Raleway;
   margin-top: 1rem;
 }
+
+.no-reviews {
+  text-size-adjust: inherit;
+  font-family: Raleway;
+}
