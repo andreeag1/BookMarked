@@ -4,12 +4,14 @@ import Footer from "../../components/footer/Footer";
 import "./Account.css";
 import Feed from "../../components/feed/Feed";
 import { Box } from "@mui/material";
-import profilePic from "../../assets/pictures/1.jpeg";
+import profilePic from "../../assets/pictures/profile.png";
 import CardProfile from "../../components/card-profile/CardProfile";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { getUserById, getFollowing } from "../../modules/user/userRepository";
 import { getReviewByUser } from "../../modules/review/reviewRepository";
+import { storage } from "../../firebase.js";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export default function Account() {
   const { userId } = useParams();
@@ -40,7 +42,27 @@ export default function Account() {
     const user = await getUserById(userId);
     setFirstName(user.firstName);
     const friends = await getFollowing(userId);
-    setFollowing(friends);
+    const totalFollowing = [];
+    friends.map((user) => {
+      const imageRef = ref(storage, user.id);
+      getDownloadURL(imageRef)
+        .then((url) => {
+          const Obj = {
+            following: user,
+            url: url,
+          };
+          totalFollowing.push(Obj);
+        })
+        .catch((error) => {
+          console.log(error.message, "error getting the image URL");
+          const Obj = {
+            following: user,
+            url: profilePic,
+          };
+          totalFollowing.push(Obj);
+        });
+    });
+    setFollowing(totalFollowing);
     const newReview = await getReviewByUser(userId);
     if (newReview.length == 0) {
       setZeroReviews(true);
@@ -119,10 +141,12 @@ export default function Account() {
             {following.map((friend) => {
               return (
                 <div className="friend">
-                  <img className="postProfileImg" src={profilePic} alt="" />
-                  <h7>
-                    {friend.firstName} {friend.lastName}
-                  </h7>
+                  <Link to={`/profile/${friend.following.id}`}>
+                    <img className="postProfileImg" src={friend.url} alt="" />
+                    <h7 className="friend-text">
+                      {friend.following.firstName} {friend.following.lastName}
+                    </h7>
+                  </Link>
                 </div>
               );
             })}
@@ -152,10 +176,12 @@ export default function Account() {
           {following.map((friend) => {
             return (
               <div className="friend">
-                <img className="postProfileImg" src={profilePic} alt="" />
-                <h7>
-                  {friend.firstName} {friend.lastName}
-                </h7>
+                <Link to={`/profile/${friend.following.id}`}>
+                  <img className="postProfileImg" src={friend.url} alt="" />
+                  <h7 className="friend-text">
+                    {friend.following.firstName} {friend.following.lastName}
+                  </h7>
+                </Link>
               </div>
             );
           })}

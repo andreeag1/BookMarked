@@ -9,11 +9,14 @@ import {
   addProfilePic,
 } from "../../modules/user/userRepository";
 import { getCollectionTitles } from "../../modules/collection/collectionRepository";
+import { storage } from "../../firebase.js";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export default function CurrentUserCardProfile() {
   const [user, setUser] = React.useState("");
   const [collections, setCollections] = React.useState([]);
-  const [image, setImage] = React.useState("");
+  const [image, setImage] = React.useState(null);
+  const [url, setUrl] = React.useState(null);
 
   useEffect(() => {
     const currentUser = async () => {
@@ -22,36 +25,55 @@ export default function CurrentUserCardProfile() {
       setUser({ firstName: user.firstName, lastName: user.lastName });
       const newCollections = await getCollectionTitles(userId);
       const titles = [];
-        newCollections.map((collection) => {
-          titles.push(collection.title);
-        });
-      
+      newCollections.map((collection) => {
+        titles.push(collection.title);
+      });
+
       setCollections(titles);
+      const imageRef = ref(storage, userId);
+      getDownloadURL(imageRef)
+        .then((url) => {
+          setUrl(url);
+        })
+        .catch((error) => {
+          console.log(error.message, "error getting the image URL");
+        });
     };
     currentUser();
   });
 
-  // useEffect(() => {
-  //   const ProfilePicture = async () => {
-  //     addProfilePic(image);
-  //   };
-  //   ProfilePicture();
-  // }, [image]);
-
-  const handleApi = async () => {
-    await addProfilePic(image);
+  const handleSubmit = async () => {
+    const userId = await getCurrentUserId();
+    const imageRef = ref(storage, userId);
+    uploadBytes(imageRef, image)
+      .then(() => {
+        getDownloadURL(imageRef)
+          .then((url) => {
+            setUrl(url);
+          })
+          .catch((error) => {
+            console.log(error.message, "error getting the image URL");
+          });
+        setImage(null);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   };
 
   const handleChange = (e) => {
-    setImage(e.target.files[0]);
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+      console.log(image);
+    }
   };
 
   return (
     <div className="card-profile">
       <div className="profile-img">
-        <Avatar sx={{ width: 150, height: 150 }} />
+        <Avatar sx={{ width: 150, height: 150 }} src={url} />
         <input type="file" onChange={handleChange} />
-        <button onClick={handleApi}>Submit</button>
+        <button onClick={handleSubmit}>Submit</button>
       </div>
       <div className="profile-info">
         <div className="name">

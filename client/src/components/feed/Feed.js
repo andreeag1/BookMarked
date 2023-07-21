@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import "./Feed.css";
-import profilePic from "../../assets/pictures/1.jpeg";
+import profilePic from "../../assets/pictures/profile.png";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import BookCard from "../book-card/BookCard";
 import data from "../../mock.json";
@@ -9,6 +9,8 @@ import heartIcon from "../../assets/pictures/heart.png";
 import { Button, Divider, Rating, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { Link } from "react-router-dom";
+import { storage } from "../../firebase.js";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {
   addLike,
   deleteLike,
@@ -19,6 +21,7 @@ import {
   getCommentsByReview,
   getCommentCount,
 } from "../../modules/comment/commentRepository";
+import { getCurrentUserId } from "../../modules/user/userRepository";
 
 const ColorButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText("#E9E7E5"),
@@ -51,7 +54,10 @@ export default function Feed({ user, book, description, review }) {
   const [comment, setComment] = React.useState("");
   const [commentInfo, setCommentInfo] = React.useState([]);
   const [commentCount, setCommentCount] = React.useState(0);
+  const [url, setUrl] = React.useState([]);
+  const [currentUserUrl, setCurrentUserUrl] = React.useState(null);
   const userLiked = React.useRef(false);
+  const [addedComment, setAddedComment] = React.useState(false);
 
   useEffect(() => {
     const getlikes = async () => {
@@ -63,15 +69,58 @@ export default function Feed({ user, book, description, review }) {
   }, [array]);
 
   useEffect(() => {
+    const getProfilePictures = async () => {
+      const imageRef = ref(storage, user.id);
+      const userId = await getCurrentUserId();
+      const secondImageRef = ref(storage, userId);
+      getDownloadURL(imageRef)
+        .then((url) => {
+          setUrl(url);
+        })
+        .catch((error) => {
+          setUrl(profilePic);
+        });
+      getDownloadURL(secondImageRef)
+        .then((url) => {
+          setCurrentUserUrl(url);
+        })
+        .catch((error) => {
+          setCurrentUserUrl(profilePic);
+        });
+    };
+    getProfilePictures();
+  }, [array]);
+
+  useEffect(() => {
     const getComments = async () => {
       const comments = await getCommentsByReview(review.id);
-      setCommentInfo(comments);
+      const totalComments = [];
+      comments.map((comment) => {
+        const imageRef = ref(storage, comment.user.id);
+        getDownloadURL(imageRef)
+          .then((url) => {
+            const Obj = {
+              info: comment,
+              url: url,
+            };
+            totalComments.push(Obj);
+          })
+          .catch(() => {
+            const Obj = {
+              info: comment,
+              url: profilePic,
+            };
+            totalComments.push(Obj);
+          });
+      });
+
+      setCommentInfo(totalComments);
       const count = await getCommentCount(review.id);
       setCommentCount(count);
     };
 
     getComments();
-  });
+  }, [addedComment]);
 
   const likeHandler = async () => {
     if (isLiked == true) {
@@ -97,9 +146,13 @@ export default function Feed({ user, book, description, review }) {
   };
 
   const addCommentHandler = async () => {
-    await addComment(comment, user.id, review.id);
+    const userId = await getCurrentUserId();
+    await addComment(comment, userId, review.id);
     setComment("");
+    setAddedComment(!addedComment);
   };
+
+  const handleCommentProfiles = (userId) => {};
 
   return (
     <div className="feed">
@@ -109,7 +162,7 @@ export default function Feed({ user, book, description, review }) {
             <div className="postTop">
               <div className="postTopLeft">
                 <Link to={`/profile/${user.id}`}>
-                  <img className="postProfileImg" src={profilePic} alt="" />
+                  <img className="postProfileImg" src={url} alt="" />
                   <span className="postUsername">
                     {user.firstName} {user.lastName}
                   </span>
@@ -171,16 +224,16 @@ export default function Feed({ user, book, description, review }) {
                       <div>
                         <img
                           className="postProfileImg"
-                          src={profilePic}
+                          src={comment.url}
                           alt=""
                         />
                         <span className="postUsername">
-                          {comment.user.firstName} {comment.user.lastName}{" "}
-                          commented
+                          {comment.info.user.firstName}{" "}
+                          {comment.info.user.lastName} commented
                         </span>
                       </div>
                       <div className="comment-text">
-                        <span>{comment.comment}</span>
+                        <span>{comment.info.comment}</span>
                       </div>
                       <Divider
                         variant="middle"
@@ -199,7 +252,7 @@ export default function Feed({ user, book, description, review }) {
             )}
             <div className="addComment">
               <div className="add-comment-section">
-                <img className="postProfileImg" src={profilePic} alt="" />
+                <img className="postProfileImg" src={currentUserUrl} alt="" />
                 <StyledTextfield
                   className="comment-box"
                   label="Write a comment..."

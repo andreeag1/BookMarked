@@ -27,6 +27,11 @@
   display: flex;
   flex-direction: row;
   padding-top: 1rem;
+  color: black;
+}
+
+.friend-text {
+  color: black;
 }
 
 @media (max-width: 850px) {

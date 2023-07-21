@@ -10,6 +10,8 @@ import {
 import { getCollectionTitles } from "../../modules/collection/collectionRepository";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
+import { storage } from "../../firebase.js";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const FollowButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText("#cab9a9"),
@@ -31,6 +33,7 @@ export default function CardProfile({ userId }) {
   const [user, setUser] = React.useState("");
   const [collections, setCollections] = React.useState([]);
   const [followed, setFollowed] = React.useState(false);
+  const [url, setUrl] = React.useState(null);
 
   useEffect(() => {
     const newUser = async () => {
@@ -43,6 +46,14 @@ export default function CardProfile({ userId }) {
         titles.push(collection.title);
       });
       setCollections(titles);
+      const imageRef = ref(storage, userId);
+      getDownloadURL(imageRef)
+        .then((url) => {
+          setUrl(url);
+        })
+        .catch((error) => {
+          console.log(error.message, "error getting the image URL");
+        });
     };
     newUser();
   }, [userId]);
@@ -64,7 +75,7 @@ export default function CardProfile({ userId }) {
   return (
     <div className="card-profile">
       <div className="profile-img-set">
-        <Avatar sx={{ width: 150, height: 150 }} />
+        <Avatar sx={{ width: 150, height: 150 }} src={url} />
         <div className="follow-button">
           {followed ? (
             <UnfollowButton onClick={handleUnfollow}>Unfollow</UnfollowButton>

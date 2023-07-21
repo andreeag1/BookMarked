@@ -222,21 +222,15 @@ export default function CurrentlyReading({ setBooksRead }) {
       setBooksRead(booksCompleted + 1);
       setBooksCompleted(booksCompleted + 1);
       await addProgressToYearlyGoal(booksCompleted + 1);
-      const collectionId = await getCollection(userId, addToCollection);
-      console.log(collectionId.id);
-      await addBookToCollection(collectionId.id, book.id);
+      if (addToCollection) {
+        const collectionId = await getCollection(userId, addToCollection);
+        console.log(collectionId.id);
+        await addBookToCollection(collectionId.id, book.id);
+      }
       const createNewReview = await addReview(review, book.id, userId, rating);
       console.log(createNewReview);
     }
   };
-
-  // await fetch(`https://openlibrary.org${bookInfo.id}.json`)
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       const Description = data.description.value;
-  //       console.log(Description);
-  //       setBookInfo({ description: Description });
-  //     });
 
   const handleSubmit = (e) => {
     if (e.key === "Enter") {
