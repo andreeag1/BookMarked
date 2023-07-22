@@ -31,7 +31,7 @@ import {
   addProgressToCurrentRead,
   addProgressToYearlyGoal,
 } from "../../modules/user/userRepository";
-import { createBook } from "../../modules/books/bookRepository";
+import { createBook, getBookByImg } from "../../modules/books/bookRepository";
 import {
   getCollectionTitles,
   addBookToCollection,
@@ -184,8 +184,15 @@ export default function CurrentlyReading({ setBooksRead }) {
     const newCollection = async () => {
       const userId = await getCurrentUserId();
       const userCollections = await getCollectionTitles(userId);
-      console.log(userCollections.title);
-      setCollections(userCollections);
+      const titles = [];
+      userCollections.map((collection) => {
+        if (collection.title == "Read" || collection.title == "Want To Read") {
+        } else {
+          titles.push(collection.title);
+        }
+      });
+      console.log(titles);
+      setCollections(titles);
     };
     newCollection();
   }, [newReview]);
@@ -222,13 +229,42 @@ export default function CurrentlyReading({ setBooksRead }) {
       setBooksRead(booksCompleted + 1);
       setBooksCompleted(booksCompleted + 1);
       await addProgressToYearlyGoal(booksCompleted + 1);
-      if (addToCollection) {
-        const collectionId = await getCollection(userId, addToCollection);
-        console.log(collectionId.id);
-        await addBookToCollection(collectionId.id, book.id);
+      if (book == null) {
+        const cover = confirmedBookInfo.imageLink.replaceAll("/", "_");
+        const findBook = await getBookByImg(cover);
+        console.log(findBook);
+        console.log(addToCollection);
+        if (addToCollection == "") {
+        } else {
+          const collectionId = await getCollection(userId, addToCollection);
+          console.log(collectionId.id);
+          await addBookToCollection(collectionId.id, findBook.id);
+        }
+        const readCollection = await getCollection(userId, "Read");
+        await addBookToCollection(readCollection.id, findBook.id);
+        const createNewReview = await addReview(
+          review,
+          findBook.id,
+          userId,
+          rating
+        );
+      } else {
+        console.log(addToCollection);
+        if (addToCollection == "") {
+        } else {
+          const collectionId = await getCollection(userId, addToCollection);
+          console.log(collectionId.id);
+          await addBookToCollection(collectionId.id, book.id);
+        }
+        const readCollection = await getCollection(userId, "Read");
+        await addBookToCollection(readCollection.id, book.id);
+        const createNewReview = await addReview(
+          review,
+          book.id,
+          userId,
+          rating
+        );
       }
-      const createNewReview = await addReview(review, book.id, userId, rating);
-      console.log(createNewReview);
     }
   };
 
@@ -434,16 +470,13 @@ export default function CurrentlyReading({ setBooksRead }) {
                   <Autocomplete
                     freeSolo
                     id="combo-box-demo"
-                    options={collections.map((option) => option.title)}
+                    options={collections.map((option) => option)}
                     sx={{ width: 250 }}
+                    onChange={(e) => {
+                      setAddToCollection(e.target.textContent);
+                    }}
                     renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Add to a collection"
-                        onChange={(newValue) => {
-                          setAddToCollection(newValue);
-                        }}
-                      />
+                      <TextField {...params} label="Add to a collection" />
                     )}
                   />
                 </div>

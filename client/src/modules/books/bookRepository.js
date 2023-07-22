@@ -13,7 +13,7 @@ export const createBook = async (title, author, imageLink) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data.description);
+      console.log(data);
       return;
     }
     return data;
@@ -39,5 +39,6 @@ export const getBookByImg = async (imagelink) => {
     return data;
   } catch (error) {
     console.log(error);
+    return null;
   }
 };

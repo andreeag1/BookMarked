@@ -85,8 +85,7 @@ export default function YearGoal({ booksRead }) {
   }, [noCurrentGoal]);
 
   const toggleBool = async () => {
-    const userId = await getCurrentUserId();
-    await addYearlyGoal(userId, goal);
+    await addYearlyGoal(goal);
     setNoCurrentGoal(false);
     setNewGoal(true);
     setMyBool(false);

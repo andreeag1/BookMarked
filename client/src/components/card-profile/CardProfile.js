@@ -6,12 +6,15 @@ import {
   getUserById,
   followUser,
   unfollowUser,
+  getFollowing,
+  getCurrentUserId,
 } from "../../modules/user/userRepository";
 import { getCollectionTitles } from "../../modules/collection/collectionRepository";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import { storage } from "../../firebase.js";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { Link } from "react-router-dom";
 
 const FollowButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText("#cab9a9"),
@@ -39,11 +42,18 @@ export default function CardProfile({ userId }) {
     const newUser = async () => {
       console.log(userId);
       const user = await getUserById(userId);
+      const currentUserId = await getCurrentUserId();
+      const following = await getFollowing(currentUserId);
+      following.map((user) => {
+        if (user.id == userId) {
+          setFollowed(true);
+        }
+      });
       setUser({ firstName: user.firstName, lastName: user.lastName });
       const newCollections = await getCollectionTitles(userId);
       const titles = [];
       newCollections.map((collection) => {
-        titles.push(collection.title);
+        titles.push(collection);
       });
       setCollections(titles);
       const imageRef = ref(storage, userId);
@@ -106,9 +116,9 @@ export default function CardProfile({ userId }) {
           <span style={{ fontWeight: "bold" }}>Collections:</span>
           <div className="book-collections">
             <ul className="list">
-              <a href={"/"}>
+              <a>
                 {collections.map((collection) => (
-                  <li className="list-items">{collection}</li>
+                  <li className="list-items">{collection.title}</li>
                 ))}
               </a>
             </ul>

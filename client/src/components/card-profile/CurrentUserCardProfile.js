@@ -11,12 +11,15 @@ import {
 import { getCollectionTitles } from "../../modules/collection/collectionRepository";
 import { storage } from "../../firebase.js";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { Link } from "react-router-dom";
+import profilePic from "../../assets/pictures/profile.png";
 
 export default function CurrentUserCardProfile() {
   const [user, setUser] = React.useState("");
   const [collections, setCollections] = React.useState([]);
   const [image, setImage] = React.useState(null);
   const [url, setUrl] = React.useState(null);
+  const [array, setArray] = React.useState([]);
 
   useEffect(() => {
     const currentUser = async () => {
@@ -26,21 +29,21 @@ export default function CurrentUserCardProfile() {
       const newCollections = await getCollectionTitles(userId);
       const titles = [];
       newCollections.map((collection) => {
-        titles.push(collection.title);
+        titles.push(collection);
       });
 
-      setCollections(titles);
+      setCollections(newCollections);
       const imageRef = ref(storage, userId);
       getDownloadURL(imageRef)
         .then((url) => {
           setUrl(url);
         })
         .catch((error) => {
-          console.log(error.message, "error getting the image URL");
+          setUrl(profilePic);
         });
     };
     currentUser();
-  });
+  }, [array]);
 
   const handleSubmit = async () => {
     const userId = await getCurrentUserId();
@@ -91,9 +94,11 @@ export default function CurrentUserCardProfile() {
           <span style={{ fontWeight: "bold" }}>Collections:</span>
           <div className="book-collections">
             <ul className="list">
-              <a href={"/"}>
+              <a>
                 {collections.map((collection) => (
-                  <li className="list-items">{collection}</li>
+                  <Link to={`/my-books/${collection.id}`}>
+                    <li className="list-items">{collection.title}</li>
+                  </Link>
                 ))}
               </a>
             </ul>

@@ -20,11 +20,11 @@ export const registerUser = async (
       }),
     });
     const data = await res.json();
-    if (!res.ok) {
-      console.log(data.description);
-      return;
-    }
     console.log(data);
+    if (data == null) {
+      return 200;
+    }
+    return 403;
   } catch (error) {
     console.log(error);
   }
@@ -361,6 +361,26 @@ export const getFollowing = async (id) => {
 export const getFriendsReviews = async () => {
   try {
     const res = await fetch(`http://localhost:5000/auth/reviews`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      console.log(data);
+      return;
+    }
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getUserByEmail = async (email) => {
+  try {
+    const res = await fetch(`http://localhost:5000/auth/user-email/${email}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

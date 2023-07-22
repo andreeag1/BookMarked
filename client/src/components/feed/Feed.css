@@ -158,3 +158,9 @@
 .add-comment-section {
   margin-bottom: 0.8rem;
 }
+
+.comment-info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

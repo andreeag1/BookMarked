@@ -6,7 +6,15 @@ import BookCard from "../book-card/BookCard";
 import data from "../../mock.json";
 import likeIcon from "../../assets/pictures/like.png";
 import heartIcon from "../../assets/pictures/heart.png";
-import { Button, Divider, Rating, TextField } from "@mui/material";
+import {
+  Button,
+  Divider,
+  Menu,
+  MenuItem,
+  Popover,
+  Rating,
+  TextField,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { storage } from "../../firebase.js";
@@ -15,17 +23,34 @@ import {
   addLike,
   deleteLike,
   getReviewById,
+  deleteReview,
 } from "../../modules/review/reviewRepository";
 import {
   addComment,
   getCommentsByReview,
   getCommentCount,
+  deleteComment,
 } from "../../modules/comment/commentRepository";
+import { getBookByImg, createBook } from "../../modules/books/bookRepository";
 import { getCurrentUserId } from "../../modules/user/userRepository";
+import {
+  getCollection,
+  addBookToCollection,
+  deleteBookFromCollection,
+  getCollectionById,
+} from "../../modules/collection/collectionRepository";
 
 const ColorButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText("#E9E7E5"),
-  backgroundColor: "#DDDDDC",
+  backgroundColor: "#cab9a9",
+  "&:hover": {
+    backgroundColor: "#cab9a9",
+  },
+}));
+
+const TouchedColorButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.getContrastText("#E9E7E5"),
+  backgroundColor: "#DDDDDD",
   "&:hover": {
     backgroundColor: "#DDDDDD",
   },
@@ -58,11 +83,19 @@ export default function Feed({ user, book, description, review }) {
   const [currentUserUrl, setCurrentUserUrl] = React.useState(null);
   const userLiked = React.useRef(false);
   const [addedComment, setAddedComment] = React.useState(false);
+  const [pressed, setPressed] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [showKebeb, setShowKebab] = React.useState(false);
+  const [commentToDelete, setCommentToDelete] = React.useState("");
 
   useEffect(() => {
     const getlikes = async () => {
       const newReview = await getReviewById(review.id);
       setLike(newReview.likes);
+      const userId = await getCurrentUserId();
+      if (user.id == userId) {
+        setShowKebab(true);
+      }
     };
 
     getlikes();
@@ -152,7 +185,73 @@ export default function Feed({ user, book, description, review }) {
     setAddedComment(!addedComment);
   };
 
-  const handleCommentProfiles = (userId) => {};
+  useEffect(() => {
+    const isBookInCollection = async () => {
+      const userId = await getCurrentUserId();
+      const collection = await getCollection(userId, "Want To Read");
+      const books = await getCollectionById(collection.id);
+      books.books.map((newBook) => {
+        if (newBook.imageLink == book.imageLink) {
+          setPressed(true);
+        }
+      });
+    };
+    isBookInCollection();
+  });
+
+  const handleWantToRead = async () => {
+    const userId = await getCurrentUserId();
+    const collection = await getCollection(userId, "Want To Read");
+    const cover = book.imageLink.replaceAll("/", "_");
+    console.log(cover);
+    const newBook = await createBook(book.title, book.author, book.imageLink);
+    console.log(newBook);
+    if (pressed == false) {
+      if (newBook == null) {
+        const findBook = await getBookByImg(cover);
+        await addBookToCollection(collection.id, findBook.id);
+        setPressed(true);
+      } else {
+        await addBookToCollection(collection.id, newBook.id);
+        setPressed(true);
+      }
+    } else {
+      if (newBook == null) {
+        const findBook = await getBookByImg(cover);
+        await deleteBookFromCollection(collection.id, findBook.id);
+        setPressed(false);
+      } else {
+        await deleteBookFromCollection(collection.id, newBook.id);
+        setPressed(false);
+      }
+    }
+  };
+
+  const handlePopover = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleDelete = async () => {
+    setAnchorEl(null);
+    await deleteReview(review.id);
+    window.location.reload();
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+
+  useEffect(() => {
+    const handleDeleteComment = async () => {
+      setAnchorEl(null);
+      await deleteComment(commentToDelete);
+      setAddedComment(!addedComment);
+    };
+
+    handleDeleteComment();
+  }, [commentToDelete]);
 
   return (
     <div className="feed">
@@ -170,10 +269,29 @@ export default function Feed({ user, book, description, review }) {
 
                 <span className="postUsername">reviewed</span>
                 <span className="postUsername">{book.title}</span>
-                {/* <span className="postDate">June 12th 2022</span> */}
+                <span className="postDate">{review.date}</span>
               </div>
               <div className="postTopRight">
-                <MoreVertIcon />
+                {showKebeb ? (
+                  <div>
+                    <Button>
+                      <MoreVertIcon onClick={handlePopover} />
+                    </Button>
+                    <Menu
+                      id="basic-menu"
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
+                      MenuListProps={{
+                        "aria-labelledby": "basic-button",
+                      }}
+                    >
+                      <MenuItem onClick={handleDelete}>Delete Post</MenuItem>
+                    </Menu>
+                  </div>
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
           </div>
@@ -192,7 +310,15 @@ export default function Feed({ user, book, description, review }) {
 
             <div className="bookSummary">
               <div className="WantToReadBtn">
-                <ColorButton>Want to Read</ColorButton>
+                {pressed ? (
+                  <TouchedColorButton onClick={handleWantToRead}>
+                    Want to Read
+                  </TouchedColorButton>
+                ) : (
+                  <ColorButton onClick={handleWantToRead}>
+                    Want to Read
+                  </ColorButton>
+                )}
               </div>
               <h5>Summary</h5>
               {description}
@@ -221,20 +347,51 @@ export default function Feed({ user, book, description, review }) {
                 {commentInfo.map((comment) => {
                   return (
                     <div className="comment">
-                      <div>
-                        <img
-                          className="postProfileImg"
-                          src={comment.url}
-                          alt=""
-                        />
-                        <span className="postUsername">
-                          {comment.info.user.firstName}{" "}
-                          {comment.info.user.lastName} commented
-                        </span>
+                      <div className="comment-info">
+                        <div>
+                          <img
+                            className="postProfileImg"
+                            src={comment.url}
+                            alt=""
+                          />
+                          <span className="postUsername">
+                            {comment.info.user.firstName}{" "}
+                            {comment.info.user.lastName} commented
+                          </span>
+                        </div>
+                        <div className="kebab">
+                          {showKebeb ? (
+                            <div>
+                              <Button>
+                                <MoreVertIcon onClick={handlePopover} />
+                              </Button>
+                              <Menu
+                                id="basic-menu"
+                                anchorEl={anchorEl}
+                                open={open}
+                                onClose={handleClose}
+                                MenuListProps={{
+                                  "aria-labelledby": "basic-button",
+                                }}
+                              >
+                                <MenuItem
+                                  onClick={() =>
+                                    setCommentToDelete(comment.info.id)
+                                  }
+                                >
+                                  Delete Comment
+                                </MenuItem>
+                              </Menu>
+                            </div>
+                          ) : (
+                            <></>
+                          )}
+                        </div>
                       </div>
                       <div className="comment-text">
                         <span>{comment.info.comment}</span>
                       </div>
+
                       <Divider
                         variant="middle"
                         sx={{
@@ -258,7 +415,8 @@ export default function Feed({ user, book, description, review }) {
                   label="Write a comment..."
                   inputProps={{
                     style: {
-                      width: "670px",
+                      width: "50%",
+                      minWidth: "370px",
                       height: "0px",
                     },
                   }}
@@ -267,6 +425,7 @@ export default function Feed({ user, book, description, review }) {
                   onClick={handleClick}
                   onChange={(e) => setComment(e.target.value)}
                 />
+
                 {touched ? (
                   <div className="comment-button-section">
                     <ColorButton

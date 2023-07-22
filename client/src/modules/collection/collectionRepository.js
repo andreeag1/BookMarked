@@ -62,6 +62,26 @@ export const addBookToCollection = async (collectionId, bookId) => {
   }
 };
 
+export const deleteBookFromCollection = async (collectionId, bookId) => {
+  try {
+    const res = await fetch(`http://localhost:5000/collection/deletebook`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        collectionId: collectionId,
+        bookId: bookId,
+      }),
+      credentials: "include",
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getCollection = async (id, title) => {
   try {
     const res = await fetch(`http://localhost:5000/collection/${id}/${title}`, {
@@ -85,6 +105,25 @@ export const getCollectionById = async (id) => {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteCollection = async (collectionId) => {
+  try {
+    const res = await fetch(`http://localhost:5000/collection/delete`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        collectionId: collectionId,
+      }),
       credentials: "include",
     });
     const data = await res.json();

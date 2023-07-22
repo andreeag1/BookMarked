@@ -36,6 +36,8 @@ export default function Dashboard() {
 
   useDidMountEffect(() => {
     console.log("second render");
+    const date = new Date();
+    console.log(date);
   });
 
   const newUser = async () => {

@@ -35,15 +35,6 @@ export default function MyBooksMain() {
               <h4>Collections</h4>
               <div className="my-list">
                 <ul>
-                  <li>
-                    <a href="/">All</a>
-                  </li>
-                  <li>
-                    <a href="/">Read</a>
-                  </li>
-                  <li>
-                    <a href="/">Want to read</a>
-                  </li>
                   {collections.map((collection) => {
                     return (
                       <li>

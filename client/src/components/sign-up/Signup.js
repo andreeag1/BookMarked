@@ -4,11 +4,15 @@ import { TextField, Button, FormControl } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Link, Navigate } from "react-router-dom";
-import { registerUser } from "../../modules/user/userRepository.js";
+import {
+  registerUser,
+  getUserByEmail,
+} from "../../modules/user/userRepository.js";
 import { useFormik } from "formik";
 import { basicSchema } from "../../schemas";
 import { CallToActionSharp } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { addCollection } from "../../modules/collection/collectionRepository";
 
 const ColorButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText("#E9E7E5"),
@@ -19,17 +23,26 @@ const ColorButton = styled(Button)(({ theme }) => ({
 }));
 
 export default function Signup() {
+  const [error, setError] = React.useState(false);
+
   const navigate = useNavigate();
 
-  const onSubmit = () => {
-    registerUser(
+  const onSubmit = async () => {
+    const register = await registerUser(
       values.firstName,
       values.lastName,
       values.email,
       values.username,
       values.password
     );
-    navigate("/login");
+    if (register === 403) {
+      setError(true);
+    } else {
+      const user = await getUserByEmail(values.email);
+      await addCollection("Want To Read", user.id);
+      await addCollection("Read", user.id);
+      navigate("/login");
+    }
   };
 
   const { values, errors, touched, handleChange, handleBlur, handleSubmit } =
@@ -142,6 +155,13 @@ export default function Signup() {
           <p className="error-password">{errors.password}</p>
         ) : (
           <div />
+        )}
+        {error ? (
+          <p className="error-password">
+            That username or email is already taken
+          </p>
+        ) : (
+          <div></div>
         )}
         <ColorButton onClick={handleSubmit} component={Link} to="/login">
           Sign-up

@@ -129,3 +129,26 @@ export const getReviewById = async (id) => {
     console.log(error);
   }
 };
+
+export const deleteReview = async (reviewId) => {
+  try {
+    const res = await fetch(`http://localhost:5000/review/delete`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        reviewId: reviewId,
+      }),
+      credentials: "include",
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      console.log(data);
+      return;
+    }
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};

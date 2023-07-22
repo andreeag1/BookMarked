@@ -3,19 +3,35 @@ import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import "./MyBooks.css";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   getCollectionTitles,
   getCollectionById,
+  deleteBookFromCollection,
+  deleteCollection,
 } from "../../modules/collection/collectionRepository";
 import { Link } from "react-router-dom";
 import { getCurrentUserId } from "../../modules/user/userRepository";
-import { Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import BookCard from "../../components/book-card/BookCard";
+import { styled } from "@mui/material/styles";
+
+const ColorButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.getContrastText("#00000"),
+  color: "#000000",
+  backgroundColor: "#fffff",
+  "&:hover": {
+    backgroundColor: "#cab9a9",
+  },
+}));
 
 export default function MyBooks() {
   const { collectionId } = useParams();
   const [collections, setCollections] = React.useState([]);
   const [books, setBooks] = React.useState([]);
+  const [bookToDelete, setBookToDelete] = React.useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getCollections = async () => {
@@ -32,6 +48,16 @@ export default function MyBooks() {
     getCollections();
   });
 
+  useEffect(() => {
+    const handleDeleteBook = async () => {
+      if (bookToDelete !== "") {
+        await deleteBookFromCollection(collectionId, bookToDelete);
+      }
+    };
+
+    handleDeleteBook();
+  }, [bookToDelete]);
+
   return (
     <div>
       <Header />
@@ -43,23 +69,15 @@ export default function MyBooks() {
               <h4>Collections</h4>
               <div className="my-list">
                 <ul>
-                  <li>
-                    <a href="/">All</a>
-                  </li>
-                  <li>
-                    <a href="/">Read</a>
-                  </li>
-                  <li>
-                    <a href="/">Want to read</a>
-                  </li>
-
                   {collections.map((collection) => {
                     if (collection.id == collectionId) {
                       return (
                         <li>
-                          <Link to={`/my-books/${collection.id}`}>
-                            <b>{collection.title}</b>
-                          </Link>
+                          <div className="collections-titles-section">
+                            <Link to={`/my-books/${collection.id}`}>
+                              <b>{collection.title}</b>
+                            </Link>
+                          </div>
                         </li>
                       );
                     } else {
@@ -80,7 +98,12 @@ export default function MyBooks() {
                 {books.map((book) => {
                   return (
                     <Grid item xs={9} md={5} lg={3}>
-                      <BookCard book={book} />
+                      <div className="book-card-section">
+                        <BookCard book={book} />
+                        <ColorButton onClick={() => setBookToDelete(book.id)}>
+                          Remove
+                        </ColorButton>
+                      </div>
                     </Grid>
                   );
                 })}

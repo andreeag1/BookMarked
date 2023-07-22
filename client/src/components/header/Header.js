@@ -165,7 +165,13 @@ const Header = () => {
                   <MenuItem onClick={handleClose} component={Link} to="/browse">
                     Browse
                   </MenuItem>
-                  <MenuItem onClick={handleClose}>My Account</MenuItem>
+                  <MenuItem
+                    onClick={handleClose}
+                    component={Link}
+                    to="/account"
+                  >
+                    My Account
+                  </MenuItem>
                 </Menu>
               </div>
               <div className="navbar-links">
@@ -202,9 +208,6 @@ const Header = () => {
               </div>
               <Box sx={{ flexGrow: 2 }} />
               <div className="icon-buttons">
-                <IconButton>
-                  <CircleNotificationsIcon className="CircleNotificationsIcon" />
-                </IconButton>
                 <IconButton component={Link} to="/account">
                   <AccountCircle
                     className="AccountCircleIcon"

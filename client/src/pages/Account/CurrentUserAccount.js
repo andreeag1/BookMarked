@@ -23,6 +23,7 @@ export default function CurrentUserAccount() {
   const [loading, setLoading] = React.useState(true);
   const [array, setArray] = React.useState([]);
   const [zeroReviews, setZeroReviews] = React.useState(false);
+  const [zeroFriends, setZeroFriends] = React.useState(false);
 
   const useDidMountEffect = () => {
     const didMount = useRef(false);
@@ -40,7 +41,6 @@ export default function CurrentUserAccount() {
   });
 
   const newUser = async () => {
-    console.log("hello");
     const userId = await getCurrentUserId();
     const friends = await getCurrentUserFollowing();
     const totalFollowing = [];
@@ -64,6 +64,9 @@ export default function CurrentUserAccount() {
         });
     });
     setFollowing(totalFollowing);
+    if (totalFollowing.length == 0) {
+      setZeroFriends(true);
+    }
     const newReview = await getReviewByUser(userId);
     if (newReview.length == 0) {
       setZeroReviews(true);
@@ -136,18 +139,22 @@ export default function CurrentUserAccount() {
           <Box sx={{ flexGrow: 1 }} />
           <div className="friends-list">
             <h3 className="friends">Your friends</h3>
-            {following.map((friend) => {
-              return (
-                <div className="friend">
-                  <Link to={`/profile/${friend.following.id}`}>
-                    <img className="postProfileImg" src={friend.url} alt="" />
-                    <h7 className="friend-text">
-                      {friend.following.firstName} {friend.following.lastName}
-                    </h7>
-                  </Link>
-                </div>
-              );
-            })}
+            {zeroFriends ? (
+              <h7>You don't follow anyone yet!</h7>
+            ) : (
+              following.map((friend) => {
+                return (
+                  <div className="friend">
+                    <Link to={`/profile/${friend.following.id}`}>
+                      <img className="postProfileImg" src={friend.url} alt="" />
+                      <h7 className="friend-text">
+                        {friend.following.firstName} {friend.following.lastName}
+                      </h7>
+                    </Link>
+                  </div>
+                );
+              })
+            )}
           </div>
           <h3 className="reviews">Your Reviews</h3>
           <div className="feed-container">

@@ -9,13 +9,28 @@ import Feed from "../../components/feed/Feed";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { getReviewByBook } from "../../modules/review/reviewRepository";
-import { getBookByImg } from "../../modules/books/bookRepository";
+import {
+  addBookToCollection,
+  getCollection,
+  getCollectionById,
+  deleteBookFromCollection,
+} from "../../modules/collection/collectionRepository";
+import { getCurrentUserId } from "../../modules/user/userRepository";
+import { createBook, getBookByImg } from "../../modules/books/bookRepository";
 
 const ColorButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText("#E9E7E5"),
   backgroundColor: "#f0ebe6",
   "&:hover": {
     backgroundColor: "#f0ebe6",
+  },
+}));
+
+const TouchedColorButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.getContrastText("#E9E7E5"),
+  backgroundColor: "#706a6a",
+  "&:hover": {
+    backgroundColor: "#706a6a",
   },
 }));
 
@@ -30,6 +45,23 @@ export default function Book() {
   const [mediumCover, setMediumCover] = React.useState("");
   const [review, setReview] = React.useState([]);
   const [zeroReviews, setZeroReviews] = React.useState(false);
+  const [touched, setTouched] = React.useState(false);
+  const [array, setArray] = React.useState([]);
+
+  useEffect(() => {
+    const isBookInCollection = async () => {
+      const userId = await getCurrentUserId();
+      const collection = await getCollection(userId, "Want To Read");
+      const books = await getCollectionById(collection.id);
+      books.books.map((newBook) => {
+        const cover = mediumCover.replaceAll("_", "/");
+        if (newBook.imageLink == cover) {
+          setTouched(true);
+        }
+      });
+    };
+    isBookInCollection();
+  });
 
   useEffect(() => {
     const handleBookList = async () => {
@@ -109,6 +141,34 @@ export default function Book() {
     getReviews();
   }, [mediumCover]);
 
+  const handleClick = async () => {
+    const userId = await getCurrentUserId();
+    const collection = await getCollection(userId, "Want To Read");
+    const cover = mediumCover.replaceAll("_", "/");
+    console.log(cover);
+    const newBook = await createBook(book.title, bookAuthor, cover);
+    console.log(newBook);
+    if (touched == false) {
+      if (newBook == null) {
+        const findBook = await getBookByImg(mediumCover);
+        await addBookToCollection(collection.id, findBook.id);
+        setTouched(true);
+      } else {
+        await addBookToCollection(collection.id, newBook.id);
+        setTouched(true);
+      }
+    } else {
+      if (newBook == null) {
+        const findBook = await getBookByImg(mediumCover);
+        await deleteBookFromCollection(collection.id, findBook.id);
+        setTouched(false);
+      } else {
+        await deleteBookFromCollection(collection.id, newBook.id);
+        setTouched(false);
+      }
+    }
+  };
+
   return (
     <div className="book-section-wrapper">
       <Header />
@@ -125,9 +185,21 @@ export default function Book() {
             <h7>Fiction,</h7>
           </div>
           <div className="btn-container">
-            <ColorButton className="want-to-read-button">
-              Want to Read
-            </ColorButton>
+            {touched ? (
+              <ColorButton
+                className="want-to-read-button"
+                onClick={handleClick}
+              >
+                Want to Read
+              </ColorButton>
+            ) : (
+              <TouchedColorButton
+                className="want-to-read-button"
+                onClick={handleClick}
+              >
+                Want to Read
+              </TouchedColorButton>
+            )}
           </div>
         </div>
       </div>
