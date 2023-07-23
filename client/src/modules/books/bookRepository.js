@@ -1,3 +1,11 @@
+import { useNavigate } from "react-router-dom";
+
+export function Navigate() {
+  const navigate = useNavigate();
+
+  navigate("/login");
+}
+
 export const createBook = async (title, author, imageLink) => {
   try {
     const res = await fetch("http://localhost:5000/book/add", {

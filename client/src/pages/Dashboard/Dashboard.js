@@ -10,11 +10,17 @@ import Grid from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
 import BookCard from "../../components/book-card/BookCard";
 import Bookshelf from "../../components/bookshelf/Bookshelf";
+import { storage } from "../../firebase.js";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import profilePic from "../../assets/pictures/profile.png";
+import ProfileList from "../../components/profile-list/Profile-list";
 import { Divider } from "@mui/material";
 import {
   getCurrentUserId,
   getFriendsReviews,
+  getAllUsers,
 } from "../../modules/user/userRepository";
+import { Link, Navigate } from "react-router-dom";
 
 export default function Dashboard() {
   const [booksRead, setBooksRead] = React.useState(0);
@@ -36,8 +42,6 @@ export default function Dashboard() {
 
   useDidMountEffect(() => {
     console.log("second render");
-    const date = new Date();
-    console.log(date);
   });
 
   const newUser = async () => {
@@ -142,6 +146,8 @@ export default function Dashboard() {
               {zeroReviews ? (
                 <div className="no-reviews">
                   <h7>Follow other users to see their updates!</h7>
+                  <h7>Here are some like-minded book lovers to follow...</h7>
+                  <ProfileList />
                 </div>
               ) : loading ? (
                 <CircularProgress />

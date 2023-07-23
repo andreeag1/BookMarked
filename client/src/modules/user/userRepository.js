@@ -1,3 +1,11 @@
+import { useNavigate } from "react-router-dom";
+
+export function Navigate() {
+  const navigate = useNavigate();
+
+  navigate("/login");
+}
+
 export const registerUser = async (
   firstName,
   lastName,
@@ -72,6 +80,7 @@ export const getCurrentUserId = async () => {
     return data;
   } catch (error) {
     console.log(error);
+    return;
   }
 };
 
@@ -91,7 +100,7 @@ export const addCurrentRead = async (title, author, imageLink) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data.description);
+      console.log(data);
       return;
     }
     return data;
@@ -381,6 +390,46 @@ export const getFriendsReviews = async () => {
 export const getUserByEmail = async (email) => {
   try {
     const res = await fetch(`http://localhost:5000/auth/user-email/${email}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      console.log(data);
+      return;
+    }
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getAllUsers = async () => {
+  try {
+    const res = await fetch(`http://localhost:5000/auth/all`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      console.log(data);
+      return;
+    }
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const logout = async () => {
+  try {
+    const res = await fetch(`http://localhost:5000/auth/logout`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

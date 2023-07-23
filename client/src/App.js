@@ -1,5 +1,5 @@
 import "./App.css";
-import * as React from "react";
+import React, { useEffect } from "react";
 import Header from "./components/header/Header";
 import {
   BrowserRouter as Router,
@@ -7,6 +7,7 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import Browse from "./pages/Browse/Browse.js";
 import Home from "./pages/Home/Home.js";
 import Login from "./pages/Login/Login.js";
@@ -18,21 +19,64 @@ import MyBooks from "./pages/MyBooks/MyBooks";
 import MyBooksMain from "./pages/MyBooks/MyBooksMain";
 import Search from "./pages/Search/Search.js";
 import CurrentUserAccount from "./pages/Account/CurrentUserAccount.js";
+import PrivateRoute from "./PrivateRoute";
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/browse" element={<Browse />} />
+        <Route
+          path="/browse"
+          element={
+            <PrivateRoute>
+              <Browse />
+            </PrivateRoute>
+          }
+        />
         <Route path="/login" element={<Login />} />
         <Route path="/sign-up" element={<Register />} />
-        <Route path="/Dashboard" element={<Dashboard />} />
-        <Route path="/account" element={<CurrentUserAccount />} />
-        <Route path="/profile/:userId" element={<Account />} />
+        <Route
+          path="/Dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/account"
+          element={
+            <PrivateRoute>
+              <CurrentUserAccount />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile/:userId"
+          element={
+            <PrivateRoute>
+              <Account />
+            </PrivateRoute>
+          }
+        />
         <Route path="/book/:bookId" element={<Book />} />
-        <Route path="/my-books/:collectionId" element={<MyBooks />} />
-        <Route path="/my-books" element={<MyBooksMain />} />
+        <Route
+          path="/my-books/:collectionId"
+          element={
+            <PrivateRoute>
+              <MyBooks />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/my-books"
+          element={
+            <PrivateRoute>
+              <MyBooksMain />
+            </PrivateRoute>
+          }
+        />
         <Route path="/search" element={<Search />} />
       </Routes>
     </Router>

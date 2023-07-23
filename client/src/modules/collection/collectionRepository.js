@@ -11,7 +11,9 @@ export const addCollection = async (title, userId) => {
       }),
       credentials: "include",
     });
+
     const data = await res.json();
+
     return data;
   } catch (error) {
     console.log(error);
@@ -28,6 +30,7 @@ export const getCollectionTitles = async (id) => {
       credentials: "include",
     });
     const data = await res.json();
+    console.log(data);
     if (!res.ok) {
       console.log(data.description);
       return;

@@ -1,5 +1,11 @@
 import { useNavigate } from "react-router-dom";
 
+export function Navigate() {
+  const navigate = useNavigate();
+
+  navigate("/login");
+}
+
 export const addComment = async (comment, user, review) => {
   try {
     const res = await fetch(`http://localhost:5000/comment/add`, {

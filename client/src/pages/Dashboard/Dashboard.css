@@ -18,7 +18,8 @@
 }
 
 .feed-container {
-  width: 80%;
+  width: 100%;
+  height: 100%;
 }
 
 .content-section {
@@ -40,6 +41,12 @@
 }
 
 .no-reviews {
-  text-size-adjust: inherit;
   font-family: Raleway;
+  display: flex;
+  flex-direction: column;
+}
+
+.profiles-container {
+  padding-bottom: 100px;
+  padding-top: 100px;
 }

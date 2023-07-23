@@ -1,5 +1,5 @@
 import "./Header.css";
-import * as React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   AppBar,
@@ -24,7 +24,7 @@ import { Link, useNavigate } from "react-router-dom";
 import data from "../../mock.json";
 import MenuIcon from "@mui/icons-material/Menu";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { getCurrentUserId } from "../../modules/user/userRepository";
+import { getCurrentUserId, logout } from "../../modules/user/userRepository";
 
 const theme = createTheme({
   palette: {
@@ -72,6 +72,16 @@ const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [search, setSearch] = React.useState("");
   const [searchedBookInfo, setSearchedBookInfo] = React.useState([]);
+  const [anchorElTwo, setAnchorElTwo] = React.useState(null);
+  const [isLoggedIn, setIsLogedIn] = React.useState(false);
+
+  const openTwo = Boolean(anchorElTwo);
+  const handleOpen = (event) => {
+    setAnchorElTwo(event.currentTarget);
+  };
+  const handleClickClose = () => {
+    setAnchorElTwo(null);
+  };
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -89,12 +99,27 @@ const Header = () => {
     }
   };
 
-  const getUser = async () => {
-    const token = await getCurrentUserId();
-    console.log(token);
+  const handleLogout = async () => {
+    setAnchorElTwo(null);
+    await logout();
+    navigate("/");
   };
 
-  return (
+  useEffect(() => {
+    const checkUser = async () => {
+      const user = await getCurrentUserId();
+      console.log(user);
+      if (user) {
+        setIsLogedIn(true);
+      } else {
+        setIsLogedIn(false);
+      }
+    };
+
+    checkUser();
+  });
+
+  return isLoggedIn ? (
     <div className="Header">
       <ThemeProvider theme={theme}>
         <AppBar position="fixed">
@@ -208,13 +233,77 @@ const Header = () => {
               </div>
               <Box sx={{ flexGrow: 2 }} />
               <div className="icon-buttons">
-                <IconButton component={Link} to="/account">
+                <IconButton>
                   <AccountCircle
                     className="AccountCircleIcon"
-                    onClick={getUser}
+                    onClick={handleOpen}
                   />
                 </IconButton>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorElTwo}
+                  open={openTwo}
+                  onClose={handleClickClose}
+                  MenuListProps={{
+                    "aria-labelledby": "basic-button",
+                  }}
+                >
+                  <MenuItem
+                    onClick={handleClickClose}
+                    component={Link}
+                    to="/account"
+                  >
+                    My account
+                  </MenuItem>
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                </Menu>
               </div>
+            </Toolbar>
+          </Container>
+        </AppBar>
+      </ThemeProvider>
+    </div>
+  ) : (
+    <div className="Header">
+      <ThemeProvider theme={theme}>
+        <AppBar position="fixed">
+          <Container maxWidth="100%">
+            <Toolbar disableGutters>
+              <img src={logo} className="App-logo" alt="logo" />
+              <Box className="title-container">
+                <Link to={"/Dashboard"}>
+                  <span className="title" component="div">
+                    BookMarked
+                  </span>
+                </Link>
+              </Box>
+              <Box sx={{ flexGrow: 1 }} />
+              <div className="search-bar">
+                <Search>
+                  <StyledTextfield
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <SearchIcon />
+                        </InputAdornment>
+                      ),
+                      disableUnderline: true,
+                    }}
+                    placeholder="Search books"
+                    onChange={(e) => setSearch(e.target.value)}
+                    onKeyDown={handleSubmit}
+                    sx={{
+                      "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                        {
+                          border: alpha(theme.palette.common.white, 0.65),
+                        },
+                      height: 40,
+                      width: 300,
+                    }}
+                  />
+                </Search>
+              </div>
+              <Box sx={{ flexGrow: 1 }} className="box-container" />
             </Toolbar>
           </Container>
         </AppBar>

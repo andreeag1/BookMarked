@@ -1,3 +1,11 @@
+import { useNavigate } from "react-router-dom";
+
+export function Navigate() {
+  const navigate = useNavigate();
+
+  navigate("/login");
+}
+
 export const addReview = async (review, bookId, userId, rating) => {
   try {
     const res = await fetch(`http://localhost:5000/review/add`, {

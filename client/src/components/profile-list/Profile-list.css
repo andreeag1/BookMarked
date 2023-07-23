@@ -1,0 +1,9 @@
+.profile-section {
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-profile-section {
+  padding-top: 5px;
+}
