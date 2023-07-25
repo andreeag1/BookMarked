@@ -15,9 +15,7 @@ export const addCollection = async (title, userId) => {
     const data = await res.json();
 
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const getCollectionTitles = async (id) => {
@@ -30,9 +28,7 @@ export const getCollectionTitles = async (id) => {
       credentials: "include",
     });
     const data = await res.json();
-    console.log(data);
     if (!res.ok) {
-      console.log(data.description);
       return;
     }
     var titles = [];
@@ -40,9 +36,7 @@ export const getCollectionTitles = async (id) => {
       titles.push(collection);
     });
     return titles;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const addBookToCollection = async (collectionId, bookId) => {
@@ -60,9 +54,7 @@ export const addBookToCollection = async (collectionId, bookId) => {
     });
     const data = await res.json();
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const deleteBookFromCollection = async (collectionId, bookId) => {
@@ -80,9 +72,7 @@ export const deleteBookFromCollection = async (collectionId, bookId) => {
     });
     const data = await res.json();
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const getCollection = async (id, title) => {
@@ -96,9 +86,7 @@ export const getCollection = async (id, title) => {
     });
     const data = await res.json();
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const getCollectionById = async (id) => {
@@ -112,26 +100,5 @@ export const getCollectionById = async (id) => {
     });
     const data = await res.json();
     return data;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const deleteCollection = async (collectionId) => {
-  try {
-    const res = await fetch(`http://localhost:5000/collection/delete`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        collectionId: collectionId,
-      }),
-      credentials: "include",
-    });
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };

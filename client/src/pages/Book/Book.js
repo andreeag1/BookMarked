@@ -2,12 +2,10 @@ import React, { useEffect } from "react";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import "./Book.css";
-import data from "../../mock.json";
-import { TextField, Button } from "@mui/material";
+import { Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Feed from "../../components/feed/Feed";
-import { useParams } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getReviewByBook } from "../../modules/review/reviewRepository";
 import {
   addBookToCollection,
@@ -36,8 +34,6 @@ const TouchedColorButton = styled(Button)(({ theme }) => ({
 
 export default function Book() {
   const { bookId } = useParams();
-  const location = useLocation();
-
   const [book, setBook] = React.useState([]);
   const [authorKey, setAuthorKey] = React.useState("");
   const [bookAuthor, setBookAuthor] = React.useState("");
@@ -46,7 +42,7 @@ export default function Book() {
   const [review, setReview] = React.useState([]);
   const [zeroReviews, setZeroReviews] = React.useState(false);
   const [touched, setTouched] = React.useState(false);
-  const [array, setArray] = React.useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const isBookInCollection = async () => {
@@ -68,7 +64,6 @@ export default function Book() {
       await fetch(`https://openlibrary.org/works/${bookId}.json`)
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           const newDescription = "No Description";
           if (!data.description) {
             const Obj = {
@@ -81,7 +76,6 @@ export default function Book() {
             setBookCover(cover);
             const mediumBookCover = `https://covers.openlibrary.org/b/id/${data.covers[0]}-M.jpg`;
             const replacedCover = mediumBookCover.replaceAll("/", "_");
-            console.log(replacedCover);
             setMediumCover(replacedCover);
           } else {
             if (data.description.value) {
@@ -103,7 +97,6 @@ export default function Book() {
             setBookCover(cover);
             const mediumBookCover = `https://covers.openlibrary.org/b/id/${data.covers[0]}-M.jpg`;
             const replacedCover = mediumBookCover.replaceAll("/", "_");
-            console.log(replacedCover);
             setMediumCover(replacedCover);
           }
         });
@@ -125,47 +118,47 @@ export default function Book() {
 
   useEffect(() => {
     const getReviews = async () => {
-      console.log(mediumCover);
       const existingBook = await getBookByImg(mediumCover);
-      if (existingBook == null) {
-        console.log("This book does not exist");
-      }
-      console.log(existingBook);
-      const reviews = await getReviewByBook(existingBook.id);
-      console.log(reviews);
-      if (reviews.length == 0) {
+      if (existingBook !== null) {
+        const reviews = await getReviewByBook(existingBook.id);
+        if (reviews.length == 0) {
+          setZeroReviews(true);
+        }
+        setReview(reviews);
+      } else {
         setZeroReviews(true);
       }
-      setReview(reviews);
     };
     getReviews();
   }, [mediumCover]);
 
   const handleClick = async () => {
     const userId = await getCurrentUserId();
-    const collection = await getCollection(userId, "Want To Read");
-    const cover = mediumCover.replaceAll("_", "/");
-    console.log(cover);
-    const newBook = await createBook(book.title, bookAuthor, cover);
-    console.log(newBook);
-    if (touched == false) {
-      if (newBook == null) {
-        const findBook = await getBookByImg(mediumCover);
-        await addBookToCollection(collection.id, findBook.id);
-        setTouched(true);
+    if (userId) {
+      const collection = await getCollection(userId, "Want To Read");
+      const cover = mediumCover.replaceAll("_", "/");
+      const newBook = await createBook(book.title, bookAuthor, cover);
+      if (touched == false) {
+        if (newBook == null) {
+          const findBook = await getBookByImg(mediumCover);
+          await addBookToCollection(collection.id, findBook.id);
+          setTouched(true);
+        } else {
+          await addBookToCollection(collection.id, newBook.id);
+          setTouched(true);
+        }
       } else {
-        await addBookToCollection(collection.id, newBook.id);
-        setTouched(true);
+        if (newBook == null) {
+          const findBook = await getBookByImg(mediumCover);
+          await deleteBookFromCollection(collection.id, findBook.id);
+          setTouched(false);
+        } else {
+          await deleteBookFromCollection(collection.id, newBook.id);
+          setTouched(false);
+        }
       }
     } else {
-      if (newBook == null) {
-        const findBook = await getBookByImg(mediumCover);
-        await deleteBookFromCollection(collection.id, findBook.id);
-        setTouched(false);
-      } else {
-        await deleteBookFromCollection(collection.id, newBook.id);
-        setTouched(false);
-      }
+      navigate("/login");
     }
   };
 
@@ -178,12 +171,6 @@ export default function Book() {
           <h1>{book.title}</h1>
           <h3>{bookAuthor}</h3>
           <h7>{book.description}</h7>
-          <div className="categories">
-            <span style={{ fontWeight: "bold" }}> Genres: </span>
-            <h7>Fantasy</h7>
-            <h7>Historical,</h7>
-            <h7>Fiction,</h7>
-          </div>
           <div className="btn-container">
             {touched ? (
               <ColorButton

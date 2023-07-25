@@ -60,6 +60,7 @@
   margin: 20px 10px;
   display: flex;
   flex-direction: row;
+  max-height: 300%;
 }
 
 .bookCard {
@@ -75,9 +76,11 @@
 
 .bookSummary {
   padding-left: 20px;
-  width: 250%;
   display: flex;
   flex-direction: column;
+  min-height: 80px;
+  width: 135vw;
+  min-width: 35vh;
 }
 
 .bookSummary h5 {

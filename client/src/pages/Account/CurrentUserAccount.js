@@ -36,9 +36,7 @@ export default function CurrentUserAccount() {
     }, [array]);
   };
 
-  useDidMountEffect(() => {
-    console.log("second render");
-  });
+  useDidMountEffect(() => {});
 
   const newUser = async () => {
     const userId = await getCurrentUserId();
@@ -55,7 +53,6 @@ export default function CurrentUserAccount() {
           totalFollowing.push(Obj);
         })
         .catch((error) => {
-          console.log(error.message, "error getting the image URL");
           const Obj = {
             following: user,
             url: profilePic,
@@ -100,8 +97,6 @@ export default function CurrentUserAccount() {
                     };
                     setReview((old) => [...old, Obj]);
                     setLoading(false);
-
-                    console.log(Obj);
                   } else {
                     if (data.description.value) {
                       const Obj = {
@@ -110,8 +105,6 @@ export default function CurrentUserAccount() {
                       };
                       setReview((old) => [...old, Obj]);
                       setLoading(false);
-
-                      console.log(Obj);
                     } else {
                       const Obj = {
                         other: reviews,
@@ -119,8 +112,6 @@ export default function CurrentUserAccount() {
                       };
                       setReview((old) => [...old, Obj]);
                       setLoading(false);
-
-                      console.log(Obj);
                     }
                   }
                 });

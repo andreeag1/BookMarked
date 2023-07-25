@@ -12,7 +12,8 @@
 }
 
 .book-cover {
-  width: 24%;
+  width: 38vh;
+  min-width: 20vh;
   height: 450px;
   border-radius: 4%;
   margin-left: 100px;
@@ -23,13 +24,6 @@
   display: flex;
   flex-direction: column;
   margin-left: 100px;
-}
-
-.categories {
-  width: 30%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
 }
 
 .btn-container {

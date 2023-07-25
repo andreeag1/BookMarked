@@ -14,7 +14,6 @@ import {
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import data from "../../mock.json";
 import BookCard from "../book-card/BookCard.js";
 import SearchIcon from "@mui/icons-material/Search";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -30,6 +29,7 @@ import {
   removeCurrentRead,
   addProgressToCurrentRead,
   addProgressToYearlyGoal,
+  getCurrentUser,
 } from "../../modules/user/userRepository";
 import { createBook, getBookByImg } from "../../modules/books/bookRepository";
 import {
@@ -38,6 +38,7 @@ import {
   getCollection,
 } from "../../modules/collection/collectionRepository";
 import { addReview } from "../../modules/review/reviewRepository";
+import { useNavigate } from "react-router-dom";
 
 const ColorButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText("#cab9a9"),
@@ -97,7 +98,6 @@ export default function CurrentlyReading({ setBooksRead }) {
   const [progress, setProgress] = React.useState(0);
   const [update, setUpdate] = React.useState(0);
   const [myBool, setMyBool] = React.useState(true);
-  const [booksCompleted, setBooksCompleted] = React.useState(0);
   const [searchedBookInfo, setSearchedBookInfo] = React.useState([]);
   const [bookInfo, setBookInfo] = React.useState([]);
   const [confirmedBookInfo, setConfirmedBookInfo] = React.useState([]);
@@ -109,10 +109,16 @@ export default function CurrentlyReading({ setBooksRead }) {
   const [rating, setRating] = React.useState(0);
   const [book, setBook] = React.useState([]);
   const [addToCollection, setAddToCollection] = React.useState("");
+  const navigate = useNavigate();
 
-  const handleClickOpen = (scrollType) => () => {
-    setOpen(true);
-    setScroll(scrollType);
+  const handleClickOpen = (scrollType) => async () => {
+    const user = await getCurrentUserId();
+    if (user) {
+      setOpen(true);
+      setScroll(scrollType);
+    } else {
+      navigate("/login");
+    }
   };
 
   const handleClose = () => {
@@ -127,7 +133,6 @@ export default function CurrentlyReading({ setBooksRead }) {
           bookInfo.author,
           bookInfo.imageLink
         );
-        console.log(currentRead);
         setConfirmedBookInfo({
           title: bookInfo.title,
           author: bookInfo.author,
@@ -142,12 +147,10 @@ export default function CurrentlyReading({ setBooksRead }) {
   React.useEffect(() => {
     const currentRead = async () => {
       const existingCurrentRead = await getCurrentRead();
-      console.log(existingCurrentRead);
       if ((await getCurrentRead()) == null) {
         setMyBool(true);
       } else {
         setMyBool(false);
-        console.log(existingCurrentRead);
         setConfirmedBookInfo({
           title: existingCurrentRead.title,
           author: existingCurrentRead.author,
@@ -159,9 +162,7 @@ export default function CurrentlyReading({ setBooksRead }) {
     currentRead();
   }, [noCurrentRead]);
 
-  useDidMountEffect(() => {
-    console.log("second render");
-  });
+  useDidMountEffect(() => {});
 
   const handleClick = async () => {
     setBookRemoved(true);
@@ -191,7 +192,6 @@ export default function CurrentlyReading({ setBooksRead }) {
           titles.push(collection.title);
         }
       });
-      console.log(titles);
       setCollections(titles);
     };
     newCollection();
@@ -208,7 +208,6 @@ export default function CurrentlyReading({ setBooksRead }) {
         confirmedBookInfo.imageLink
       )
     );
-    console.log(book);
   };
 
   const handleSecondClose = () => {
@@ -226,18 +225,16 @@ export default function CurrentlyReading({ setBooksRead }) {
       setNoCurrentRead(true);
       setMyBool(true);
       setProgress(0);
-      setBooksRead(booksCompleted + 1);
-      setBooksCompleted(booksCompleted + 1);
-      await addProgressToYearlyGoal(booksCompleted + 1);
+      const user = await getCurrentUser();
+      const currentProgress = user.readbooks;
+      setBooksRead(currentProgress + 1);
+      await addProgressToYearlyGoal(currentProgress + 1);
       if (book == null) {
         const cover = confirmedBookInfo.imageLink.replaceAll("/", "_");
         const findBook = await getBookByImg(cover);
-        console.log(findBook);
-        console.log(addToCollection);
         if (addToCollection == "") {
         } else {
           const collectionId = await getCollection(userId, addToCollection);
-          console.log(collectionId.id);
           await addBookToCollection(collectionId.id, findBook.id);
         }
         const readCollection = await getCollection(userId, "Read");
@@ -249,11 +246,9 @@ export default function CurrentlyReading({ setBooksRead }) {
           rating
         );
       } else {
-        console.log(addToCollection);
         if (addToCollection == "") {
         } else {
           const collectionId = await getCollection(userId, addToCollection);
-          console.log(collectionId.id);
           await addBookToCollection(collectionId.id, book.id);
         }
         const readCollection = await getCollection(userId, "Read");
@@ -291,7 +286,6 @@ export default function CurrentlyReading({ setBooksRead }) {
           const filteredArray = books.filter(function (element) {
             return element !== undefined;
           });
-          console.log(filteredArray);
           setSearchedBookInfo(filteredArray);
         });
     }

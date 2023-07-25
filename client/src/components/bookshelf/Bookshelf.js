@@ -13,7 +13,6 @@ export default function Bookshelf() {
       fetch("https://openlibrary.org/trending/daily.json")
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           const book = data.works;
           const newBook = [];
           const newId = [];

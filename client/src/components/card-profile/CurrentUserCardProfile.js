@@ -11,7 +11,7 @@ import {
 import { getCollectionTitles } from "../../modules/collection/collectionRepository";
 import { storage } from "../../firebase.js";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import profilePic from "../../assets/pictures/profile.png";
 
 export default function CurrentUserCardProfile() {
@@ -20,6 +20,7 @@ export default function CurrentUserCardProfile() {
   const [image, setImage] = React.useState(null);
   const [url, setUrl] = React.useState(null);
   const [array, setArray] = React.useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const currentUser = async () => {
@@ -54,20 +55,20 @@ export default function CurrentUserCardProfile() {
           .then((url) => {
             setUrl(url);
           })
-          .catch((error) => {
-            console.log(error.message, "error getting the image URL");
-          });
+          .catch((error) => {});
         setImage(null);
       })
-      .catch((error) => {
-        console.log(error.message);
-      });
+      .catch((error) => {});
   };
 
-  const handleChange = (e) => {
-    if (e.target.files[0]) {
-      setImage(e.target.files[0]);
-      console.log(image);
+  const handleChange = async (e) => {
+    const authorized = await getCurrentUserId();
+    if (authorized) {
+      if (e.target.files[0]) {
+        setImage(e.target.files[0]);
+      }
+    } else {
+      navigate("/login");
     }
   };
 

@@ -1,11 +1,3 @@
-import { useNavigate } from "react-router-dom";
-
-export function Navigate() {
-  const navigate = useNavigate();
-
-  navigate("/login");
-}
-
 export const addComment = async (comment, user, review) => {
   try {
     const res = await fetch(`http://localhost:5000/comment/add`, {
@@ -22,13 +14,10 @@ export const addComment = async (comment, user, review) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const getCommentsByReview = async (id) => {
@@ -42,13 +31,10 @@ export const getCommentsByReview = async (id) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const getCommentCount = async (id) => {
@@ -62,13 +48,10 @@ export const getCommentCount = async (id) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const deleteComment = async (commentId) => {
@@ -85,11 +68,8 @@ export const deleteComment = async (commentId) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };

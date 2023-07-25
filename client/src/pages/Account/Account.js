@@ -33,12 +33,9 @@ export default function Account() {
     }, [array]);
   };
 
-  useDidMountEffect(() => {
-    console.log("second render");
-  });
+  useDidMountEffect(() => {});
 
   const newUser = async () => {
-    console.log(userId);
     const user = await getUserById(userId);
     setFirstName(user.firstName);
     const friends = await getFollowing(userId);
@@ -54,7 +51,6 @@ export default function Account() {
           totalFollowing.push(Obj);
         })
         .catch((error) => {
-          console.log(error.message, "error getting the image URL");
           const Obj = {
             following: user,
             url: profilePic,
@@ -67,7 +63,6 @@ export default function Account() {
     if (newReview.length == 0) {
       setZeroReviews(true);
     }
-    console.log(newReview);
     if (newReview.length !== review.length) {
       newReview.map(async (reviews) => {
         const title = reviews.book.title;
@@ -98,8 +93,6 @@ export default function Account() {
                       };
                       setReview((old) => [...old, Obj]);
                       setLoading(false);
-
-                      console.log(Obj);
                     } else {
                       if (data.description.value) {
                         const Obj = {
@@ -108,8 +101,6 @@ export default function Account() {
                         };
                         setReview((old) => [...old, Obj]);
                         setLoading(false);
-
-                        console.log(Obj);
                       } else {
                         const Obj = {
                           other: reviews,
@@ -117,8 +108,6 @@ export default function Account() {
                         };
                         setReview((old) => [...old, Obj]);
                         setLoading(false);
-
-                        console.log(Obj);
                       }
                     }
                   });

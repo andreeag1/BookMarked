@@ -1,11 +1,3 @@
-import { useNavigate } from "react-router-dom";
-
-export function Navigate() {
-  const navigate = useNavigate();
-
-  navigate("/login");
-}
-
 export const createBook = async (title, author, imageLink) => {
   try {
     const res = await fetch("http://localhost:5000/book/add", {
@@ -21,13 +13,10 @@ export const createBook = async (title, author, imageLink) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const getBookByImg = async (imagelink) => {
@@ -41,12 +30,10 @@ export const getBookByImg = async (imagelink) => {
     });
     const data = await res.json();
     if (res == 404) {
-      console.log(data);
       return null;
     }
     return data;
   } catch (error) {
-    console.log(error);
     return null;
   }
 };

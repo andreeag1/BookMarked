@@ -1,13 +1,7 @@
 import "./App.css";
-import React, { useEffect } from "react";
+import React from "react";
 import Header from "./components/header/Header";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Redirect,
-} from "react-router-dom";
-import { Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Browse from "./pages/Browse/Browse.js";
 import Home from "./pages/Home/Home.js";
 import Login from "./pages/Login/Login.js";

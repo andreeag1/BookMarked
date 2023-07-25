@@ -1,11 +1,3 @@
-import { useNavigate } from "react-router-dom";
-
-export function Navigate() {
-  const navigate = useNavigate();
-
-  navigate("/login");
-}
-
 export const registerUser = async (
   firstName,
   lastName,
@@ -28,14 +20,11 @@ export const registerUser = async (
       }),
     });
     const data = await res.json();
-    console.log(data);
     if (data == null) {
       return 200;
     }
     return 403;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const loginUser = async (email, password) => {
@@ -53,14 +42,10 @@ export const loginUser = async (email, password) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data.description);
       return;
     }
-    console.log(data);
     return 200;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const getCurrentUserId = async () => {
@@ -74,12 +59,10 @@ export const getCurrentUserId = async () => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       return;
     }
     return data;
   } catch (error) {
-    console.log(error);
     return;
   }
 };
@@ -100,13 +83,10 @@ export const addCurrentRead = async (title, author, imageLink) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const getCurrentRead = async () => {
@@ -120,13 +100,10 @@ export const getCurrentRead = async () => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data.description);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const removeCurrentRead = async (id) => {
@@ -140,13 +117,10 @@ export const removeCurrentRead = async (id) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data.description);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const addProgressToCurrentRead = async (progress) => {
@@ -162,14 +136,8 @@ export const addProgressToCurrentRead = async (progress) => {
       credentials: "include",
     });
     const data = await res.json();
-    if (!res.ok) {
-      console.log(data.description);
-      return;
-    }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const addYearlyGoal = async (goal) => {
@@ -186,13 +154,10 @@ export const addYearlyGoal = async (goal) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data.description);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const addProgressToYearlyGoal = async (progress) => {
@@ -209,13 +174,10 @@ export const addProgressToYearlyGoal = async (progress) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data.description);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const getCurrentUser = async () => {
@@ -229,13 +191,10 @@ export const getCurrentUser = async () => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data.description);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const addProfilePic = async (picture) => {
@@ -252,13 +211,10 @@ export const addProfilePic = async (picture) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data.description);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const getUserById = async (id) => {
@@ -272,13 +228,10 @@ export const getUserById = async (id) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const followUser = async (userId) => {
@@ -295,13 +248,10 @@ export const followUser = async (userId) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       return 404;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const unfollowUser = async (userId) => {
@@ -318,13 +268,10 @@ export const unfollowUser = async (userId) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const getCurrentUserFollowing = async () => {
@@ -338,13 +285,10 @@ export const getCurrentUserFollowing = async () => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const getFollowing = async (id) => {
@@ -358,13 +302,10 @@ export const getFollowing = async (id) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const getFriendsReviews = async () => {
@@ -378,13 +319,10 @@ export const getFriendsReviews = async () => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const getUserByEmail = async (email) => {
@@ -398,13 +336,10 @@ export const getUserByEmail = async (email) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const getAllUsers = async () => {
@@ -418,13 +353,10 @@ export const getAllUsers = async () => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const logout = async () => {
@@ -438,11 +370,8 @@ export const logout = async () => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };

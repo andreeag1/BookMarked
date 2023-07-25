@@ -1,11 +1,3 @@
-import { useNavigate } from "react-router-dom";
-
-export function Navigate() {
-  const navigate = useNavigate();
-
-  navigate("/login");
-}
-
 export const addReview = async (review, bookId, userId, rating) => {
   try {
     const res = await fetch(`http://localhost:5000/review/add`, {
@@ -23,13 +15,10 @@ export const addReview = async (review, bookId, userId, rating) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data.description);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const getReviewByBook = async (bookId) => {
@@ -43,13 +32,10 @@ export const getReviewByBook = async (bookId) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const getReviewByUser = async (userId) => {
@@ -63,13 +49,10 @@ export const getReviewByUser = async (userId) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const addLike = async (reviewId) => {
@@ -86,13 +69,10 @@ export const addLike = async (reviewId) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const deleteLike = async (reviewId) => {
@@ -109,13 +89,10 @@ export const deleteLike = async (reviewId) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const getReviewById = async (id) => {
@@ -129,13 +106,10 @@ export const getReviewById = async (id) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const deleteReview = async (reviewId) => {
@@ -152,11 +126,8 @@ export const deleteReview = async (reviewId) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       return;
     }
     return data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };

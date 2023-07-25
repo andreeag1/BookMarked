@@ -3,22 +3,20 @@ import "./Feed.css";
 import profilePic from "../../assets/pictures/profile.png";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import BookCard from "../book-card/BookCard";
-import data from "../../mock.json";
 import likeIcon from "../../assets/pictures/like.png";
-import heartIcon from "../../assets/pictures/heart.png";
 import {
+  Box,
   Button,
   Divider,
   Menu,
   MenuItem,
-  Popover,
   Rating,
   TextField,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { storage } from "../../firebase.js";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref, getDownloadURL } from "firebase/storage";
 import {
   addLike,
   deleteLike,
@@ -81,12 +79,12 @@ export default function Feed({ user, book, description, review }) {
   const [commentCount, setCommentCount] = React.useState(0);
   const [url, setUrl] = React.useState([]);
   const [currentUserUrl, setCurrentUserUrl] = React.useState(null);
-  const userLiked = React.useRef(false);
   const [addedComment, setAddedComment] = React.useState(false);
   const [pressed, setPressed] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [showKebeb, setShowKebab] = React.useState(false);
   const [commentToDelete, setCommentToDelete] = React.useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getlikes = async () => {
@@ -126,47 +124,56 @@ export default function Feed({ user, book, description, review }) {
 
   useEffect(() => {
     const getComments = async () => {
-      const comments = await getCommentsByReview(review.id);
-      const totalComments = [];
-      comments.map((comment) => {
-        const imageRef = ref(storage, comment.user.id);
-        getDownloadURL(imageRef)
-          .then((url) => {
-            const Obj = {
-              info: comment,
-              url: url,
-            };
-            totalComments.push(Obj);
-          })
-          .catch(() => {
-            const Obj = {
-              info: comment,
-              url: profilePic,
-            };
-            totalComments.push(Obj);
-          });
-      });
+      const authorized = await getCurrentUserId();
+      if (authorized) {
+        const comments = await getCommentsByReview(review.id);
+        const totalComments = [];
+        comments.map((comment) => {
+          const imageRef = ref(storage, comment.user.id);
+          getDownloadURL(imageRef)
+            .then((url) => {
+              const Obj = {
+                info: comment,
+                url: url,
+              };
+              totalComments.push(Obj);
+            })
+            .catch(() => {
+              const Obj = {
+                info: comment,
+                url: profilePic,
+              };
+              totalComments.push(Obj);
+            });
+        });
 
-      setCommentInfo(totalComments);
-      const count = await getCommentCount(review.id);
-      setCommentCount(count);
+        setCommentInfo(totalComments);
+        const count = await getCommentCount(review.id);
+        setCommentCount(count);
+      } else {
+        navigate("/login");
+      }
     };
 
     getComments();
   }, [addedComment]);
 
   const likeHandler = async () => {
-    if (isLiked == true) {
-      await addLike(review.id);
-      const newReview = await getReviewById(review.id);
-      console.log(newReview);
-      setLike(newReview.likes);
-      setIsLiked(false);
-    } else if (isLiked == false) {
-      await deleteLike(review.id);
-      const newReview = await getReviewById(review.id);
-      setLike(newReview.likes);
-      setIsLiked(true);
+    const authorized = await getCurrentUserId();
+    if (authorized) {
+      if (isLiked == true) {
+        await addLike(review.id);
+        const newReview = await getReviewById(review.id);
+        setLike(newReview.likes);
+        setIsLiked(false);
+      } else if (isLiked == false) {
+        await deleteLike(review.id);
+        const newReview = await getReviewById(review.id);
+        setLike(newReview.likes);
+        setIsLiked(true);
+      }
+    } else {
+      navigate("/login");
     }
   };
 
@@ -180,9 +187,13 @@ export default function Feed({ user, book, description, review }) {
 
   const addCommentHandler = async () => {
     const userId = await getCurrentUserId();
-    await addComment(comment, userId, review.id);
-    setComment("");
-    setAddedComment(!addedComment);
+    if (userId) {
+      await addComment(comment, userId, review.id);
+      setComment("");
+      setAddedComment(!addedComment);
+    } else {
+      navigate("/login");
+    }
   };
 
   useEffect(() => {
@@ -201,29 +212,31 @@ export default function Feed({ user, book, description, review }) {
 
   const handleWantToRead = async () => {
     const userId = await getCurrentUserId();
-    const collection = await getCollection(userId, "Want To Read");
-    const cover = book.imageLink.replaceAll("/", "_");
-    console.log(cover);
-    const newBook = await createBook(book.title, book.author, book.imageLink);
-    console.log(newBook);
-    if (pressed == false) {
-      if (newBook == null) {
-        const findBook = await getBookByImg(cover);
-        await addBookToCollection(collection.id, findBook.id);
-        setPressed(true);
+    if (userId) {
+      const collection = await getCollection(userId, "Want To Read");
+      const cover = book.imageLink.replaceAll("/", "_");
+      const newBook = await createBook(book.title, book.author, book.imageLink);
+      if (pressed == false) {
+        if (newBook == null) {
+          const findBook = await getBookByImg(cover);
+          await addBookToCollection(collection.id, findBook.id);
+          setPressed(true);
+        } else {
+          await addBookToCollection(collection.id, newBook.id);
+          setPressed(true);
+        }
       } else {
-        await addBookToCollection(collection.id, newBook.id);
-        setPressed(true);
+        if (newBook == null) {
+          const findBook = await getBookByImg(cover);
+          await deleteBookFromCollection(collection.id, findBook.id);
+          setPressed(false);
+        } else {
+          await deleteBookFromCollection(collection.id, newBook.id);
+          setPressed(false);
+        }
       }
     } else {
-      if (newBook == null) {
-        const findBook = await getBookByImg(cover);
-        await deleteBookFromCollection(collection.id, findBook.id);
-        setPressed(false);
-      } else {
-        await deleteBookFromCollection(collection.id, newBook.id);
-        setPressed(false);
-      }
+      navigate("/login");
     }
   };
 
@@ -232,9 +245,14 @@ export default function Feed({ user, book, description, review }) {
   };
 
   const handleDelete = async () => {
-    setAnchorEl(null);
-    await deleteReview(review.id);
-    window.location.reload();
+    const authorized = await getCurrentUserId();
+    if (authorized) {
+      setAnchorEl(null);
+      await deleteReview(review.id);
+      window.location.reload();
+    } else {
+      navigate("/login");
+    }
   };
 
   const handleClose = () => {
@@ -245,9 +263,14 @@ export default function Feed({ user, book, description, review }) {
 
   useEffect(() => {
     const handleDeleteComment = async () => {
-      setAnchorEl(null);
-      await deleteComment(commentToDelete);
-      setAddedComment(!addedComment);
+      const authorized = await getCurrentUserId();
+      if (authorized) {
+        setAnchorEl(null);
+        await deleteComment(commentToDelete);
+        setAddedComment(!addedComment);
+      } else {
+        navigate("/login");
+      }
     };
 
     handleDeleteComment();
@@ -321,7 +344,7 @@ export default function Feed({ user, book, description, review }) {
                 )}
               </div>
               <h5>Summary</h5>
-              {description}
+              <Box className="description">{description}</Box>
             </div>
           </div>
 

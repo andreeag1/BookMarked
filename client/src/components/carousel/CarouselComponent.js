@@ -1,11 +1,8 @@
 import "./CarouselComponent.css";
 import React, { useEffect } from "react";
-import data from "../../mock.json";
 import BookCard from "../book-card/BookCard.js";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
-import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import { Link } from "react-router-dom";
 
 export default function CarouselComponent() {
@@ -22,7 +19,6 @@ export default function CarouselComponent() {
       fetch("https://openlibrary.org/trending/now.json")
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           const book = data.works;
           const newBook = [];
           book.map((work) => {
@@ -40,7 +36,6 @@ export default function CarouselComponent() {
       fetch("https://openlibrary.org/subjects/fantasy.json")
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           const book = data.works;
           const newBook = [];
           book.map((work) => {
@@ -58,7 +53,6 @@ export default function CarouselComponent() {
       fetch("https://openlibrary.org/subjects/science_fiction.json")
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           const book = data.works;
           const newBook = [];
           book.map((work) => {
@@ -78,7 +72,6 @@ export default function CarouselComponent() {
       )
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           const book = data.works;
           const newBook = [];
           book.map((work) => {
@@ -96,7 +89,6 @@ export default function CarouselComponent() {
       fetch("https://openlibrary.org/subjects/young_adult_fiction.json")
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           const book = data.works;
           const newBook = [];
           book.map((work) => {
@@ -114,7 +106,6 @@ export default function CarouselComponent() {
       fetch("https://openlibrary.org/subjects/history.json")
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           const book = data.works;
           const newBook = [];
           book.map((work) => {

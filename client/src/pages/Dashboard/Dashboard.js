@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import "./Dashboard.css";
@@ -8,19 +8,9 @@ import CollectionsWidget from "../../components/collections-widget/CollectionsWi
 import Feed from "../../components/feed/Feed";
 import Grid from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
-import BookCard from "../../components/book-card/BookCard";
 import Bookshelf from "../../components/bookshelf/Bookshelf";
-import { storage } from "../../firebase.js";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import profilePic from "../../assets/pictures/profile.png";
 import ProfileList from "../../components/profile-list/Profile-list";
-import { Divider } from "@mui/material";
-import {
-  getCurrentUserId,
-  getFriendsReviews,
-  getAllUsers,
-} from "../../modules/user/userRepository";
-import { Link, Navigate } from "react-router-dom";
+import { getFriendsReviews } from "../../modules/user/userRepository";
 
 export default function Dashboard() {
   const [booksRead, setBooksRead] = React.useState(0);
@@ -40,9 +30,7 @@ export default function Dashboard() {
     }, [array]);
   };
 
-  useDidMountEffect(() => {
-    console.log("second render");
-  });
+  useDidMountEffect(() => {});
 
   const newUser = async () => {
     const newReview = await getFriendsReviews();
@@ -80,8 +68,6 @@ export default function Dashboard() {
                       };
                       setReview((old) => [...old, Obj]);
                       setLoading(false);
-
-                      console.log(Obj);
                     } else {
                       if (data.description.value) {
                         const Obj = {
@@ -91,8 +77,6 @@ export default function Dashboard() {
                         };
                         setReview((old) => [...old, Obj]);
                         setLoading(false);
-
-                        console.log(Obj);
                       } else {
                         const Obj = {
                           user: reviews,
@@ -101,8 +85,6 @@ export default function Dashboard() {
                         };
                         setReview((old) => [...old, Obj]);
                         setLoading(false);
-
-                        console.log(Obj);
                       }
                     }
                   });

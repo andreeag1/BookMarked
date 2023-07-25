@@ -21,9 +21,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { styled, alpha } from "@mui/material/styles";
 import { Link, useNavigate } from "react-router-dom";
-import data from "../../mock.json";
 import MenuIcon from "@mui/icons-material/Menu";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import { getCurrentUserId, logout } from "../../modules/user/userRepository";
 
 const theme = createTheme({
@@ -108,7 +106,6 @@ const Header = () => {
   useEffect(() => {
     const checkUser = async () => {
       const user = await getCurrentUserId();
-      console.log(user);
       if (user) {
         setIsLogedIn(true);
       } else {
@@ -271,7 +268,7 @@ const Header = () => {
             <Toolbar disableGutters>
               <img src={logo} className="App-logo" alt="logo" />
               <Box className="title-container">
-                <Link to={"/Dashboard"}>
+                <Link to={"/"}>
                   <span className="title" component="div">
                     BookMarked
                   </span>

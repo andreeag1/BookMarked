@@ -8,7 +8,6 @@ import {
   getCollectionTitles,
   getCollectionById,
   deleteBookFromCollection,
-  deleteCollection,
 } from "../../modules/collection/collectionRepository";
 import { Link } from "react-router-dom";
 import { getCurrentUserId } from "../../modules/user/userRepository";
@@ -30,7 +29,6 @@ export default function MyBooks() {
   const [collections, setCollections] = React.useState([]);
   const [books, setBooks] = React.useState([]);
   const [bookToDelete, setBookToDelete] = React.useState("");
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -50,8 +48,13 @@ export default function MyBooks() {
 
   useEffect(() => {
     const handleDeleteBook = async () => {
-      if (bookToDelete !== "") {
-        await deleteBookFromCollection(collectionId, bookToDelete);
+      const authorized = await getCurrentUserId();
+      if (authorized) {
+        if (bookToDelete !== "") {
+          await deleteBookFromCollection(collectionId, bookToDelete);
+        }
+      } else {
+        navigate("/login");
       }
     };
 
@@ -70,7 +73,7 @@ export default function MyBooks() {
               <div className="my-list">
                 <ul>
                   {collections.map((collection) => {
-                    if (collection.id == collectionId) {
+                    if (collection.id === collectionId) {
                       return (
                         <li>
                           <div className="collections-titles-section">

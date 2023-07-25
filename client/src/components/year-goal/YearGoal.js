@@ -14,6 +14,7 @@ import {
   getUserById,
   getCurrentUser,
 } from "../../modules/user/userRepository";
+import { useNavigate } from "react-router-dom";
 
 const ColorButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText("#E9E7E5"),
@@ -60,25 +61,37 @@ export default function YearGoal({ booksRead }) {
   const [progress, setProgress] = React.useState(0);
   const [noCurrentGoal, setNoCurrentGoal] = React.useState(true);
   const [newGoal, setNewGoal] = React.useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const setNewProgress = async () => {
-      const user = await getCurrentUser();
-      const newProgress = user.readbooks;
-      setProgress(newProgress);
+      const authorized = await getCurrentUserId();
+      console.log("hello");
+      if (authorized) {
+        const user = await getCurrentUser();
+        const newProgress = user.readbooks;
+        setProgress(newProgress);
+      } else {
+        navigate("/login");
+      }
     };
     setNewProgress();
   }, [booksRead]);
 
   useEffect(() => {
     const getGoal = async () => {
-      const user = await getCurrentUser();
-      const goal = user.goal;
-      if (goal !== 0) {
-        setGoal(goal);
-        setMyBool(false);
+      const authorized = await getCurrentUserId();
+      if (authorized) {
+        const user = await getCurrentUser();
+        const goal = user.goal;
+        if (goal !== 0) {
+          setGoal(goal);
+          setMyBool(false);
+        } else {
+          setMyBool(true);
+        }
       } else {
-        setMyBool(true);
+        navigate("/login");
       }
     };
     getGoal();

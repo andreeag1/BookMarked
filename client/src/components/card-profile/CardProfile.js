@@ -14,7 +14,8 @@ import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import { storage } from "../../firebase.js";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import profilePic from "../../assets/pictures/profile.png";
 
 const FollowButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText("#cab9a9"),
@@ -37,10 +38,10 @@ export default function CardProfile({ userId }) {
   const [collections, setCollections] = React.useState([]);
   const [followed, setFollowed] = React.useState(false);
   const [url, setUrl] = React.useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const newUser = async () => {
-      console.log(userId);
       const user = await getUserById(userId);
       const currentUserId = await getCurrentUserId();
       const following = await getFollowing(currentUserId);
@@ -62,24 +63,32 @@ export default function CardProfile({ userId }) {
           setUrl(url);
         })
         .catch((error) => {
-          console.log(error.message, "error getting the image URL");
+          setUrl(profilePic);
         });
     };
     newUser();
   }, [userId]);
 
   const handleFollow = async () => {
-    const follow = await followUser(userId);
-    if (follow !== 404) {
-      setFollowed(true);
+    const authorized = await getCurrentUserId();
+    if (authorized) {
+      const follow = await followUser(userId);
+      if (follow !== 404) {
+        setFollowed(true);
+      }
+    } else {
+      navigate("/login");
     }
-    console.log(follow);
   };
 
   const handleUnfollow = async () => {
-    setFollowed(false);
-    const unfollow = await unfollowUser(userId);
-    console.log(unfollow);
+    const authorized = await getCurrentUserId();
+    if (authorized) {
+      setFollowed(false);
+      const unfollow = await unfollowUser(userId);
+    } else {
+      navigate("/login");
+    }
   };
 
   return (

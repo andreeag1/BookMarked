@@ -16,6 +16,7 @@ import {
   getCollectionTitles,
 } from "../../modules/collection/collectionRepository";
 import { getCurrentUserId } from "../../modules/user/userRepository";
+import { useNavigate } from "react-router-dom";
 
 const ColorButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText("#E9E7E5"),
@@ -30,14 +31,13 @@ export default function CollectionsWidget() {
   const [newItem, setNewItem] = React.useState("");
   const [items, setItems] = React.useState([]);
   const [collection, setCollection] = React.useState(false);
-  const [collectionId, setCollectionId] = React.useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getCollection = async () => {
       const userId = await getCurrentUserId();
       const collections = await getCollectionTitles(userId);
       setItems(collections);
-      console.log(collections);
     };
 
     getCollection();
@@ -52,27 +52,22 @@ export default function CollectionsWidget() {
   };
 
   const addItem = async () => {
-    if (!newItem) {
-      alert("Enter a collection name");
-      return;
-    }
-
     const userId = await getCurrentUserId();
-    const newCollection = await addCollection(newItem, userId);
-    if (newCollection.statusCode == 404) {
-      alert("This collection already exists");
+    if (userId) {
+      if (!newItem) {
+        alert("Enter a collection name");
+        return;
+      }
+      const newCollection = await addCollection(newItem, userId);
+      if (newCollection.statusCode === 404) {
+        alert("This collection already exists");
+      } else {
+        setCollection(true);
+      }
+      setNewItem("");
     } else {
-      setCollection(true);
+      navigate("/login");
     }
-
-    // const item = {
-    //   id: Math.floor(Math.random() * 1000),
-    //   value: newItem,
-    // };
-
-    // setItems((oldList) => [...oldList, item]);
-
-    setNewItem("");
   };
 
   return (
