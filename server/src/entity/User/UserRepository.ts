@@ -16,7 +16,7 @@ export interface UserRepositoryContract {
     email: string,
     username: string,
     password: string
-  ): Promise<InsertResult>;
+  ): Promise<User | null>;
   updateUser(User: User): Promise<User>;
   deleteUser(id: string): Promise<DeleteResult>;
   getUsersFollowing(id: string): Promise<User[]>;
@@ -102,20 +102,40 @@ export class UserRepository implements UserRepositoryContract {
     return queryBuilder;
   }
 
-  saveUser(
+  async saveUser(
     firstName: string,
     lastName: string,
     email: string,
     username: string,
     password: string
-  ): Promise<InsertResult> {
-    return this.repository.insert({
-      firstName,
-      lastName,
-      username,
-      email,
-      password: bcryptjs.hashSync(password, 12),
+  ): Promise<User | null> {
+    const existingEmail = await this.repository.findOne({
+      where: {
+        email: email,
+      },
     });
+    const existingUsername = await this.repository.findOne({
+      where: {
+        username: username,
+      },
+    });
+    if (existingEmail == null && existingUsername == null) {
+      const user = this.repository.create({
+        firstName: firstName,
+        lastName: lastName,
+        username: username,
+        email: email,
+        password: bcryptjs.hashSync(password, 12),
+      });
+      this.repository.save(user);
+      return this.repository.findOne({
+        where: {
+          username: username,
+          email: email,
+        },
+      });
+    }
+    return existingUsername || existingEmail;
   }
 
   updateUser(User: User): Promise<User> {

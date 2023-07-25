@@ -1,5 +1,6 @@
 import { Router, Request, Response } from "express";
 import { CommentControllerContract } from "./types";
+import { authenticate } from "../../lib/middlewares";
 
 export function createCommentRouter(controllers: {
   commentController: CommentControllerContract;
@@ -8,7 +9,7 @@ export function createCommentRouter(controllers: {
   const { commentController } = controllers;
 
   //add a comment DONE
-  router.post("/add", async (req: Request, res: Response) => {
+  router.post("/add", authenticate, async (req: Request, res: Response) => {
     const comment = await commentController.saveComment(
       req.body.comment,
       req.body.user,
@@ -17,8 +18,8 @@ export function createCommentRouter(controllers: {
     res.status(comment.statusCode).json(comment);
   });
 
-  //delete a comment
-  router.put("/delete", async (req: Request, res: Response) => {
+  //delete a comment DONE
+  router.put("/delete", authenticate, async (req: Request, res: Response) => {
     const comment = await commentController.deleteComment(req.body.commentId);
     res.status(comment.statusCode).json(comment);
   });

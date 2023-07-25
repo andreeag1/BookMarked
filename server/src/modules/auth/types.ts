@@ -11,7 +11,7 @@ export interface AuthControllerContract {
     email: string,
     username: string,
     password: string
-  ): Promise<SaveUserResponse>;
+  ): Promise<User | null>;
   updateUser(User: User): Promise<SaveUserResponse>;
   deleteUser(id: string): Promise<DeleteResult>;
   getUsersFollowing(id: string): Promise<User[]>;
@@ -42,7 +42,7 @@ export interface AuthServiceContract {
     email: string,
     username: string,
     password: string
-  ): Promise<InsertResult>;
+  ): Promise<User | null>;
   updateUser(User: User): Promise<User>;
   deleteUser(id: string): Promise<DeleteResult>;
   getUsersFollowing(id: string): Promise<User[]>;

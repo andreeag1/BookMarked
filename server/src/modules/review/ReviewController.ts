@@ -33,9 +33,10 @@ export class ReviewController implements ReviewControllerContract {
     review: string,
     bookId: string,
     userId: string,
-    rating: number
+    rating: number,
+    date: string
   ): Promise<SaveReviewResponse> {
-    this.reviewService.saveReview(review, bookId, userId, rating);
+    this.reviewService.saveReview(review, bookId, userId, rating, date);
     return new Promise<SaveReviewResponse>((resolve, reject) => {
       resolve({
         statusCode: 200,

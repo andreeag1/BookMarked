@@ -36,11 +36,12 @@ export class ReviewService implements ReviewServiceContract {
     review: string,
     bookId: string,
     userId: string,
-    rating: number
+    rating: number,
+    date: string
   ): Promise<Review> {
     const user = await this.userRepository.getUserById(userId);
     const book = await this.bookRepository.getBookById(bookId);
-    return this.reviewRepository.saveReview(review, book, user, rating);
+    return this.reviewRepository.saveReview(review, book, user, rating, date);
   }
 
   updateReview(Review: Review): Promise<Review> {

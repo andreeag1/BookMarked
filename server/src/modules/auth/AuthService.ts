@@ -37,7 +37,7 @@ export class AuthService implements AuthServiceContract {
     email: string,
     username: string,
     password: string
-  ): Promise<InsertResult> {
+  ): Promise<User | null> {
     return this.userRepository.saveUser(
       firstName,
       lastName,

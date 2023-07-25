@@ -10,7 +10,8 @@ export interface ReviewRepositoryContract {
     review: string,
     book: Book,
     user: User,
-    rating: number
+    rating: number,
+    date: string
   ): Promise<Review>;
   getReviewByReview(review: string): Promise<Review>;
   getReviewByUser(id: string): Promise<Review[]>;
@@ -77,11 +78,13 @@ export class ReviewRepository implements ReviewRepositoryContract {
     review: string,
     book: Book,
     user: User,
-    rating: number
+    rating: number,
+    date: string
   ): Promise<Review> {
     const post = this.repository.create({
       review: review,
       rating: rating,
+      date: date,
     });
     post.book = book;
     post.user = user;

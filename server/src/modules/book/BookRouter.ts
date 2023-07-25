@@ -9,7 +9,7 @@ export function createBookRouter(controllers: {
   const { bookController } = controllers;
 
   //add a book DONE
-  router.post("/add", async (req: Request, res: Response) => {
+  router.post("/add", authenticate, async (req: Request, res: Response) => {
     const response = await bookController.saveBook(
       req.body.title,
       req.body.author,

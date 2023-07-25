@@ -15,7 +15,7 @@ export const authenticate = (
       (err: any, user: any) => {
         if (err) {
           console.log("middlewares.authenticate: invalid access token");
-          return res.sendStatus(403);
+          return res.sendStatus(401);
         }
         res.locals.user = user;
         next();

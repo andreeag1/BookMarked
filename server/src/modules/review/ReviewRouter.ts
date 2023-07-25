@@ -19,13 +19,19 @@ export function createReviewRouter(controllers: {
   });
 
   //save a review DONE
-  router.post("/add", async (req: Request, res: Response) => {
+  router.post("/add", authenticate, async (req: Request, res: Response) => {
     if (req.body.rating <= 5) {
+      const date = new Date();
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+      const format = month + "/" + day + "/" + year;
       const review = await reviewController.saveReview(
         req.body.review,
         req.body.bookId,
         req.body.userId,
-        req.body.rating
+        req.body.rating,
+        format
       );
       res.status(review.statusCode).json(review);
     } else {
@@ -36,10 +42,14 @@ export function createReviewRouter(controllers: {
   });
 
   //get a user's reviews DONE
-  router.get("/user/:userId", async (req: Request, res: Response) => {
-    const review = await reviewController.getReviewByUser(req.params.userId);
-    return res.json(review);
-  });
+  router.get(
+    "/user/:userId",
+    authenticate,
+    async (req: Request, res: Response) => {
+      const review = await reviewController.getReviewByUser(req.params.userId);
+      return res.json(review);
+    }
+  );
 
   //get a book's reviews DONE
   router.get("/book/:bookId", async (req: Request, res: Response) => {
@@ -48,7 +58,7 @@ export function createReviewRouter(controllers: {
   });
 
   //add like DONE
-  router.put("/like", async (req: Request, res: Response) => {
+  router.put("/like", authenticate, async (req: Request, res: Response) => {
     const review = await reviewController.getReviewById(req.body.id);
     review.likes++;
     const newReview = await reviewController.updateReview(review);
@@ -56,7 +66,7 @@ export function createReviewRouter(controllers: {
   });
 
   //remove like DONE
-  router.put("/unlike", async (req: Request, res: Response) => {
+  router.put("/unlike", authenticate, async (req: Request, res: Response) => {
     const review = await reviewController.getReviewById(req.body.id);
     review.likes--;
     const newReview = await reviewController.updateReview(review);
@@ -69,8 +79,8 @@ export function createReviewRouter(controllers: {
     return res.json(review);
   });
 
-  //delete review
-  router.put("/delete", async (req: Request, res: Response) => {
+  //delete review DONE
+  router.put("/delete", authenticate, async (req: Request, res: Response) => {
     const review = await reviewController.deleteReview(req.body.reviewId);
     res.status(review.statusCode).json(review);
   });

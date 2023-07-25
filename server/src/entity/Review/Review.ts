@@ -23,6 +23,9 @@ export class Review {
   @Column("varchar", { length: 500 })
   review!: string;
 
+  @Column("varchar", { length: 500 })
+  date!: string;
+
   @Column({ default: 0 })
   rating!: number;
 

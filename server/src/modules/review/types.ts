@@ -12,7 +12,8 @@ export interface ReviewControllerContract {
     review: string,
     bookId: string,
     userId: string,
-    rating: number
+    rating: number,
+    date: string
   ): Promise<SaveReviewResponse>;
 
   updateReview(Review: Review): Promise<Review>;
@@ -35,7 +36,8 @@ export interface ReviewServiceContract {
     review: string,
     bookId: string,
     userId: string,
-    rating: number
+    rating: number,
+    date: string
   ): Promise<Review>;
 
   updateReview(Review: Review): Promise<Review>;

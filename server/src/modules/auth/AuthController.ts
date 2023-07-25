@@ -43,14 +43,14 @@ export class AuthController implements AuthControllerContract {
     email: string,
     username: string,
     password: string
-  ): Promise<SaveUserResponse> {
-    this.authService.saveUser(firstName, lastName, email, username, password);
-    return new Promise<SaveUserResponse>((resolve, reject) => {
-      resolve({
-        statusCode: 200,
-        message: "success",
-      });
-    });
+  ): Promise<User | null> {
+    return this.authService.saveUser(
+      firstName,
+      lastName,
+      email,
+      username,
+      password
+    );
   }
 
   updateUser(User: User): Promise<SaveUserResponse> {
