@@ -64,7 +64,7 @@ app.use(
   })
 );
 
-const PORT = 5000;
+const PORT = process.env.PORT;
 
 const bookRepository = new BookRepository();
 const userRepository = new UserRepository();
