@@ -33,7 +33,7 @@ export interface CollectionServiceContract {
   ): Promise<Collection>;
   deleteCollection(id: string): Promise<DeleteResult>;
   getCollectionByUser(id: string): Promise<Collection[]>;
-  getCollection(userId: string, title: string): Promise<Collection | null>;;
+  getCollection(userId: string, title: string): Promise<Collection | null>;
 }
 
 export type SaveCollectionResponse = {
