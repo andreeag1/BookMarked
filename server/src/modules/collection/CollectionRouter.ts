@@ -9,7 +9,7 @@ export function createCollectionRouter(controllers: {
   const { collectionController } = controllers;
 
   //Add a collection DONE
-  router.post("/add", authenticate, async (req: Request, res: Response) => {
+  router.post("/add", async (req: Request, res: Response) => {
     const existingCollection = await collectionController.getCollection(
       req.body.userId,
       req.body.title

@@ -11,7 +11,6 @@ export const addCollection = async (title, userId) => {
         title: title,
         userId: userId,
       }),
-      credentials: "include",
     });
 
     const data = await res.json();

@@ -118,14 +118,11 @@ export function createAuthRouter(controllers: {
   });
 
   //get any user by email DONE
-  router.get(
-    "/user-email/:email",
-    authenticate,
-    async (req: Request, res: Response) => {
-      const newUser = await authController.getUserByEmail(req.params.email);
-      res.json(newUser);
-    }
-  );
+  router.get("/user-email/:email", async (req: Request, res: Response) => {
+    const newUser = await authController.getUserByEmail(req.params.email);
+    console.log(newUser);
+    res.json(newUser);
+  });
 
   //follow a user DONE
   router.post("/follow", authenticate, async (req: Request, res: Response) => {
