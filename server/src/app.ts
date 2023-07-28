@@ -59,6 +59,8 @@ app.use(
       "http://localhost:3000",
       "http://localhost:8080",
       "http://localhost:4200",
+      "https://bookmarked-client-rn4dsun2dq-uc.a.run.app",
+      "https://bookmarked.andreeagugiuman.com",
     ],
     credentials: true,
   })
