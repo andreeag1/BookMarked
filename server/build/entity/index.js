@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ReviewRepository = exports.Review = exports.UserRepository = exports.User = exports.BookRepository = exports.Book = void 0;
+const Book_1 = require("./Book");
+Object.defineProperty(exports, "Book", { enumerable: true, get: function () { return Book_1.Book; } });
+Object.defineProperty(exports, "BookRepository", { enumerable: true, get: function () { return Book_1.BookRepository; } });
+const User_1 = require("./User");
+Object.defineProperty(exports, "User", { enumerable: true, get: function () { return User_1.User; } });
+Object.defineProperty(exports, "UserRepository", { enumerable: true, get: function () { return User_1.UserRepository; } });
+const Review_1 = require("./Review");
+Object.defineProperty(exports, "Review", { enumerable: true, get: function () { return Review_1.Review; } });
+Object.defineProperty(exports, "ReviewRepository", { enumerable: true, get: function () { return Review_1.ReviewRepository; } });
