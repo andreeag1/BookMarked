@@ -151,12 +151,12 @@ export default function CurrentlyReading({ setBooksRead }) {
         setMyBool(true);
       } else {
         setMyBool(false);
+        setProgress(existingCurrentRead.progress);
         setConfirmedBookInfo({
           title: existingCurrentRead.title,
           author: existingCurrentRead.author,
           imageLink: existingCurrentRead.imageLink,
         });
-        setProgress(existingCurrentRead.progress);
       }
     };
     currentRead();
@@ -237,28 +237,28 @@ export default function CurrentlyReading({ setBooksRead }) {
           const collectionId = await getCollection(userId, addToCollection);
           await addBookToCollection(collectionId.id, findBook.id);
         }
-        const readCollection = await getCollection(userId, "Read");
-        await addBookToCollection(readCollection.id, findBook.id);
         const createNewReview = await addReview(
           review,
           findBook.id,
           userId,
           rating
         );
+        const readCollection = await getCollection(userId, "Read");
+        await addBookToCollection(readCollection.id, findBook.id);
       } else {
         if (addToCollection == "") {
         } else {
           const collectionId = await getCollection(userId, addToCollection);
           await addBookToCollection(collectionId.id, book.id);
         }
-        const readCollection = await getCollection(userId, "Read");
-        await addBookToCollection(readCollection.id, book.id);
         const createNewReview = await addReview(
           review,
           book.id,
           userId,
           rating
         );
+        const readCollection = await getCollection(userId, "Read");
+        await addBookToCollection(readCollection.id, book.id);
       }
     }
   };

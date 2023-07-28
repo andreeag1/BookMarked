@@ -5,6 +5,7 @@ export const createBook = async (title, author, imageLink) => {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({
         title: title,
         author: author,
@@ -21,6 +22,7 @@ export const createBook = async (title, author, imageLink) => {
 
 export const getBookByImg = async (imagelink) => {
   try {
+    console.log(imagelink);
     const res = await fetch(`http://localhost:5000/book/search/${imagelink}`, {
       method: "GET",
       headers: {
@@ -29,7 +31,7 @@ export const getBookByImg = async (imagelink) => {
       credentials: "include",
     });
     const data = await res.json();
-    if (res == 404) {
+    if (res === 404) {
       return null;
     }
     return data;

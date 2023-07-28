@@ -92,12 +92,12 @@ export default function Book() {
               setBook(Obj);
             }
 
-            setAuthorKey(data.authors[0].author.key);
             const cover = `https://covers.openlibrary.org/b/id/${data.covers[0]}-L.jpg`;
             setBookCover(cover);
             const mediumBookCover = `https://covers.openlibrary.org/b/id/${data.covers[0]}-M.jpg`;
             const replacedCover = mediumBookCover.replaceAll("/", "_");
             setMediumCover(replacedCover);
+            setAuthorKey(data.authors[0].author.key);
           }
         });
     };
@@ -106,7 +106,9 @@ export default function Book() {
 
   useEffect(() => {
     const handleAuthor = async () => {
-      await fetch(`https://openlibrary.org${authorKey}.json`)
+      console.log(authorKey);
+      const newAuthorKey = authorKey.replace("/", "");
+      await fetch(`https://openlibrary.org/${newAuthorKey}.json`)
         .then((response) => response.json())
         .then((data) => {
           const name = data.name;
@@ -125,8 +127,6 @@ export default function Book() {
           setZeroReviews(true);
         }
         setReview(reviews);
-      } else {
-        setZeroReviews(true);
       }
     };
     getReviews();
