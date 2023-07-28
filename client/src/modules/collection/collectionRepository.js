@@ -1,6 +1,8 @@
+import { BACKEND_URL } from "../../lib/config";
+
 export const addCollection = async (title, userId) => {
   try {
-    const res = await fetch(`http://localhost:5000/collection/add`, {
+    const res = await fetch(`${BACKEND_URL}/collection/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -20,7 +22,7 @@ export const addCollection = async (title, userId) => {
 
 export const getCollectionTitles = async (id) => {
   try {
-    const res = await fetch(`http://localhost:5000/collection/user/${id}`, {
+    const res = await fetch(`${BACKEND_URL}/collection/user/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -41,7 +43,7 @@ export const getCollectionTitles = async (id) => {
 
 export const addBookToCollection = async (collectionId, bookId) => {
   try {
-    const res = await fetch(`http://localhost:5000/collection/book`, {
+    const res = await fetch(`${BACKEND_URL}/collection/book`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -59,7 +61,7 @@ export const addBookToCollection = async (collectionId, bookId) => {
 
 export const deleteBookFromCollection = async (collectionId, bookId) => {
   try {
-    const res = await fetch(`http://localhost:5000/collection/deletebook`, {
+    const res = await fetch(`${BACKEND_URL}/collection/deletebook`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -77,7 +79,7 @@ export const deleteBookFromCollection = async (collectionId, bookId) => {
 
 export const getCollection = async (id, title) => {
   try {
-    const res = await fetch(`http://localhost:5000/collection/${id}/${title}`, {
+    const res = await fetch(`${BACKEND_URL}/collection/${id}/${title}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -91,7 +93,7 @@ export const getCollection = async (id, title) => {
 
 export const getCollectionById = async (id) => {
   try {
-    const res = await fetch(`http://localhost:5000/collection/get/${id}`, {
+    const res = await fetch(`${BACKEND_URL}/collection/get/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

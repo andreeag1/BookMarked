@@ -1,6 +1,8 @@
+import { BACKEND_URL } from "../../lib/config";
+
 export const createBook = async (title, author, imageLink) => {
   try {
-    const res = await fetch("http://localhost:5000/book/add", {
+    const res = await fetch(`${BACKEND_URL}/book/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -21,7 +23,7 @@ export const createBook = async (title, author, imageLink) => {
 
 export const getBookByImg = async (imagelink) => {
   try {
-    const res = await fetch(`http://localhost:5000/book/search/${imagelink}`, {
+    const res = await fetch(`${BACKEND_URL}/book/search/${imagelink}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

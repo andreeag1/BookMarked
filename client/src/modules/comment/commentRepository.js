@@ -1,6 +1,8 @@
+import { BACKEND_URL } from "../../lib/config";
+
 export const addComment = async (comment, user, review) => {
   try {
-    const res = await fetch(`http://localhost:5000/comment/add`, {
+    const res = await fetch(`${BACKEND_URL}/comment/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -22,7 +24,7 @@ export const addComment = async (comment, user, review) => {
 
 export const getCommentsByReview = async (id) => {
   try {
-    const res = await fetch(`http://localhost:5000/comment/review/${id}`, {
+    const res = await fetch(`${BACKEND_URL}/comment/review/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -39,7 +41,7 @@ export const getCommentsByReview = async (id) => {
 
 export const getCommentCount = async (id) => {
   try {
-    const res = await fetch(`http://localhost:5000/comment/count/${id}`, {
+    const res = await fetch(`${BACKEND_URL}/comment/count/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -56,7 +58,7 @@ export const getCommentCount = async (id) => {
 
 export const deleteComment = async (commentId) => {
   try {
-    const res = await fetch(`http://localhost:5000/comment/delete`, {
+    const res = await fetch(`${BACKEND_URL}/comment/delete`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

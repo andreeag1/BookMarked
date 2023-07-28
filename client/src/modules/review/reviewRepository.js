@@ -1,6 +1,8 @@
+import { BACKEND_URL } from "../../lib/config";
+
 export const addReview = async (review, bookId, userId, rating) => {
   try {
-    const res = await fetch(`http://localhost:5000/review/add`, {
+    const res = await fetch(`${BACKEND_URL}/review/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -23,7 +25,7 @@ export const addReview = async (review, bookId, userId, rating) => {
 
 export const getReviewByBook = async (bookId) => {
   try {
-    const res = await fetch(`http://localhost:5000/review/book/${bookId}`, {
+    const res = await fetch(`${BACKEND_URL}/review/book/${bookId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -40,7 +42,7 @@ export const getReviewByBook = async (bookId) => {
 
 export const getReviewByUser = async (userId) => {
   try {
-    const res = await fetch(`http://localhost:5000/review/user/${userId}`, {
+    const res = await fetch(`${BACKEND_URL}/review/user/${userId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -57,7 +59,7 @@ export const getReviewByUser = async (userId) => {
 
 export const addLike = async (reviewId) => {
   try {
-    const res = await fetch(`http://localhost:5000/review/like`, {
+    const res = await fetch(`${BACKEND_URL}/review/like`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -77,7 +79,7 @@ export const addLike = async (reviewId) => {
 
 export const deleteLike = async (reviewId) => {
   try {
-    const res = await fetch(`http://localhost:5000/review/unlike`, {
+    const res = await fetch(`${BACKEND_URL}/review/unlike`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -97,7 +99,7 @@ export const deleteLike = async (reviewId) => {
 
 export const getReviewById = async (id) => {
   try {
-    const res = await fetch(`http://localhost:5000/review/${id}`, {
+    const res = await fetch(`${BACKEND_URL}/review/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -114,7 +116,7 @@ export const getReviewById = async (id) => {
 
 export const deleteReview = async (reviewId) => {
   try {
-    const res = await fetch(`http://localhost:5000/review/delete`, {
+    const res = await fetch(`${BACKEND_URL}/review/delete`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

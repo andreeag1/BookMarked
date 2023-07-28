@@ -1,3 +1,5 @@
+import { BACKEND_URL } from "../../lib/config";
+
 export const registerUser = async (
   firstName,
   lastName,
@@ -6,7 +8,7 @@ export const registerUser = async (
   password
 ) => {
   try {
-    const res = await fetch("http://localhost:5000/auth/register", {
+    const res = await fetch(`${BACKEND_URL}/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -29,7 +31,7 @@ export const registerUser = async (
 
 export const loginUser = async (email, password) => {
   try {
-    const res = await fetch("http://localhost:5000/auth/login", {
+    const res = await fetch(`${BACKEND_URL}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -50,7 +52,7 @@ export const loginUser = async (email, password) => {
 
 export const getCurrentUserId = async () => {
   try {
-    const res = await fetch(`http://localhost:5000/auth/me`, {
+    const res = await fetch(`${BACKEND_URL}/auth/me`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -69,7 +71,7 @@ export const getCurrentUserId = async () => {
 
 export const addCurrentRead = async (title, author, imageLink) => {
   try {
-    const res = await fetch(`http://localhost:5000/auth/currentread`, {
+    const res = await fetch(`${BACKEND_URL}/auth/currentread`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -91,7 +93,7 @@ export const addCurrentRead = async (title, author, imageLink) => {
 
 export const getCurrentRead = async () => {
   try {
-    const res = await fetch(`http://localhost:5000/auth/getcurrent`, {
+    const res = await fetch(`${BACKEND_URL}/auth/getcurrent`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -108,7 +110,7 @@ export const getCurrentRead = async () => {
 
 export const removeCurrentRead = async (id) => {
   try {
-    const res = await fetch(`http://localhost:5000/auth/removecurrent`, {
+    const res = await fetch(`${BACKEND_URL}/auth/removecurrent`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -125,7 +127,7 @@ export const removeCurrentRead = async (id) => {
 
 export const addProgressToCurrentRead = async (progress) => {
   try {
-    const res = await fetch(`http://localhost:5000/auth/progress`, {
+    const res = await fetch(`${BACKEND_URL}/auth/progress`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -142,7 +144,7 @@ export const addProgressToCurrentRead = async (progress) => {
 
 export const addYearlyGoal = async (goal) => {
   try {
-    const res = await fetch(`http://localhost:5000/auth/goal`, {
+    const res = await fetch(`${BACKEND_URL}/auth/goal`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -162,7 +164,7 @@ export const addYearlyGoal = async (goal) => {
 
 export const addProgressToYearlyGoal = async (progress) => {
   try {
-    const res = await fetch(`http://localhost:5000/auth/readbooks`, {
+    const res = await fetch(`${BACKEND_URL}/auth/readbooks`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -182,7 +184,7 @@ export const addProgressToYearlyGoal = async (progress) => {
 
 export const getCurrentUser = async () => {
   try {
-    const res = await fetch(`http://localhost:5000/auth/user`, {
+    const res = await fetch(`${BACKEND_URL}/auth/user`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -199,7 +201,7 @@ export const getCurrentUser = async () => {
 
 export const addProfilePic = async (picture) => {
   try {
-    const res = await fetch(`http://localhost:5000/auth/profilepic`, {
+    const res = await fetch(`${BACKEND_URL}/auth/profilepic`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -219,7 +221,7 @@ export const addProfilePic = async (picture) => {
 
 export const getUserById = async (id) => {
   try {
-    const res = await fetch(`http://localhost:5000/auth/user/${id}`, {
+    const res = await fetch(`${BACKEND_URL}/auth/user/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -236,7 +238,7 @@ export const getUserById = async (id) => {
 
 export const followUser = async (userId) => {
   try {
-    const res = await fetch(`http://localhost:5000/auth/follow`, {
+    const res = await fetch(`${BACKEND_URL}/auth/follow`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -256,7 +258,7 @@ export const followUser = async (userId) => {
 
 export const unfollowUser = async (userId) => {
   try {
-    const res = await fetch(`http://localhost:5000/auth/unfollow`, {
+    const res = await fetch(`${BACKEND_URL}/auth/unfollow`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -276,7 +278,7 @@ export const unfollowUser = async (userId) => {
 
 export const getCurrentUserFollowing = async () => {
   try {
-    const res = await fetch(`http://localhost:5000/auth/following/`, {
+    const res = await fetch(`${BACKEND_URL}/auth/following/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -293,7 +295,7 @@ export const getCurrentUserFollowing = async () => {
 
 export const getFollowing = async (id) => {
   try {
-    const res = await fetch(`http://localhost:5000/auth/following/${id}`, {
+    const res = await fetch(`${BACKEND_URL}/auth/following/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -310,7 +312,7 @@ export const getFollowing = async (id) => {
 
 export const getFriendsReviews = async () => {
   try {
-    const res = await fetch(`http://localhost:5000/auth/reviews`, {
+    const res = await fetch(`${BACKEND_URL}/auth/reviews`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -327,7 +329,7 @@ export const getFriendsReviews = async () => {
 
 export const getUserByEmail = async (email) => {
   try {
-    const res = await fetch(`http://localhost:5000/auth/user-email/${email}`, {
+    const res = await fetch(`${BACKEND_URL}/auth/user-email/${email}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -344,7 +346,7 @@ export const getUserByEmail = async (email) => {
 
 export const getAllUsers = async () => {
   try {
-    const res = await fetch(`http://localhost:5000/auth/all`, {
+    const res = await fetch(`${BACKEND_URL}/auth/all`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -361,7 +363,7 @@ export const getAllUsers = async () => {
 
 export const logout = async () => {
   try {
-    const res = await fetch(`http://localhost:5000/auth/logout`, {
+    const res = await fetch(`${BACKEND_URL}/auth/logout`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
