@@ -22,7 +22,7 @@ export const registerUser = async (
       }),
     });
     const data = await res.json();
-    if (data == null) {
+    if (data === null) {
       return 200;
     }
     return 403;
@@ -334,7 +334,6 @@ export const getUserByEmail = async (email) => {
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
     });
     const data = await res.json();
     if (!res.ok) {
