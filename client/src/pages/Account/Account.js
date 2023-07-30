@@ -20,7 +20,7 @@ export default function Account() {
   const [review, setReview] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [array, setArray] = React.useState([]);
-  const [zeroReviews, setZeroReviews] = React.useState(false);
+  const [zeroReviews, setZeroReviews] = React.useState(true);
 
   const useDidMountEffect = () => {
     const didMount = useRef(false);

@@ -22,7 +22,7 @@ export default function CurrentUserAccount() {
   const [review, setReview] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [array, setArray] = React.useState([]);
-  const [zeroReviews, setZeroReviews] = React.useState(false);
+  const [zeroReviews, setZeroReviews] = React.useState(true);
   const [zeroFriends, setZeroFriends] = React.useState(false);
 
   const useDidMountEffect = () => {

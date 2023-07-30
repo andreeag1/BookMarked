@@ -12,7 +12,7 @@
   font-family: Raleway;
 }
 
-.book-info {
+.book-infoo {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -48,7 +48,7 @@
   color: #403c3a;
 }
 
-.book-info h7 {
+.book-infoo h7 {
   padding-left: 2em;
   width: 9em;
 }

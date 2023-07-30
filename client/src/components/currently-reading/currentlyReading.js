@@ -305,7 +305,7 @@ export default function CurrentlyReading({ setBooksRead }) {
     <div className="container">
       <div className="current-read">
         <h5>Currently Reading</h5>
-        <div className="book-info">
+        <div className="book-infoo">
           <div className="book-imagee">
             <IconButton onClick={handleClickOpen("paper")}>
               <AddIcon className="add-icon" sx={{ fontSize: "45px" }} />
