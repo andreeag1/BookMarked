@@ -25,7 +25,7 @@ export default function Signin() {
     const loggedIn = await loginUser(values.email, values.password);
     if (loggedIn === 200) {
       setError(false);
-      navigate("/Dashboard");
+      navigate("/dashboard");
     } else {
       setError(true);
     }
@@ -82,7 +82,7 @@ export default function Signin() {
         ) : (
           <div />
         )}
-        <ColorButton onClick={handleSubmit} component={Link} to="/Dashboard">
+        <ColorButton onClick={handleSubmit} component={Link} to="/dashboard">
           Login
         </ColorButton>
         <div className="signup-section">

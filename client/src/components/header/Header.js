@@ -124,7 +124,7 @@ const Header = () => {
             <Toolbar disableGutters>
               <img src={logo} className="App-logo" alt="logo" />
               <Box className="title-container">
-                <Link to={"/Dashboard"}>
+                <Link to={"/dashboard"}>
                   <span className="title" component="div">
                     BookMarked
                   </span>
@@ -173,7 +173,7 @@ const Header = () => {
                   <MenuItem
                     onClick={handleClose}
                     component={Link}
-                    to="/Dashboard"
+                    to="/dashboard"
                   >
                     Home
                   </MenuItem>
@@ -202,7 +202,7 @@ const Header = () => {
                     key="Home"
                     sx={{ color: "inherit" }}
                     component={Link}
-                    to="/Dashboard"
+                    to="/dashboard"
                   >
                     Home
                   </Button>
