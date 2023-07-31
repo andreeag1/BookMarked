@@ -20,7 +20,7 @@ export default function Account() {
   const [review, setReview] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [array, setArray] = React.useState([]);
-  const [zeroReviews, setZeroReviews] = React.useState(true);
+  const [zeroReviews, setZeroReviews] = React.useState(false);
 
   const useDidMountEffect = () => {
     const didMount = useRef(false);
@@ -60,7 +60,7 @@ export default function Account() {
     });
     setFollowing(totalFollowing);
     const newReview = await getReviewByUser(userId);
-    if (newReview.length == 0) {
+    if (newReview.length === 0) {
       setZeroReviews(true);
     }
     if (newReview.length !== review.length) {
@@ -82,7 +82,8 @@ export default function Account() {
             data.docs.map(async (book) => {
               if (book.cover_i == newCover) {
                 const bookId = book.key;
-                await fetch(`https://openlibrary.org${bookId}.json`)
+                const newBookId = bookId.replace("/", "");
+                await fetch(`https://openlibrary.org/${newBookId}.json`)
                   .then((response) => response.json())
                   .then((data) => {
                     const newDescription = "No Description";
@@ -146,17 +147,21 @@ export default function Account() {
               <div className="no-reviews">
                 <h7>This user doesn't have any reviews yet!</h7>
               </div>
-            ) : loading ? (
-              <CircularProgress />
             ) : (
-              review.map((singleReview) => (
-                <Feed
-                  user={singleReview.other.user}
-                  book={singleReview.other.book}
-                  review={singleReview.other}
-                  description={singleReview.description}
-                />
-              ))
+              <div>
+                {loading ? (
+                  <CircularProgress />
+                ) : (
+                  review.map((singleReview) => (
+                    <Feed
+                      user={singleReview.other.user}
+                      book={singleReview.other.book}
+                      review={singleReview.other}
+                      description={singleReview.description}
+                    />
+                  ))
+                )}
+              </div>
             )}
           </div>
         </div>

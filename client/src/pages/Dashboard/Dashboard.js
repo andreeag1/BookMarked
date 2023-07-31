@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import "./Dashboard.css";
@@ -11,13 +11,14 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Bookshelf from "../../components/bookshelf/Bookshelf";
 import ProfileList from "../../components/profile-list/Profile-list";
 import { getFriendsReviews } from "../../modules/user/userRepository";
+import { FlashOffOutlined } from "@mui/icons-material";
 
 export default function Dashboard() {
   const [booksRead, setBooksRead] = React.useState(0);
   const [review, setReview] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [array, setArray] = React.useState([]);
-  const [zeroReviews, setZeroReviews] = React.useState(true);
+  const [zeroReviews, setZeroReviews] = React.useState(false);
 
   const useDidMountEffect = () => {
     const didMount = useRef(false);
@@ -32,11 +33,18 @@ export default function Dashboard() {
 
   useDidMountEffect(() => {});
 
+  useEffect(() => {
+    const getReviews = async () => {
+      const newReview = await getFriendsReviews();
+      if (newReview.length === 0) {
+        setZeroReviews(true);
+      }
+    };
+    getReviews();
+  });
+
   const newUser = async () => {
     const newReview = await getFriendsReviews();
-    if (newReview.length == 0) {
-      setZeroReviews(true);
-    }
     newReview.map((reviews) => {
       reviews.reviews.map((singleReview) => {
         const title = singleReview.book.title;
@@ -131,17 +139,21 @@ export default function Dashboard() {
                   <h7>Here are some like-minded book lovers to follow...</h7>
                   <ProfileList />
                 </div>
-              ) : loading ? (
-                <CircularProgress />
               ) : (
-                review.map((singleReview) => (
-                  <Feed
-                    user={singleReview.user}
-                    book={singleReview.other.book}
-                    review={singleReview.other}
-                    description={singleReview.description}
-                  />
-                ))
+                <div>
+                  {loading ? (
+                    <CircularProgress />
+                  ) : (
+                    review.map((singleReview) => (
+                      <Feed
+                        user={singleReview.user}
+                        book={singleReview.other.book}
+                        review={singleReview.other}
+                        description={singleReview.description}
+                      />
+                    ))
+                  )}
+                </div>
               )}
             </div>
           </Grid>

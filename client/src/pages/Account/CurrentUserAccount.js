@@ -22,8 +22,7 @@ export default function CurrentUserAccount() {
   const [review, setReview] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [array, setArray] = React.useState([]);
-  const [zeroReviews, setZeroReviews] = React.useState(true);
-  const [zeroFriends, setZeroFriends] = React.useState(false);
+  const [zeroReviews, setZeroReviews] = React.useState(false);
 
   const useDidMountEffect = () => {
     const didMount = useRef(false);
@@ -61,11 +60,8 @@ export default function CurrentUserAccount() {
         });
     });
     setFollowing(totalFollowing);
-    if (totalFollowing.length == 0) {
-      setZeroFriends(true);
-    }
     const newReview = await getReviewByUser(userId);
-    if (newReview.length == 0) {
+    if (newReview.length === 0) {
       setZeroReviews(true);
     }
     newReview.map((reviews) => {
@@ -86,7 +82,8 @@ export default function CurrentUserAccount() {
           data.docs.map((book) => {
             if (book.cover_i == newCover) {
               const bookId = book.key;
-              fetch(`https://openlibrary.org${bookId}.json`)
+              const newBookId = bookId.replace("/", "");
+              fetch(`https://openlibrary.org/${newBookId}.json`)
                 .then((response) => response.json())
                 .then((data) => {
                   const newDescription = "No Description";
@@ -130,22 +127,18 @@ export default function CurrentUserAccount() {
           <Box sx={{ flexGrow: 1 }} />
           <div className="friends-list">
             <h3 className="friends">Your friends</h3>
-            {zeroFriends ? (
-              <h7>You don't follow anyone yet!</h7>
-            ) : (
-              following.map((friend) => {
-                return (
-                  <div className="friend">
-                    <Link to={`/profile/${friend.following.id}`}>
-                      <img className="postProfileImg" src={friend.url} alt="" />
-                      <h7 className="friend-text">
-                        {friend.following.firstName} {friend.following.lastName}
-                      </h7>
-                    </Link>
-                  </div>
-                );
-              })
-            )}
+            {following.map((friend) => {
+              return (
+                <div className="friend">
+                  <Link to={`/profile/${friend.following.id}`}>
+                    <img className="postProfileImg" src={friend.url} alt="" />
+                    <h7 className="friend-text">
+                      {friend.following.firstName} {friend.following.lastName}
+                    </h7>
+                  </Link>
+                </div>
+              );
+            })}
           </div>
           <h3 className="reviews">Your Reviews</h3>
           <div className="feed-container">
@@ -153,17 +146,21 @@ export default function CurrentUserAccount() {
               <div className="no-reviews">
                 <h7>You'll see your reviews here once you write one!</h7>
               </div>
-            ) : loading ? (
-              <CircularProgress />
             ) : (
-              review.map((singleReview) => (
-                <Feed
-                  user={singleReview.other.user}
-                  book={singleReview.other.book}
-                  review={singleReview.other}
-                  description={singleReview.description}
-                />
-              ))
+              <div>
+                {loading ? (
+                  <CircularProgress />
+                ) : (
+                  review.map((singleReview) => (
+                    <Feed
+                      user={singleReview.other.user}
+                      book={singleReview.other.book}
+                      review={singleReview.other}
+                      description={singleReview.description}
+                    />
+                  ))
+                )}
+              </div>
             )}
           </div>
         </div>
