@@ -106,58 +106,60 @@ export default function Dashboard() {
   return (
     <div className="dashboard">
       <Header />
-      <div className="overview">
-        <Grid container spacing={9} rowSpacing={4}>
-          <Grid item>
-            <CurrentlyReading setBooksRead={setBooksRead} />
+      <div className="main-section">
+        <div className="overview">
+          <Grid container spacing={9} rowSpacing={4}>
+            <Grid item>
+              <CurrentlyReading setBooksRead={setBooksRead} />
+            </Grid>
+            <Grid item>
+              <div className="second-widget">
+                <YearGoal booksRead={booksRead} />
+              </div>
+            </Grid>
+            <Grid item>
+              <CollectionsWidget />
+            </Grid>
           </Grid>
-          <Grid item>
-            <div className="second-widget">
-              <YearGoal booksRead={booksRead} />
-            </div>
+        </div>
+        <div className="content-section">
+          <Grid container>
+            <Grid item>
+              <div className="bookshelf-container">
+                <Bookshelf />
+              </div>
+            </Grid>
+            <Grid item>
+              <div className="updates-container">
+                <h3>Updates</h3>
+              </div>
+              <div className="feed-container">
+                {zeroReviews ? (
+                  <div className="no-reviews">
+                    <h7>Follow other users to see their updates!</h7>
+                    <h7>Here are some like-minded book lovers to follow...</h7>
+                    <ProfileList />
+                  </div>
+                ) : (
+                  <div>
+                    {loading ? (
+                      <CircularProgress />
+                    ) : (
+                      review.map((singleReview) => (
+                        <Feed
+                          user={singleReview.user}
+                          book={singleReview.other.book}
+                          review={singleReview.other}
+                          description={singleReview.description}
+                        />
+                      ))
+                    )}
+                  </div>
+                )}
+              </div>
+            </Grid>
           </Grid>
-          <Grid item>
-            <CollectionsWidget />
-          </Grid>
-        </Grid>
-      </div>
-      <div className="content-section">
-        <Grid container>
-          <Grid item>
-            <div className="bookshelf-container">
-              <Bookshelf />
-            </div>
-          </Grid>
-          <Grid item>
-            <div className="updates-container">
-              <h3>Updates</h3>
-            </div>
-            <div className="feed-container">
-              {zeroReviews ? (
-                <div className="no-reviews">
-                  <h7>Follow other users to see their updates!</h7>
-                  <h7>Here are some like-minded book lovers to follow...</h7>
-                  <ProfileList />
-                </div>
-              ) : (
-                <div>
-                  {loading ? (
-                    <CircularProgress />
-                  ) : (
-                    review.map((singleReview) => (
-                      <Feed
-                        user={singleReview.user}
-                        book={singleReview.other.book}
-                        review={singleReview.other}
-                        description={singleReview.description}
-                      />
-                    ))
-                  )}
-                </div>
-              )}
-            </div>
-          </Grid>
-        </Grid>
+        </div>
       </div>
       <Footer />
     </div>

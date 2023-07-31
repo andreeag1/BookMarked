@@ -99,6 +99,7 @@ const Header = () => {
 
   const handleLogout = async () => {
     setAnchorElTwo(null);
+    setAnchorEl(null);
     await logout();
     navigate("/");
   };
@@ -117,7 +118,7 @@ const Header = () => {
   });
 
   return isLoggedIn ? (
-    <div className="Header">
+    <div className="header">
       <ThemeProvider theme={theme}>
         <AppBar position="fixed">
           <Container maxWidth="100%">
@@ -194,6 +195,9 @@ const Header = () => {
                   >
                     My Account
                   </MenuItem>
+                  <MenuItem component={Link} to="/login" onClick={handleLogout}>
+                    Logout
+                  </MenuItem>
                 </Menu>
               </div>
               <div className="navbar-links">
@@ -261,48 +265,50 @@ const Header = () => {
       </ThemeProvider>
     </div>
   ) : (
-    <div className="Header">
+    <div className="header">
       <ThemeProvider theme={theme}>
         <AppBar position="fixed">
-          <Container maxWidth="100%">
-            <Toolbar disableGutters>
-              <img src={logo} className="App-logo" alt="logo" />
-              <Box className="title-container">
-                <Link to={"/"}>
-                  <span className="title" component="div">
-                    BookMarked
-                  </span>
-                </Link>
-              </Box>
-              <Box sx={{ flexGrow: 1 }} />
-              <div className="search-bar">
-                <Search>
-                  <StyledTextfield
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <SearchIcon />
-                        </InputAdornment>
-                      ),
-                      disableUnderline: true,
-                    }}
-                    placeholder="Search books"
-                    onChange={(e) => setSearch(e.target.value)}
-                    onKeyDown={handleSubmit}
-                    sx={{
-                      "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
-                        {
-                          border: alpha(theme.palette.common.white, 0.65),
-                        },
-                      height: 40,
-                      width: 300,
-                    }}
-                  />
-                </Search>
-              </div>
-              <Box sx={{ flexGrow: 1 }} className="box-container" />
-            </Toolbar>
-          </Container>
+          <div className="new-header">
+            <Container maxWidth="100%">
+              <Toolbar disableGutters>
+                <img src={logo} className="App-logo" alt="logo" />
+                <Box className="title-container">
+                  <Link to={"/"}>
+                    <span className="title" component="div">
+                      BookMarked
+                    </span>
+                  </Link>
+                </Box>
+                <Box sx={{ flexGrow: 1 }} />
+                <div className="search-bar">
+                  <Search>
+                    <StyledTextfield
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <SearchIcon />
+                          </InputAdornment>
+                        ),
+                        disableUnderline: true,
+                      }}
+                      placeholder="Search books"
+                      onChange={(e) => setSearch(e.target.value)}
+                      onKeyDown={handleSubmit}
+                      sx={{
+                        "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                          {
+                            border: alpha(theme.palette.common.white, 0.65),
+                          },
+                        height: 40,
+                        width: 300,
+                      }}
+                    />
+                  </Search>
+                </div>
+                <Box sx={{ flexGrow: 1 }} className="box-container" />
+              </Toolbar>
+            </Container>
+          </div>
         </AppBar>
       </ThemeProvider>
     </div>

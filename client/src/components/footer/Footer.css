@@ -4,6 +4,7 @@
 
 .footer {
   width: 100%;
+  min-width: 414px;
   background-color: #706a6a;
 }
 
@@ -95,7 +96,7 @@ hr {
   }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 935px) {
   .sb_footer-heading h1 {
     font-size: 34px;
     line-height: 42px;
@@ -125,7 +126,7 @@ hr {
   }
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 935px) {
   .sb_footer-heading h1 {
     font-size: 27px;
     line-height: 38px;

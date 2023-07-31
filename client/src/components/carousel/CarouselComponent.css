@@ -1,6 +1,8 @@
 .carousel {
   scroll-behavior: none;
   font-family: Raleway;
+  width: 100%;
+  min-width: 414px;
 }
 
 .book-card {

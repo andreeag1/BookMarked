@@ -68,7 +68,7 @@ export default function AboutSection() {
         </div>
       </div>
       <div className="container-cards">
-        <Grid container>
+        <Grid container spacing={10}>
           <Grid item>
             <div className="cards-section">
               <StyledCard

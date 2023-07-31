@@ -1,0 +1,12 @@
+.home {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+/* 
+@media (max-width: 800px) {
+    .footerr {
+        width: 600px;
+    }
+} */

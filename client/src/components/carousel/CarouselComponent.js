@@ -140,7 +140,7 @@ export default function CarouselComponent() {
     },
     mobile: {
       breakpoint: { max: 764, min: 0 },
-      items: 2,
+      items: 1,
     },
   };
   return (

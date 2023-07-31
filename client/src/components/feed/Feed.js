@@ -439,7 +439,7 @@ export default function Feed({ user, book, description, review }) {
                   inputProps={{
                     style: {
                       width: "50%",
-                      minWidth: "370px",
+                      minWidth: "270px",
                       height: "0px",
                     },
                   }}

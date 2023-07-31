@@ -18,7 +18,7 @@
   transform: scale(1.5);
 }
 
-.Header {
+.header {
   position: fixed;
   left: 0;
   top: 0;
@@ -37,7 +37,7 @@
 
 .search-bar {
   width: 300px;
-  min-width: 170px;
+  min-width: 210px;
 }
 
 .hamburger {
@@ -81,5 +81,25 @@
 
   .box-container {
     flex-grow: 10;
+  }
+}
+
+@media (max-width: 618px) {
+  .title {
+    font-size: 0rem;
+  }
+
+  .search-bar {
+    margin-right: 0rem;
+    width: 260px;
+  }
+
+  .Header {
+    width: 418px;
+    position: absolute;
+  }
+
+  .hamburger {
+    padding-right: 4rem;
   }
 }

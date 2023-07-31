@@ -1,5 +1,8 @@
 .dashboard {
   background-color: #f3f3f3;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
 
 .overview {
@@ -49,4 +52,14 @@
 .profiles-container {
   padding-bottom: 100px;
   padding-top: 100px;
+}
+
+@media (max-width: 870px) {
+  .overview {
+    padding-left: 0px;
+  }
+
+  .bookshelf-container {
+    padding-left: 0;
+  }
 }
