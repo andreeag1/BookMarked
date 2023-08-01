@@ -49,3 +49,9 @@
   padding-left: 3.5em;
   padding-bottom: 1.5em;
 }
+
+@media (max-width: 500px) {
+  .container-year-goal {
+    width: 20em;
+  }
+}

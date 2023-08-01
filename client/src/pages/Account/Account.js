@@ -22,18 +22,9 @@ export default function Account() {
   const [array, setArray] = React.useState([]);
   const [zeroReviews, setZeroReviews] = React.useState(false);
 
-  const useDidMountEffect = () => {
-    const didMount = useRef(false);
-    React.useEffect(() => {
-      if (didMount.current) {
-        newUser();
-      } else {
-        didMount.current = true;
-      }
-    }, [array]);
-  };
-
-  useDidMountEffect(() => {});
+  useEffect(() => {
+    newUser();
+  }, [array]);
 
   const newUser = async () => {
     const user = await getUserById(userId);
@@ -60,7 +51,7 @@ export default function Account() {
     });
     setFollowing(totalFollowing);
     const newReview = await getReviewByUser(userId);
-    if (newReview.length === 0) {
+    if (newReview.length == 0) {
       setZeroReviews(true);
     }
     if (newReview.length !== review.length) {

@@ -20,31 +20,15 @@ export default function Dashboard() {
   const [array, setArray] = React.useState([]);
   const [zeroReviews, setZeroReviews] = React.useState(false);
 
-  const useDidMountEffect = () => {
-    const didMount = useRef(false);
-    React.useEffect(() => {
-      if (didMount.current) {
-        newUser();
-      } else {
-        didMount.current = true;
-      }
-    }, [array]);
-  };
-
-  useDidMountEffect(() => {});
-
   useEffect(() => {
-    const getReviews = async () => {
-      const newReview = await getFriendsReviews();
-      if (newReview.length === 0) {
-        setZeroReviews(true);
-      }
-    };
-    getReviews();
-  });
+    newUser();
+  }, [array]);
 
   const newUser = async () => {
     const newReview = await getFriendsReviews();
+    if (newReview.length === 0) {
+      setZeroReviews(true);
+    }
     newReview.map((reviews) => {
       reviews.reviews.map((singleReview) => {
         const title = singleReview.book.title;

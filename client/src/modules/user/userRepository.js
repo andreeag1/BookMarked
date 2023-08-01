@@ -101,9 +101,6 @@ export const getCurrentRead = async () => {
       credentials: "include",
     });
     const data = await res.json();
-    if (!res.ok) {
-      return;
-    }
     return data;
   } catch (error) {}
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import "./currentlyReading.css";
 import AddIcon from "@mui/icons-material/Add";
 import {
@@ -79,17 +79,6 @@ LinearProgressWithLabel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-const useDidMountEffect = (saveBook, bookInfo) => {
-  const didMount = useRef(false);
-  React.useEffect(() => {
-    if (didMount.current) {
-      saveBook();
-    } else {
-      didMount.current = true;
-    }
-  }, [bookInfo]);
-};
-
 export default function CurrentlyReading({ setBooksRead }) {
   const [open, setOpen] = React.useState(false);
   const [secondOpen, setSecondOpen] = React.useState(false);
@@ -127,8 +116,8 @@ export default function CurrentlyReading({ setBooksRead }) {
 
   React.useEffect(() => {
     const saveBook = async () => {
-      if (bookRemoved == true) {
-        const currentRead = await addCurrentRead(
+      if (bookRemoved === true) {
+        await addCurrentRead(
           bookInfo.title,
           bookInfo.author,
           bookInfo.imageLink
@@ -142,7 +131,7 @@ export default function CurrentlyReading({ setBooksRead }) {
       }
     };
     saveBook();
-  }, [bookInfo]);
+  });
 
   React.useEffect(() => {
     const currentRead = async () => {
@@ -150,19 +139,20 @@ export default function CurrentlyReading({ setBooksRead }) {
       if ((await getCurrentRead()) == null) {
         setMyBool(true);
       } else {
+        console.log("first log");
         setMyBool(false);
-        setProgress(existingCurrentRead.progress);
         setConfirmedBookInfo({
           title: existingCurrentRead.title,
           author: existingCurrentRead.author,
           imageLink: existingCurrentRead.imageLink,
         });
+        setProgress(existingCurrentRead.progress);
       }
     };
     currentRead();
   }, [noCurrentRead]);
 
-  useDidMountEffect(() => {});
+  // useDidMountEffect(() => {});
 
   const handleClick = async () => {
     setBookRemoved(true);
@@ -187,7 +177,10 @@ export default function CurrentlyReading({ setBooksRead }) {
       const userCollections = await getCollectionTitles(userId);
       const titles = [];
       userCollections.map((collection) => {
-        if (collection.title == "Read" || collection.title == "Want To Read") {
+        if (
+          collection.title === "Read" ||
+          collection.title === "Want To Read"
+        ) {
         } else {
           titles.push(collection.title);
         }
@@ -215,7 +208,7 @@ export default function CurrentlyReading({ setBooksRead }) {
   };
 
   const handleDone = async () => {
-    if (review == "" || rating == 0) {
+    if (review === "" || rating === 0) {
       alert("Please enter a review and a rating");
       handleFinished();
     } else {
@@ -229,34 +222,24 @@ export default function CurrentlyReading({ setBooksRead }) {
       const currentProgress = user.readbooks;
       setBooksRead(currentProgress + 1);
       await addProgressToYearlyGoal(currentProgress + 1);
-      if (book == null) {
+      if (book === null) {
         const cover = confirmedBookInfo.imageLink.replaceAll("/", "_");
         const findBook = await getBookByImg(cover);
-        if (addToCollection == "") {
+        if (addToCollection === "") {
         } else {
           const collectionId = await getCollection(userId, addToCollection);
           await addBookToCollection(collectionId.id, findBook.id);
         }
-        const createNewReview = await addReview(
-          review,
-          findBook.id,
-          userId,
-          rating
-        );
+        await addReview(review, findBook.id, userId, rating);
         const readCollection = await getCollection(userId, "Read");
         await addBookToCollection(readCollection.id, findBook.id);
       } else {
-        if (addToCollection == "") {
+        if (addToCollection === "") {
         } else {
           const collectionId = await getCollection(userId, addToCollection);
           await addBookToCollection(collectionId.id, book.id);
         }
-        const createNewReview = await addReview(
-          review,
-          book.id,
-          userId,
-          rating
-        );
+        await addReview(review, book.id, userId, rating);
         const readCollection = await getCollection(userId, "Read");
         await addBookToCollection(readCollection.id, book.id);
       }

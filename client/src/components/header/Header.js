@@ -123,7 +123,9 @@ const Header = () => {
         <AppBar position="fixed">
           <Container maxWidth="100%">
             <Toolbar disableGutters>
-              <img src={logo} className="App-logo" alt="logo" />
+              <Link to={"/dashboard"}>
+                <img src={logo} className="App-logo" alt="logo" />
+              </Link>
               <Box className="title-container">
                 <Link to={"/dashboard"}>
                   <span className="title" component="div">
@@ -271,7 +273,9 @@ const Header = () => {
           <div className="new-header">
             <Container maxWidth="100%">
               <Toolbar disableGutters>
-                <img src={logo} className="App-logo" alt="logo" />
+                <Link to={"/dashboard"}>
+                  <img src={logo} className="App-logo" alt="logo" />
+                </Link>
                 <Box className="title-container">
                   <Link to={"/"}>
                     <span className="title" component="div">

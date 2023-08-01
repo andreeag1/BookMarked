@@ -1,5 +1,6 @@
 .dashboard {
   background-color: #f3f3f3;
+  width: 100%;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -60,6 +61,6 @@
   }
 
   .bookshelf-container {
-    padding-left: 0;
+    margin-left: -5rem;
   }
 }
