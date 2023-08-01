@@ -47,6 +47,7 @@ export function createReviewRouter(controllers: {
     authenticate,
     async (req: Request, res: Response) => {
       const review = await reviewController.getReviewByUser(req.params.userId);
+      console.log(review);
       return res.json(review);
     }
   );
