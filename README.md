@@ -1,6 +1,6 @@
 # BookMarked
 
-BookMarked is a social media platform designed for all book lovers and avid readers. An engaging space for bibliophiles to connect, discover and share their passion for books. With BookMarked, you can track your reading progress, organize books into personalized bookshelves, add a yearly reading goal, write review and join discussions about your favourite books and authors.
+BookMarked is a social media platform designed for all book lovers and avid readers. An engaging space for bibliophiles to connect, discover and share their passion for books. With BookMarked, you can track your reading progress, organize books into personalized bookshelves, add a yearly reading goal, write reviews and join discussions about your favourite books and authors.
 
 ## Services
 
@@ -27,4 +27,4 @@ Both the frontend and backend are hosted on Google Cloud (Cloud Run).
 
 ## Motivations
 
-For years I've been an avid book reader and love reading any kind of books, from classics to fantasy. So I wanted to create a space that combines the ability for people like myself to interact and share their passion for books and also track progress/reading habits and organize your books into collections.
+For years I've been an avid book reader and have loved reading any kind of books, from classics to fantasy. So I wanted to create a space that combines the ability for people like myself to interact and share their passion for books and also track progress/reading habits.
