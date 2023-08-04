@@ -1,70 +1,30 @@
-# Getting Started with Create React App
+# BookMarked
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+BookMarked is a social media platform designed for all book lovers and avid readers. An engaging space for bibliophiles to connect, discover and share their passion for books. With BookMarked, you can track your reading progress, organize books into personalized bookshelves, add a yearly reading goal, write review and join discussions about your favourite books and authors.
 
-## Available Scripts
+## Services
 
-In the project directory, you can run:
+BookMarked operates on two services.
 
-### `npm start`
+1. The Frontend
+2. The Backend
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+The frontend is the side that presents the interface and user-experience to the end-users. Meanwhile, the backend is the server side which includes a REST Api. It handles any data processing and supplies the frontend with the necessary data.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Technologies
 
-### `npm test`
+- React (Javascript)
+  - Material UI, Formik
+- Firebase
+- Express (Typescript)
+  - TypeORM
+- MySQL
+- Docker
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Visit [Bookmarked](https://bookmarked.andreeagugiuman.com/) today!
 
-### `npm run build`
+Both the frontend and backend are hosted on Google Cloud (Cloud Run).
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Motivations
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+For years I've been an avid book reader and love reading any kind of books, from classics to fantasy. So I wanted to create a space that combines the ability for people like myself to interact and share their passion for books and also track progress/reading habits and organize your books into collections.
