@@ -20,10 +20,11 @@ The frontend is the side that presents the interface and user-experience to the 
   - TypeORM
 - MySQL
 - Docker
+- Google Cloud (Cloud Run)
 
 ## Visit [Bookmarked](https://bookmarked.andreeagugiuman.com/) today!
 
-Both the frontend and backend are hosted on Google Cloud (Cloud Run).
+Both the frontend and backend are hosted on Google Cloud (Cloud Run) while the user's profile pictures are hosted on Firebase.
 
 ## Motivations
 
